@@ -1,18 +1,17 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-
-import React from 'react'; 
+import React, { useState } from 'react'; 
 import './App.css';
-import {ShiledCheck, ShieldAlert, Send } from 'lucide-react';
-import { useState } from 'react';
+import { ShieldCheck, ShieldAlert, Send } from 'lucide-react';
 import { sendMessage } from './services/api';
-import ConnectionStatus from './components/ConnectionStatus';
+// Если ConnectionStatus пока не используется, его можно закомментировать
+// import ConnectionStatus from './components/ConnectionStatus';
 
 function App() {
-  
   const [input, setInput] = useState('');
-  const [status, setStatus] = useState({ online, tru, node: ' Waiting...'});
+  
+  // ИСПРАВЛЕНИЕ 1: Правильный синтаксис объекта (ключ: значение)
+  const [status, setStatus] = useState({ isOnline: true, node: 'Waiting...' });
+  
+  // ИСПРАВЛЕНИЕ 2: Оставляем название chat
   const [chat, setChat] = useState([]);
 
   const handleSend = async () => {
@@ -20,28 +19,32 @@ function App() {
 
     try {
       const result = await sendMessage(input);
-      setChat([...chat, { text: input, from: 'me' }]);
-      setStatus({ online: true, node: result.node });
+      // ИСПРАВЛЕНИЕ 3: Добавил генерацию id (Date.now()), чтобы React не ругался на отсутствие ключей
+      setChat([...chat, { id: Date.now(), text: input, from: 'me' }]);
+      setStatus({ isOnline: true, node: result.node });
       setInput('');
     } catch (err) {
-      setStatus({ online: false, node: 'None' });
+      setStatus({ isOnline: false, node: 'None' });
       alert("Error: " + err.message);
     }
   };
+
   return (
     <div className="app-container">
       <div className="messenger-card">
         
         <div className="header">
           <h2>DodgeNet</h2>
-          <div className={`status-bar ${isOnline ? 'status-online' : 'status-offline'}`}>
-            {isOnline ? <ShieldCheck size={18} /> : <ShieldAlert size={18} />}
-            <span>{isOnline ? "Канал защищен" : "Связь потеряна"}</span>
+          {/* ИСПРАВЛЕНИЕ 4: Обращаемся к isOnline через объект status */}
+          <div className={`status-bar ${status.isOnline ? 'status-online' : 'status-offline'}`}>
+            {status.isOnline ? <ShieldCheck size={18} /> : <ShieldAlert size={18} />}
+            <span>{status.isOnline ? "Канал защищен" : "Связь потеряна"}</span>
           </div>
         </div>
 
         <div className="chat-window">
-          {messages.map((msg) => (
+          {/* ИСПРАВЛЕНИЕ 5: Используем chat вместо messages */}
+          {chat.map((msg) => (
             <div key={msg.id} className="message me">
               {msg.text}
             </div>
@@ -63,10 +66,7 @@ function App() {
 
       </div>
     </div>
-
-
-    
   );
 }
 
-export default App
+export default App;
