@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// Список твоих адресов (локальный Flask и, например, будущий сервер в облаке)
 const ENDPOINTS = [
   'http://localhost:5000/send',
-  'http://192.168.1.50:5000/send', // Пример другого IP в сети
+  'http://192.168.1.50:5000/send', 
 ];
 
 export const sendMessage = async (message) => {
