@@ -1,5 +1,17 @@
 import axios from 'axios';
 
+const token = localStorage.getItem('token'); // Достаем сохраненный при логине токен
+
+const response = await axios.post(
+  `${baseUrl}/send-message`, 
+  { text: message }, 
+  { 
+    timeout: 3000,
+    headers: {
+      'Authorization': `Bearer ${token}` // Передаем токен серверу
+    }
+  }
+);
 const ENDPOINTS = [
   'http://localhost:5000/send',
   'http://192.168.1.50:5000/send', 

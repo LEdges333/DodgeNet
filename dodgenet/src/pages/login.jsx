@@ -3,11 +3,11 @@ import '../App.css';
 
 function Login() {
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
+    <div className="register-main">
       <h1>Войти</h1>
-      <form style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px', margin: '0 auto' }}>
-        <input type="text" placeholder="Логин" />
+      <form className="register-form">
         <input type="email" placeholder="Email" />
+        <input type="text" placeholder="Логин" />
         <input type="password" placeholder="Пароль" />
         <button type="submit">Забыли логин или пароль?</button>
         

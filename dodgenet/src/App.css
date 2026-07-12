@@ -175,9 +175,10 @@
   gap: 10px; 
   max-width: 300px;
   margin: 0 auto;
+
 }
 
-.login-main {
+.register-main {
   padding: 20px;
   text-align: center;
 
