@@ -14,10 +14,10 @@ Rename **key.env.example** to **key.env** and insert your key without quotes or 
 
 
 **RU**
-# Launch
+# Запуск
 
 Запуск в папке веба через: `npm run dev` 
-Запуск в папке бэка (в папке **vanv\Scripts**) через: `.\activate`  (полный `.\venv\Scripts\activate` )
+Запуск в папке бэка (в папке **venv\Scripts**) через: `.\activate`  (полный `.\venv\Scripts\activate` )
 чтобы выйти из виртуального окружения: `deactivate` 
 
 
