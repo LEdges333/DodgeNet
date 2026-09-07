@@ -34,5 +34,6 @@ venv/
 env/
 
 # Environment variables
-.env
+*.env
+!key.env.example
 __pycache__/
