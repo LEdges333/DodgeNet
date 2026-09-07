@@ -1,3 +1,4 @@
+
 **ENG**
 # Launch
 
@@ -22,4 +23,8 @@ Rename **key.env.example** to **key.env** and insert your key without quotes or 
 
 
 # Ключ для Бэка
-Переименовать **key.env.example** в **key.env** и вставить в нем свой ключ без кавычек и прочих знаков, в поле: **'SECRET_KEY'** 
+Переименовать **key.env.example** в **key.env** и вставить в нем свой ключ без кавычек и прочих знаков, в поле: **'SECRET_KEY'**  
+
+
+
+
