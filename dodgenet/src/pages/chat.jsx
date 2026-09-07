@@ -1,31 +1,85 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Send } from 'lucide-react';
+import {Send} from 'lucide-react';
+import {useState} from 'react';
+import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import {useEffect} from 'react';
+import {sendMessage, getMessage} from '../services/api';
+import ConnectionStatus from '../components/ConnectionStatus';
 import '../App.css';
 
-function Chat({ status, chat, input, setInput, handleSend }) {
+
+function Chat({ status, setStatus}) {
+
+  const {userId} = useParams();
+  const [input, setInput] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+
+  const myId = Number(localStorage.getItem('userId'));
+
+  const handleSend = async () => {
+    // Protection against empty messages (spaces)
+    if (!input.trim()) return;
+ 
+    try {
+        //  text to the server
+        const message = await sendMessage(userId, input);
+ 
+        // the servers response to the message list
+        setChatMessages(prev => [...prev, message]);
+ 
+        // node status update
+        setStatus({
+            isOnline: true,
+            node: 'Primary',
+        });
+ 
+        // clearing the input field for the next message
+        setInput(""); 
+        
+    } catch (err) {
+        setStatus({
+            isOnline: false,
+            node: "None",
+        });
+        alert(err.message);
+    }
+  };
+  useEffect(() => {
+    const loadMessages = async () => {
+        try {
+            const data = await getMessage(userId);
+            setChatMessages(data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+ 
+    loadMessages();
+}, [userId]);
+
   return (
     <div className="messenger-card">
       <div className="header">
         <h2>DodgeNet Chat</h2>
-        <div className="status-container">
-          <div className={`status-row ${status.isOnline ? 'online' : 'offline'}`}>
-            {status.isOnline ? <ShieldCheck size={18} /> : <ShieldAlert size={18} />}
-            <span>
-              {status.isOnline ? "Канал защищен" : "Связь потеряна"}
-            </span>
-          </div>
-          <div className="node-info">
-            Узел: {status.node}
-          </div>
-        </div>
+        <ConnectionStatus status={status} />
       </div>
 
       <div className="chat-window">
-        {chat.map((msg) => (
-          <div key={msg.id} className="message me">
-            {msg.text}
-          </div>
-        ))}
+        {chatMessages.map((msg) => {
+          const isMine = msg.sender_id === myId;
+          return (
+            <div
+              key={msg.id}
+              className={`message-row ${isMine ? 'send' : 'get'}`}
+            >
+              <div className={`message ${isMine ? 'message-send' : 'message-get'}`}>
+                {msg.text}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="input-area">
