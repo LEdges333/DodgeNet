@@ -7,7 +7,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from init_db import init_db;
 
 app = Flask(__name__)
 CORS(app) 
@@ -15,46 +15,35 @@ CORS(app)
 
 
 
-load_dotenv()
+load_dotenv("key.env")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 DB_NAME = 'dodgenet.db'
 
 
-# Для быстрого доступа к полям по имени: user['password_hash']
+# For quick access to fields by name: user['password_hash']
 def get_db_connection():
     conn = sqlite3.connect(DB_NAME)
-    conn.row_factory = sqlite3.Row  # Чтобы обращаться к полям по именам: user['password_hash']
+    conn.row_factory = sqlite3.Row  
+    conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
-@app.route("/test", methods=["GET"])
-def test_connection():
-    return jsonify({"status": "DodgeNet Backend is Online!"})
 
-@app.route("/send", methods=["POST"])
-def handle_message():
-    data = request.json
-    print(f"Message from frontend: {data.get('message')}")
-    return jsonify({"status": "received", "node": "Primary"})
-
-# Проверка валидности токена юзера
+# Checking validity of user token
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
 
-        # Получение заголовка
         auth_header = request.headers.get('Authorization')
 
-        # Отделяем слово "Bearer " от самого токена
-        
         if auth_header:
             parts = auth_header.split()
             if len(parts) == 2 and parts[0] == "Bearer":
                 token = parts[1]
             else:
-                token = auth_header # на случай если фронтенд шлет без слова Bearer
+                token = auth_header 
 
 
 
@@ -62,219 +51,281 @@ def token_required(f):
             return jsonify({"message": "The token is missing!"}), 401
         
         try:
-            # Попытка расшифровать токен
+
             secret_key = app.config['SECRET_KEY']
             payload = jwt.decode(token, secret_key, algorithms=["HS256"])
             
-            # Сохранение ID пользователя во временное хранилище g
+
             g.user_id = payload.get('user_id')
             
         except jwt.ExpiredSignatureError:
-            return jsonify({"message": "Время действия токена истекло. Залогиньтесь заново!"}), 401
+            return jsonify({"message": "The token has expired. Login again!"}), 401
         except jwt.InvalidTokenError:
-            return jsonify({"message": "Токен невалиден!"}), 401
+            return jsonify({"message": "The token is not valid!"}), 401
             
-
-        # Если всё отлично, запускаем оригинальную функцию
         return f(*args, **kwargs)
     return decorated
 
 
 
-# Сервера
-
-@app.route("/api/proxy-status", methods=["GET"])
-def get_status():
-    # логика пинга серваков
-    return jsonify({
-        "isOnline": True, 
-        "node": "138.201.x.x"
-    })
-
-@app.route('/api/nodes', methods=['GET', 'POST'])
-@token_required
-def manage_nodes():
-    if request.method == 'POST':
-        # добавление узлов в бд
-        return jsonify({"message": "Узел добавлен"}), 201
-    
-    # Возврат списка узлов
-    return jsonify({"nodes": ["138.201.x.x", "45.132.x.x"]})
-
-
-# Сообщения
+# Messages
 
 @app.route("/api/send-message", methods=["POST"])
 @token_required
 def send_message():
-    """Принимает сообщение от пользователя и отправляет его через активный прокси/туннель."""
-    
-    data = request.json
-    text = data.get('text')
-    receiver_id = data.get('receiver_id')
+    data = request.json or {}
+    receiver_id = data.get("receiver_id")
+    text = data.get("text")       
+    nonce = data.get("nonce")
 
-    # Логика шифрования и отправки через zapret/xray
-    
-    if not text or not receiver_id:
-        return jsonify({"error": "Текст и получатель обязательны"}), 400
+    if not receiver_id or not text or not nonce:
+        return jsonify({"error": "Recipient, text and nonce mandatory"}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    
-    # Сохранение в базу
     cursor.execute(
-        'INSERT INTO messages (sender_id, receiver_id, text) VALUES (?, ?, ?)',
-        (g.user_id, receiver_id, text)
+        "INSERT INTO messages (sender_id, receiver_id, text, nonce) VALUES (?, ?, ?, ?)",
+        (g.user_id, receiver_id, text, nonce)
     )
+    message_id = cursor.lastrowid
     conn.commit()
     conn.close()
-    return jsonify({"status": "success", "message": "Отправлено"}), 201
+
+    return jsonify({"id": message_id, "sender_id": g.user_id, "receiver_id": receiver_id, "text": text, "nonce": nonce}), 201
 
 
-# Страницы
+
+# History of correspondence with user 
+
+@app.route("/api/messages/<int:other_user_id>", methods=["GET"])
+@token_required
+def get_messages(other_user_id):
+    conn = get_db_connection()
+    messages = conn.execute("""
+        SELECT id, sender_id, receiver_id, text, nonce, timestamp
+        FROM messages
+        WHERE (sender_id = ? AND receiver_id = ?)
+           OR (sender_id = ? AND receiver_id = ?)
+        ORDER BY timestamp ASC
+    """, (g.user_id, other_user_id, other_user_id, g.user_id)).fetchall()
+    conn.close()
+
+    return jsonify([
+        {
+            "id": m["id"],
+            "sender_id": m["sender_id"],
+            "receiver_id": m["receiver_id"],
+            "text": m["text"],
+            "nonce": m["nonce"],
+            "timestamp": m["timestamp"],
+        }
+        for m in messages
+    ]), 200
+
+
+# contacts user
+
+@app.route("/api/contacts", methods=["GET"])
+@token_required
+def contactsUser():
+
+    conn = get_db_connection()
+
+    contacts = conn.execute("""
+        SELECT
+            u.id,
+            u.username,
+            (
+                SELECT text
+                FROM messages m
+                WHERE
+                    (m.sender_id = u.id AND m.receiver_id = ?)
+                    OR
+                    (m.sender_id = ? AND m.receiver_id = u.id)
+                ORDER BY m.timestamp DESC
+                LIMIT 1
+            ) AS last_message,
+            (
+                SELECT nonce
+                FROM messages m
+                WHERE
+                    (m.sender_id = u.id AND m.receiver_id = ?)
+                    OR
+                    (m.sender_id = ? AND m.receiver_id = u.id)
+                ORDER BY m.timestamp DESC
+                LIMIT 1
+            ) AS last_nonce,
+            (
+                SELECT timestamp
+                FROM messages m
+                WHERE
+                    (m.sender_id = u.id AND m.receiver_id = ?)
+                    OR
+                    (m.sender_id = ? AND m.receiver_id = u.id)
+                ORDER BY m.timestamp DESC
+                LIMIT 1
+            ) AS last_timestamp
+
+        FROM contacts c
+        INNER JOIN users u ON c.contact_id = u.id
+        WHERE c.user_id = ?
+
+        ORDER BY
+            last_timestamp DESC,
+            username ASC
+
+    """, (g.user_id, g.user_id,  g.user_id, g.user_id,  g.user_id, g.user_id, g.user_id)).fetchall()
+
+    conn.close()
+
+    return jsonify([
+        {
+            "id": c["id"],
+            "username": c["username"],
+            "last_message": c["last_message"] or "No messages",
+            "last_nonce": c["last_nonce"],
+            "last_timestamp": c["last_timestamp"]
+        }
+        for c in contacts
+    ]), 200
+
+# Add contacts 
+ 
+@app.route("/api/contacts/add", methods=["POST"])
+@token_required
+def add_contact():
+    data = request.json or {}
+    username = data.get("username")
+
+    if not username:
+        return jsonify({"error": "Enter username"}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    target_user = cursor.execute("SELECT id FROM users WHERE username = ?", (username,)).fetchone()
+
+    if not target_user:
+        conn.close()
+        return jsonify({"error": "User not found"}), 404
+
+    contact_id = target_user["id"]
+
+    if contact_id == g.user_id:
+        conn.close()
+        return jsonify({"error": "You cant add yourself"}), 400
+
+    try:
+        cursor.execute(
+            "INSERT INTO contacts (user_id, contact_id) VALUES (?, ?)",
+            (g.user_id, contact_id)
+        )
+        cursor.execute(
+            "INSERT INTO contacts (user_id, contact_id) VALUES (?, ?)",
+            (contact_id, g.user_id)
+        )
+        conn.commit()
+    except sqlite3.IntegrityError:
+        conn.rollback()
+        conn.close()
+        return jsonify({"error": "User is already in your contact list"}), 400
+
+    conn.close()
+    return jsonify({"status": "success", "message": "Contact successfully added"}), 201
+
+
+# Pages
 
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
-    # создание нового аккаунта
+    # Create new account
 
     data = request.json or {}
-    username = data.get('username')
-    password = data.get('password')
+    username = data.get("username")
+    password = data.get("password")
+    email = data.get("email")
+    public_key = data.get("public_key")
 
-    if not username or not password:
-        return jsonify({"message": "Заполните все поля"}), 400
+    if not username or not email or not password:
+        return jsonify({"message": "Fill in all the fields"}), 400
     
     hashed_password = generate_password_hash(password)
-    # Сохранение в бд
+    # Saving to database
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
-        cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', (username, hashed_password))
+        cursor.execute('INSERT INTO users (username, email, password_hash, public_key) VALUES (?, ?, ?, ?)', (username, email, hashed_password, public_key))
         conn.commit()
     except sqlite3.IntegrityError:
-        return jsonify({"message": "Пользователь с таким именем уже существует"}), 400
+        return jsonify({"message": "User with such name already exist"}), 400
     finally:
         conn.close()
-    return jsonify({"message": "Пользователь успешно зарегистрирован"}), 201
+    return jsonify({"message": "User has been successfully registered"}), 201
 
 
 
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json or {}
-    username = data.get('username')
-    password = data.get('password')
+    username = data.get("username")
+    password = data.get("password")
 
-    # проверка
+    # checking
 
     if not username or not password:
-        return jsonify({"error": "Введите логин и пароль"}), 400
+        return jsonify({"error": "Fill in the fields"}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    # Ищем пользователя в БД
-    user = cursor.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+
+    user = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
     conn.close()
 
-    # Если пользователь не найден или хеш пароля не совпал
     if user is None or not check_password_hash(user['password_hash'], password):
-        return jsonify({"error": "Неверный логин или пароль"}), 401
+        return jsonify({"error": "Incorrect login or password"}), 401
 
-    # 3. Если всё ок — генерирутся JWT-токен
     payload = {
-        'user_id': user['id'],
-        'username': user['username'],
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+        "user_id": user['id'],
+        "username": user['username'],
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24)
     }
     
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
 
-    # Возвращаем токен фронтенду
-    return jsonify({"status": "success", "token": token, "username": user['username']}), 200
+    return jsonify({"status": "success", "token": token, "username": user['username'], "user_id": user['id']}), 200
 
-
-
-@app.route("/logout")
+@app.route("/api/profile", methods=["GET", "POST"])
 @token_required
-def logout():
-    # позже реализовать blacklist
-    return jsonify({"status": "Success", "message": "You have successfully logged out"}), 200
-
-
-@app.route("/change_password", methods=["GET", "POST"])
-@token_required
-def change_password():
-
-    user_id = g.user_id
-
-    data = request.json or {}
-    old_password = data.get("old_password")
-    new_password = data.get("new_password")
-    confirmation = data.get("confirmation")
-
-    
-
-    # Checking correctness input
-    if old_password == new_password:
-        return jsonify("new password must be different from the old one", 400)
-    if not new_password or not old_password or confirmation:
-        return jsonify("all fields are required", 400)
-    if new_password != confirmation:
-        return jsonify("passwords do not match", 400)
-
-    # Checking the validity of the old password in database
+def profile():
     conn = get_db_connection()
-    cursor = conn.cursor()
-
-
-    # Проверка валидности старого пароля
-    user = cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-
-    if user is None or not check_password_hash(user['password_hash'], old_password):
-        conn.close()
-        return jsonify({"error": "Неверный текущий пароль"}), 400
-    
-    new_hash = generate_password_hash(new_password)
-    cursor.execute('UPDATE users SET password_hash = ? WHERE id = ?', (new_hash, user_id))
-    conn.commit()
+    user = conn.execute(
+        "SELECT id, username, email FROM users WHERE id = ?",
+        (g.user_id,)
+    ).fetchone()
     conn.close()
 
-    return jsonify({"status": "success", "message": "Пароль успешно изменен"}), 200
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify({"id": user["id"], "username": user["username"], "email": user["email"]}), 200
 
 
+# Endpoint with public key
 
-
-
-
-
-
-def init_db():
-    conn = sqlite3.connect('dodgenet.db')
-    cursor = conn.cursor()
-    # Создаем таблицу пользователей 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL
-        )
-    ''')
-
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sender_id INTEGER NOT NULL,
-            receiver_id INTEGER NOT NULL,
-            text TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(sender_id) REFERENCES users(id),
-            FOREIGN KEY(receiver_id) REFERENCES users(id)
-        )
-    ''')
-    conn.commit()
+@app.route("/api/user-key/<int:user_id>", methods=["GET"])
+@token_required
+def get_user_key(user_id):
+    conn = get_db_connection()
+    user = conn.execute("SELECT public_key FROM users WHERE id = ?", (user_id,)).fetchone()
     conn.close()
+    if not user or not user["public_key"]:
+        return jsonify({"error": "Key not found"}), 404
+    return jsonify({"public_key": user["public_key"]}), 200
+
+
+
 
 if __name__ == "__main__":
     init_db()

@@ -1,78 +1,51 @@
 import React, { useState } from 'react'; 
 import './App.css';
-import { Routes, Route, Link, useLocation } from 'react-router-dom'; // для ссылок
-import { ShieldCheck, ShieldAlert, Send } from 'lucide-react';
-import { sendMessage } from './services/api';
+import { Routes, Route, Link } from 'react-router-dom';
 
 
 import Profile from './pages/profile';
 import Chat from './pages/chat';
+import ChatList from './pages/chatlist';
 import Registration from './pages/registration';
-import Settings from './pages/settings';
 import ConnectionStatus from './components/ConnectionStatus';
 import Login from './pages/login';
 
 function App() {
-  const location = useLocation();
-  const [input, setInput] = useState('');
-  const [status, setStatus] = useState({ isOnline: true, node: 'Waiting...' });
-  const [chatMessages, setChatMessages] = useState([]);
-
-  const handleSend = async () => {
-    if (!input) return;
-
-    try {
-      const result = await sendMessage(input)
-      setChatMessages([...chatMessages, { id: Date.now(), text: input, from: 'me' }]);
-      setStatus({ isOnline: true, node: result.node });
-      setInput('');
-    } catch (err) {
-      setStatus({ isOnline: false, node: 'None' });
-      alert("Error: " + err.message);
-    }
-  };
+  const [status, setStatus] = useState({ isOnline: true, node: 'Primary' });
 
   return (
     <div className="app-container">
-       {/* БОКОВАЯ ПАНЕЛЬ (Сайдбар для навигации) */}
+      {/* sidebar for navigation */}
       <div className="side-bar">
         <div>
-          <h2 >DodgeNet</h2>
-          <span >Secure Messenger</span>
+          <h2>DodgeNet</h2>
+          <span>Secure Messenger</span>
         </div>
 
-        {/* Меню ссылок */}
+        {/* Links Menu */}
         <nav className="nav-bar">
-          <Link className="Link" to="/">💬 Чат</Link>
-          <Link className="Link" to="/profile">👤 Профиль</Link>       
+          <Link className="Link" to="/">Chat</Link>
+          <Link className="Link" to="/profile">Profile</Link>      
         </nav>
 
-        {/* Индикатор безопасности соединения внизу панели */}
-        <div >
-          <div >
-            {status.isOnline ? <ShieldCheck size={18} color="#22c55e" /> : <ShieldAlert size={18} color="#ef4444" />}
-            <span >
-              {status.isOnline ? "Канал защищен" : "Связь потеряна"}
-            </span>
-          </div>
-          <div >Узел: {status.node}</div>
-        </div>
+        {/* secure */}
+        <ConnectionStatus status={status} />
       </div>
 
-      {/* Здесь отображается только активный компонент */}
+      {/* Main content area */}
       <div className="main-content">
         <Routes>
-          <Route path="/" element={
-            <Chat 
-              status={status} 
-              chat={chatMessages} 
-              input={input} 
-              setInput={setInput} 
-              handleSend={handleSend}/>} />
-          <Route path="/profile" element={<Profile />}/>
-          <Route path="/settings" element={<Settings />}/>
-          <Route path="/registration" element={<Registration />}/> 
-          <Route path="/login" element={<Login />}/>         
+          {/* Contact page (chat list) */}
+          <Route path="/" element={<ChatList />} />
+          <Route path="/chatlist" element={<ChatList />} />
+          {/* Chat page with a specific user */}
+          <Route 
+            path="/chat/:userId" 
+            element={<Chat status={status} setStatus={setStatus} />} 
+          />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/registration" element={<Registration />} /> 
+          <Route path="/login" element={<Login />} />        
         </Routes>
       </div>
     </div>

@@ -1,14 +1,17 @@
 import { ShieldCheck, ShieldAlert } from 'lucide-react';
 
-const ConnectionStatus = ({ isOnline, currentNode }) => {
+function ConnectionStatus({ status }) {
   return (
-    <div className={`flex items-center gap-2 p-2 rounded-lg ${isOnline ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
-      {isOnline ? <ShieldCheck size={20} /> : <ShieldAlert size={20} />}
-      <span className="text-sm font-medium">
-        {isOnline ? `Active connections: ${currentNode}` : 'Channels are blocked'}
-      </span>
+    <div className="status-container">
+      <div className={`status-row ${status.isOnline ? 'online' : 'offline'}`}>
+        {status.isOnline ? <ShieldCheck size={18} /> : <ShieldAlert size={18} />}
+        <span className="status-label">
+          {status.isOnline ? "Channel is protected" : "Connection lost"}
+        </span>
+      </div>
+      <div className="node-info">Node: {status.node}</div>
     </div>
   );
-};
+}
 
 export default ConnectionStatus;
