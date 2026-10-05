@@ -3,25 +3,25 @@
 
 
 #### Stack:
--Python (Flask)
--PyJWT
--SQLite
--CSS
--React
--Jinja2
--JavaScript
+- Python (Flask)
+- PyJWT
+- SQLite
+- CSS
+- React
+- Jinja2
+- JavaScript
 
 #### Description:
  
 DodgeNet is an end-to-end encrypted web messenger created as a final project for the CS50 course. It integrates a Flask (Python)-based REST API, a React (Vite) single-page frontend, and an SQLite database. Two aspects were treated as key requirements rather than optional extras during development: ensuring that messages remain unreadable to others—even if the server is compromised or a database administrator accesses the data—and ensuring application resilience against network interference that blocks standard connections in highly restricted network environments. The failover architecture supports CDN fronting allowing real CDN addresses to be added without structural changes (though automatic rotation among multiple active CDN providers is planned for the future and has not yet been implemented)
 
 ### Features
--User registration and login; an X25519 key pair is generated in the browser during registration, and these keys never leave the device.
--Adding contacts via username; data is stored as two symmetric records in the database, eliminating the need to handle connection reciprocity within the application logic. 
--Sending and receiving end-to-end encrypted messages, including the preservation of the full conversation history with each contact.
--Displaying decrypted snippets of the latest messages in the contact list (loading and decryption occur in a single network request per contact).
--Connection status indicator ("channel secure" / "connection lost") displayed in the sidebar and chat header.
--The architecture ensures resilience against network blocking through the use of CDN frontends: the `requestWithFailover()` method retries requests by iterating through a configurable list of frontends; this structure allows for the substitution of actual CDN addresses without affecting the rest of the application.
+- User registration and login; an X25519 key pair is generated in the browser during registration, and these keys never leave the device.
+- Adding contacts via username; data is stored as two symmetric records in the database, eliminating the need to handle connection reciprocity within the application logic. 
+- Sending and receiving end-to-end encrypted messages, including the preservation of the full conversation history with each contact.
+- Displaying decrypted snippets of the latest messages in the contact list (loading and decryption occur in a single network request per contact).
+- Connection status indicator ("channel secure" / "connection lost") displayed in the sidebar and chat header.
+- The architecture ensures resilience against network blocking through the use of CDN frontends: the `requestWithFailover()` method retries requests by iterating through a configurable list of frontends; this structure allows for the substitution of actual CDN addresses without affecting the rest of the application.
 
 
 ### Implementation
@@ -45,14 +45,14 @@ The files in `src/pages/*.jsx` each contain a single component representing a sc
 ##### Install and start
 
 **Backend**
-1.`cd backend`
-2.Create and activate virtual environment: `python -m venv venv`, then `source venv/bin/activate` (or `venv\Scripts\activate` on Windows). To exit the virtual environment: `deactivate`.
-3.Install dependencies: `pip install -r requirements.txt`. 
-4.Copy `key.env.example` to `key.env` and set real value for `SECRET_KEY`.
-5.`python app.py` — this command also runs `init_db()` on startup, creating the `dodgenet.db` file if it does not already exist. The API runs at `http://localhost:5000`.
+1. `cd backend`
+2. Create and activate virtual environment: `python -m venv venv`, then `source venv/bin/activate` (or `venv\Scripts\activate` on Windows). To exit the virtual environment: `deactivate`.
+3. Install dependencies: `pip install -r requirements.txt`. 
+4. Copy `key.env.example` to `key.env` and set real value for `SECRET_KEY`.
+5. `python app.py` — this command also runs `init_db()` on startup, creating the `dodgenet.db` file if it does not already exist. The API runs at `http://localhost:5000`.
 
 **Frontend**
-1.`cd dodgenet`
-2.`npm install`
-3.`npm run dev` and open the local URL displayed in the console (by default in Vite, this is `http://localhost:5173`).
+1. `cd dodgenet`
+2. `npm install`
+3. `npm run dev` and open the local URL displayed in the console (by default in Vite, this is `http://localhost:5173`).
 
