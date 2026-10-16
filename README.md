@@ -1,5 +1,5 @@
 # Dodgenet
-#### Video Demo:  <URL HERE>
+#### Video Demo: https://youtu.be/g9iemH7pOiM
 
 
 #### Stack:
@@ -13,7 +13,7 @@
 
 #### Description:
  
-DodgeNet is an end-to-end encrypted web messenger created as a final project for the CS50 course. It integrates a Flask (Python)-based REST API, a React (Vite) single-page frontend, and an SQLite database. Two aspects were treated as key requirements rather than optional extras during development: ensuring that messages remain unreadable to others—even if the server is compromised or a database administrator accesses the data—and ensuring application resilience against network interference that blocks standard connections in highly restricted network environments. The failover architecture supports CDN fronting allowing real CDN addresses to be added without structural changes (though automatic rotation among multiple active CDN providers is planned for the future and has not yet been implemented)
+DodgeNet is an end-to-end encrypted web messenger created as a final project for the CS50 course. It integrates a Flask (Python)-based REST API, a React (Vite) single-page frontend, and an SQLite database. Two aspects were treated as key requirements rather than optional extras during development: ensuring that messages remain unreadable to others even if the server is compromised or a database administrator accesses the data and ensuring application resilience against network interference that blocks standard connections in highly restricted network environments. The failover architecture supports CDN fronting allowing real CDN addresses to be added without structural changes (though automatic rotation among multiple active CDN providers is planned for the future and has not yet been implemented)
 
 ### Features
 - User registration and login; an X25519 key pair is generated in the browser during registration, and these keys never leave the device.
@@ -42,7 +42,7 @@ The files in `src/pages/*.jsx` each contain a single component representing a sc
 
 `src/components/ConnectionStatus.jsx` is not a separate screen but a small, reusable component; it displays a status indicator ("channel secure" / "connection lost") in both the sidebar (`App.jsx`) and the chat header (`chat.jsx`). This component replaced two duplicate markup snippets that had drifted out of sync over time; now, status text and styles can only fall out of sync in one place rather than two.
 
-##### Install and start
+### Install and start
 
 **Backend**
 1. `cd backend`
