@@ -1,5 +1,4 @@
 # Dodgenet
-#### Video Demo: https://youtu.be/g9iemH7pOiM
 
 
 #### Stack:
@@ -13,7 +12,7 @@
 
 #### Description:
  
-DodgeNet is an end-to-end encrypted web messenger created as a final project for the CS50 course. It integrates a Flask (Python)-based REST API, a React (Vite) single-page frontend, and an SQLite database. Two aspects were treated as key requirements rather than optional extras during development: ensuring that messages remain unreadable to others even if the server is compromised or a database administrator accesses the data and ensuring application resilience against network interference that blocks standard connections in highly restricted network environments. The failover architecture supports CDN fronting allowing real CDN addresses to be added without structural changes (though automatic rotation among multiple active CDN providers is planned for the future and has not yet been implemented)
+DodgeNet is an end-to-end encrypted web messenger. It integrates a Flask (Python)-based REST API, a React (Vite) single-page frontend, and an SQLite database. Two aspects were treated as key requirements rather than optional extras during development: ensuring that messages remain unreadable to others even if the server is compromised or a database administrator accesses the data and ensuring application resilience against network interference that blocks standard connections in highly restricted network environments. The failover architecture supports CDN fronting allowing real CDN addresses to be added without structural changes (though automatic rotation among multiple active CDN providers is planned for the future and has not yet been implemented)
 
 ### Features
 - User registration and login; an X25519 key pair is generated in the browser during registration, and these keys never leave the device.
