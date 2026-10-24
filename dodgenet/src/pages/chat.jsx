@@ -5,12 +5,14 @@ import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import {useParams} from 'react-router-dom';
 import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 import {sendMessage, getMessage} from '../services/api';
 import ConnectionStatus from '../components/ConnectionStatus';
 import '../App.css';
 
 
 function Chat({ status, setStatus}) {
+  const { t } = useTranslation();
 
   const {userId} = useParams();
   const [input, setInput] = useState("");
@@ -62,7 +64,7 @@ function Chat({ status, setStatus}) {
   return (
     <div className="messenger-card">
       <div className="header">
-        <h2>DodgeNet Chat</h2>
+        <h2>{t('chat.title')}</h2>
         <ConnectionStatus status={status} />
       </div>
 
@@ -87,7 +89,7 @@ function Chat({ status, setStatus}) {
           className="message-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter Message..."
+          placeholder={t('chat.placeholder')}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         />
         <button className="send-button" onClick={handleSend}>

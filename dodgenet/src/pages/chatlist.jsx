@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserPlus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { contactsUser as getContacts, addContact } from '../services/api';
 import '../App.css';
 
 function ChatList() {
+  const { t } = useTranslation();
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -54,13 +56,13 @@ function ChatList() {
   };
 
   if (loading) {
-    return <div className="chat-list"><p>Uploading contacts...</p></div>;
+    return <div className="chat-list"><p>{t('chatList.loading')}</p></div>;
   }
 
   return (
     <div className="chat-list">
       <div className="chat-list-header">
-        <h2>Contacts</h2>
+        <h2>{t('chatList.title')}</h2>
         <button 
           className="add-contact-btn"
           onClick={() => {
@@ -69,7 +71,7 @@ function ChatList() {
           }}
         >
           {showForm ? <X size={18} /> : <UserPlus size={18} />}
-          <span>{showForm ? 'Cancel' : 'Add'}</span>
+          <span>{showForm ? t('chatList.cancel') : t('chatList.add')}</span>
         </button>
       </div>
 
@@ -78,13 +80,13 @@ function ChatList() {
           <div className="input-group">
             <input
               type="text"
-              placeholder="Enter username..."
+              placeholder={t('chatList.usernamePlaceholder')}
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
               disabled={isSubmitting}
             />
             <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? '...' : 'Search'}
+              {isSubmitting ? '...' : t('chatList.search')}
             </button>
           </div>
           {error && <p className="error-text">{error}</p>}
@@ -93,7 +95,7 @@ function ChatList() {
 
       {/* Contact list */}
       {contacts.length === 0 ? (
-        <p className="empty-text">You don't have any contacts yet</p>
+        <p className="empty-text">{t('chatList.empty')}</p>
       ) : (
         contacts.map(contact => (
           <div
@@ -102,7 +104,7 @@ function ChatList() {
             onClick={() => navigate(`/chat/${contact.id}`)}
           >
             <h3>{contact.username}</h3>
-            <p>{contact.last_message}</p>
+            <p>{contact.decrypt_failed ? t('chatList.encrypted') : (contact.last_message || t('chatList.noMessages'))}</p>
           </div>
         ))
       )}

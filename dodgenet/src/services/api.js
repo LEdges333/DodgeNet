@@ -1,4 +1,6 @@
 import axios from 'axios';
+import i18n from '../i18n';
+import { errorMessage } from './errors';
 import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, getMyPublicKey } from './crypto';
 
 
@@ -68,7 +70,7 @@ export const registerUser = async (username, email, password) => {
     saveKeyPair(publicKey, privateKey);
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Registration error');
+    throw new Error(errorMessage(error, 'errors.registration'));
   }
 };
 
@@ -89,7 +91,7 @@ export const loginUser = async (username, password) => {
  
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || error.response?.data?.error || 'Login error');
+    throw new Error(errorMessage(error, 'errors.login'));
   }
 };
 
@@ -102,9 +104,7 @@ export const profilUser = async () => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error || error.response?.data?.message || 'The profile could not be loaded'
-    );
+    throw new Error(errorMessage(error, 'errors.profile'));
   }
 };
 
@@ -114,12 +114,12 @@ export const sendMessage = async (receiverId, text) => {
   const myPrivateKey = getMyPrivateKey();
  
   if (!myPrivateKey) {
-    throw new Error('Encryption keys not found. Log in again');
+    throw new Error(i18n.t('errors.noKeys'));
   }
  
   const recipientPublicKey = await getPublicKeyOf(receiverId);
   if (!recipientPublicKey) {
-    throw new Error('The recipient does not have a public key — the message cannot be encrypted');
+    throw new Error(i18n.t('errors.noRecipientKey'));
   }
  
   const { ciphertext, nonce } = await encryptMessage(text, recipientPublicKey, myPrivateKey);
@@ -139,7 +139,7 @@ export const sendMessage = async (receiverId, text) => {
       receiver_id: Number(receiverId),
     };
   } catch (error) {
-    throw new Error('All communication channels are unavailable');
+    throw new Error(i18n.t('errors.channelsUnavailable'));
   }
 };
 
@@ -153,13 +153,19 @@ export const contactsUser = async () => {
       headers: authHeader(),
     });
 
+    // The server sends the literal "No messages" for an empty conversation.
+    // We turn it into null so the UI can show it in the selected language.
+    const contacts = response.data.map((c) =>
+      c.last_message === 'No messages' ? { ...c, last_message: null } : c
+    );
+
     if (!myPrivateKey) {
-      return response.data;
+      return contacts;
     }
 
     const contactsWithDecrypted = await Promise.all(
-      response.data.map(async (contact) => {
-        if (!contact.last_message || contact.last_message === 'No messages.' || !contact.last_nonce) {
+      contacts.map(async (contact) => {
+        if (!contact.last_message || !contact.last_nonce) {
           return contact;
         }
         try {
@@ -172,16 +178,14 @@ export const contactsUser = async () => {
           );
           return { ...contact, last_message: decrypted };
         } catch (e) {
-          return { ...contact, last_message: 'Encrypted message'};
+          return { ...contact, last_message: null, decrypt_failed: true };
         }
       })
     );
 
     return contactsWithDecrypted;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error || 'Failed to load contacts'
-    );
+    throw new Error(errorMessage(error, 'errors.loadContacts'));
   }
 };
 
@@ -210,9 +214,7 @@ export const getMessage = async (receiverId) => {
 
     return decryptedMessages;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error || 'Failed to load messages'
-    );
+    throw new Error(errorMessage(error, 'errors.loadMessages'));
   }
 };
 
@@ -226,8 +228,6 @@ export const addContact = async (username) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error || 'Adding contact error'
-    );
+    throw new Error(errorMessage(error, 'errors.addContact'));
   }
 };

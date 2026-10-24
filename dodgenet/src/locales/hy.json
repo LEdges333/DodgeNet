@@ -1,0 +1,96 @@
+{
+  "app": {
+    "tagline": "Անվտանգ մեսենջեր"
+  },
+  "nav": {
+    "chat": "Զրույցներ",
+    "profile": "Պրոֆիլ",
+    "settings": "Կարգավորումներ"
+  },
+  "connection": {
+    "protected": "Կապուղին պաշտպանված է",
+    "lost": "Կապը խզվել է",
+    "node": "Հանգույց՝ {{name}}",
+    "nodes": {
+      "Primary": "Հիմնական",
+      "None": "Չկա"
+    }
+  },
+  "chat": {
+    "title": "DodgeNet զրույց",
+    "placeholder": "Մուտքագրեք հաղորդագրություն..."
+  },
+  "chatList": {
+    "loading": "Կոնտակտները բեռնվում են...",
+    "title": "Կոնտակտներ",
+    "cancel": "Չեղարկել",
+    "add": "Ավելացնել",
+    "usernamePlaceholder": "Մուտքագրեք օգտանունը...",
+    "search": "Որոնել",
+    "empty": "Դուք դեռ կոնտակտներ չունեք",
+    "noMessages": "Հաղորդագրություններ չկան",
+    "encrypted": "Գաղտնագրված հաղորդագրություն"
+  },
+  "login": {
+    "title": "Մուտք",
+    "usernamePlaceholder": "Մուտքանուն",
+    "passwordPlaceholder": "Գաղտնաբառ",
+    "submit": "Մուտք գործել",
+    "noAccount": "Հաշիվ չունե՞ք։",
+    "signUp": "Գրանցվել",
+    "welcome": "Բարի գալուստ, {{name}}։"
+  },
+  "registration": {
+    "title": "Գրանցում",
+    "usernamePlaceholder": "Մուտքանուն",
+    "emailPlaceholder": "Էլ. փոստ",
+    "passwordPlaceholder": "Գաղտնաբառ",
+    "submit": "Գրանցվել",
+    "hasAccount": "Արդեն ունե՞ք հաշիվ։",
+    "signIn": "Մուտք գործել",
+    "success": "Օգտատերը հաջողությամբ գրանցվեց",
+    "error": "Սխալ՝ {{message}}"
+  },
+  "profile": {
+    "loading": "Օգտատիրոջ տվյալները բեռնվում են...",
+    "title": "Պրոֆիլ",
+    "name": "Անուն՝",
+    "email": "Էլ. փոստ՝",
+    "edit": "Խմբագրել պրոֆիլը",
+    "exit": "Դուրս գալ",
+    "signUp": "Գրանցվել",
+    "noData": "Օգտատիրոջ տվյալներ չեն գտնվել։",
+    "backToLogin": "Վերադառնալ մուտքի էջ",
+    "networkError": "Ցանցի սխալ։ Սերվերը հասանելի չէ։"
+  },
+  "settings": {
+    "title": "Կարգավորումներ",
+    "language": "Լեզու"
+  },
+  "errors": {
+    "registration": "Գրանցման սխալ",
+    "login": "Մուտքի սխալ",
+    "profile": "Չհաջողվեց բեռնել պրոֆիլը",
+    "noKeys": "Գաղտնագրման բանալիները չեն գտնվել։ Մուտք գործեք նորից",
+    "noRecipientKey": "Ստացողը հանրային բանալի չունի. հաղորդագրությունը հնարավոր չէ գաղտնագրել",
+    "channelsUnavailable": "Կապի բոլոր ուղիները անհասանելի են",
+    "loadContacts": "Չհաջողվեց բեռնել կոնտակտները",
+    "loadMessages": "Չհաջողվեց բեռնել հաղորդագրությունները",
+    "addContact": "Կոնտակտ ավելացնելու սխալ"
+  },
+  "serverErrors": {
+    "token_missing": "Թոքենը բացակայում է։",
+    "token_expired": "Թոքենի ժամկետը լրացել է։ Մուտք գործեք նորից։",
+    "token_invalid": "Թոքենը անվավեր է։",
+    "message_fields_required": "Ստացողը, տեքստը և nonce-ը պարտադիր են",
+    "username_required": "Մուտքագրեք օգտանունը",
+    "user_not_found": "Օգտատերը չի գտնվել",
+    "cannot_add_self": "Դուք չեք կարող ավելացնել ինքներդ ձեզ",
+    "already_contact": "Օգտատերն արդեն ձեր կոնտակտների ցանկում է",
+    "registration_fields_required": "Լրացրեք բոլոր դաշտերը",
+    "user_exists": "Այդ անունով օգտատեր արդեն գոյություն ունի",
+    "login_fields_required": "Լրացրեք դաշտերը",
+    "invalid_credentials": "Սխալ մուտքանուն կամ գաղտնաբառ",
+    "key_not_found": "Բանալին չի գտնվել"
+  }
+}

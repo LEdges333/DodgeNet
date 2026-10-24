@@ -3,9 +3,11 @@ import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import {loginUser} from '../services/api';
+import {useTranslation} from 'react-i18next';
 import '../App.css';
 
 function Login() {
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ function Login() {
     try {
       const data = await loginUser(username, password);
 
-      alert(`Welcome, ${data.username}!`);
+      alert(t('login.welcome', { name: data.username }));
       navigate("/chat");
     } catch (error) {
             
@@ -27,14 +29,14 @@ function Login() {
 
   return (
   <div className="register-main">
-      <h1>Sign in</h1>
+      <h1>{t('login.title')}</h1>
         <form
           className="register-form"
           onSubmit={handleLogin}
           >
             <input
               type="text"
-              placeholder="Login"
+              placeholder={t('login.usernamePlaceholder')}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -42,19 +44,19 @@ function Login() {
 
             <input
               type="password"
-              placeholder="Password"
+              placeholder={t('login.passwordPlaceholder')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
             <button type="submit">
-              Sign in
+              {t('login.submit')}
             </button>
         </form>
         <p>
-          No account?{" "}
+          {t('login.noAccount')}{" "}
           <Link to="/registration">
-            Sign up
+            {t('login.signUp')}
           </Link>
         </p>
   </div>

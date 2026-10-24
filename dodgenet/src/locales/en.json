@@ -1,0 +1,96 @@
+{
+  "app": {
+    "tagline": "Secure Messenger"
+  },
+  "nav": {
+    "chat": "Chat",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "connection": {
+    "protected": "Channel is protected",
+    "lost": "Connection lost",
+    "node": "Node: {{name}}",
+    "nodes": {
+      "Primary": "Primary",
+      "None": "None"
+    }
+  },
+  "chat": {
+    "title": "DodgeNet Chat",
+    "placeholder": "Enter message..."
+  },
+  "chatList": {
+    "loading": "Loading contacts...",
+    "title": "Contacts",
+    "cancel": "Cancel",
+    "add": "Add",
+    "usernamePlaceholder": "Enter username...",
+    "search": "Search",
+    "empty": "You don't have any contacts yet",
+    "noMessages": "No messages",
+    "encrypted": "Encrypted message"
+  },
+  "login": {
+    "title": "Sign in",
+    "usernamePlaceholder": "Login",
+    "passwordPlaceholder": "Password",
+    "submit": "Sign in",
+    "noAccount": "No account?",
+    "signUp": "Sign up",
+    "welcome": "Welcome, {{name}}!"
+  },
+  "registration": {
+    "title": "Registration",
+    "usernamePlaceholder": "Login",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "submit": "Sign up",
+    "hasAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "success": "User has been successfully registered",
+    "error": "Error: {{message}}"
+  },
+  "profile": {
+    "loading": "Loading user data...",
+    "title": "Profile",
+    "name": "Name:",
+    "email": "Email:",
+    "edit": "Edit profile",
+    "exit": "Exit",
+    "signUp": "Sign up",
+    "noData": "No user data was found.",
+    "backToLogin": "Go back to sign in",
+    "networkError": "Network error. Backend is unavailable."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language"
+  },
+  "errors": {
+    "registration": "Registration error",
+    "login": "Login error",
+    "profile": "The profile could not be loaded",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "Failed to load contacts",
+    "loadMessages": "Failed to load messages",
+    "addContact": "Adding contact error"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found"
+  }
+}

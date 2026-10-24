@@ -29,6 +29,14 @@ def get_db_connection():
     return conn
 
 
+# Uniform error response: {"code": ..., "message": ...}
+# "code" is a stable machine-readable identifier; the client uses it to show the error in the
+# user's language. "message" is an English fallback for logs and for clients that do not know the code.
+# If you change a code here, change the matching key in dodgenet/src/locales/*.json ("serverErrors").
+def api_error(code, message, status):
+    return jsonify({"code": code, "message": message}), status
+
+
 # Checking validity of user token
 
 def token_required(f):
@@ -48,7 +56,7 @@ def token_required(f):
 
 
         if not auth_header:
-            return jsonify({"message": "The token is missing!"}), 401
+            return api_error("token_missing", "The token is missing!", 401)
         
         try:
 
@@ -59,9 +67,9 @@ def token_required(f):
             g.user_id = payload.get('user_id')
             
         except jwt.ExpiredSignatureError:
-            return jsonify({"message": "The token has expired. Login again!"}), 401
+            return api_error("token_expired", "The token has expired. Login again!", 401)
         except jwt.InvalidTokenError:
-            return jsonify({"message": "The token is not valid!"}), 401
+            return api_error("token_invalid", "The token is not valid!", 401)
             
         return f(*args, **kwargs)
     return decorated
@@ -79,7 +87,7 @@ def send_message():
     nonce = data.get("nonce")
 
     if not receiver_id or not text or not nonce:
-        return jsonify({"error": "Recipient, text and nonce mandatory"}), 400
+        return api_error("message_fields_required", "Recipient, text and nonce mandatory", 400)
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -198,7 +206,7 @@ def add_contact():
     username = data.get("username")
 
     if not username:
-        return jsonify({"error": "Enter username"}), 400
+        return api_error("username_required", "Enter username", 400)
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -207,13 +215,13 @@ def add_contact():
 
     if not target_user:
         conn.close()
-        return jsonify({"error": "User not found"}), 404
+        return api_error("user_not_found", "User not found", 404)
 
     contact_id = target_user["id"]
 
     if contact_id == g.user_id:
         conn.close()
-        return jsonify({"error": "You cant add yourself"}), 400
+        return api_error("cannot_add_self", "You cant add yourself", 400)
 
     try:
         cursor.execute(
@@ -228,7 +236,7 @@ def add_contact():
     except sqlite3.IntegrityError:
         conn.rollback()
         conn.close()
-        return jsonify({"error": "User is already in your contact list"}), 400
+        return api_error("already_contact", "User is already in your contact list", 400)
 
     conn.close()
     return jsonify({"status": "success", "message": "Contact successfully added"}), 201
@@ -247,7 +255,7 @@ def registration():
     public_key = data.get("public_key")
 
     if not username or not email or not password:
-        return jsonify({"message": "Fill in all the fields"}), 400
+        return api_error("registration_fields_required", "Fill in all the fields", 400)
     
     hashed_password = generate_password_hash(password)
     # Saving to database
@@ -259,7 +267,7 @@ def registration():
         cursor.execute('INSERT INTO users (username, email, password_hash, public_key) VALUES (?, ?, ?, ?)', (username, email, hashed_password, public_key))
         conn.commit()
     except sqlite3.IntegrityError:
-        return jsonify({"message": "User with such name already exist"}), 400
+        return api_error("user_exists", "User with such name already exist", 400)
     finally:
         conn.close()
     return jsonify({"message": "User has been successfully registered"}), 201
@@ -275,7 +283,7 @@ def login():
     # checking
 
     if not username or not password:
-        return jsonify({"error": "Fill in the fields"}), 400
+        return api_error("login_fields_required", "Fill in the fields", 400)
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -284,7 +292,7 @@ def login():
     conn.close()
 
     if user is None or not check_password_hash(user['password_hash'], password):
-        return jsonify({"error": "Incorrect login or password"}), 401
+        return api_error("invalid_credentials", "Incorrect login or password", 401)
 
     payload = {
         "user_id": user['id'],
@@ -307,7 +315,7 @@ def profile():
     conn.close()
 
     if not user:
-        return jsonify({"error": "User not found"}), 404
+        return api_error("user_not_found", "User not found", 404)
 
     return jsonify({"id": user["id"], "username": user["username"], "email": user["email"]}), 200
 
@@ -321,7 +329,7 @@ def get_user_key(user_id):
     user = conn.execute("SELECT public_key FROM users WHERE id = ?", (user_id,)).fetchone()
     conn.close()
     if not user or not user["public_key"]:
-        return jsonify({"error": "Key not found"}), 404
+        return api_error("key_not_found", "Key not found", 404)
     return jsonify({"public_key": user["public_key"]}), 200
 
 

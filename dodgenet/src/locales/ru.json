@@ -1,0 +1,96 @@
+{
+  "app": {
+    "tagline": "Защищённый мессенджер"
+  },
+  "nav": {
+    "chat": "Чаты",
+    "profile": "Профиль",
+    "settings": "Настройки"
+  },
+  "connection": {
+    "protected": "Канал защищён",
+    "lost": "Соединение потеряно",
+    "node": "Узел: {{name}}",
+    "nodes": {
+      "Primary": "Основной",
+      "None": "Нет"
+    }
+  },
+  "chat": {
+    "title": "Чат DodgeNet",
+    "placeholder": "Введите сообщение..."
+  },
+  "chatList": {
+    "loading": "Загрузка контактов...",
+    "title": "Контакты",
+    "cancel": "Отмена",
+    "add": "Добавить",
+    "usernamePlaceholder": "Введите имя пользователя...",
+    "search": "Найти",
+    "empty": "У вас пока нет контактов",
+    "noMessages": "Нет сообщений",
+    "encrypted": "Зашифрованное сообщение"
+  },
+  "login": {
+    "title": "Вход",
+    "usernamePlaceholder": "Логин",
+    "passwordPlaceholder": "Пароль",
+    "submit": "Войти",
+    "noAccount": "Нет аккаунта?",
+    "signUp": "Зарегистрироваться",
+    "welcome": "Добро пожаловать, {{name}}!"
+  },
+  "registration": {
+    "title": "Регистрация",
+    "usernamePlaceholder": "Логин",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Пароль",
+    "submit": "Зарегистрироваться",
+    "hasAccount": "Уже есть аккаунт?",
+    "signIn": "Войти",
+    "success": "Пользователь успешно зарегистрирован",
+    "error": "Ошибка: {{message}}"
+  },
+  "profile": {
+    "loading": "Загрузка данных пользователя...",
+    "title": "Профиль",
+    "name": "Имя:",
+    "email": "Email:",
+    "edit": "Редактировать профиль",
+    "exit": "Выйти",
+    "signUp": "Регистрация",
+    "noData": "Данные пользователя не найдены.",
+    "backToLogin": "Вернуться ко входу",
+    "networkError": "Ошибка сети. Сервер недоступен."
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык"
+  },
+  "errors": {
+    "registration": "Ошибка регистрации",
+    "login": "Ошибка входа",
+    "profile": "Не удалось загрузить профиль",
+    "noKeys": "Ключи шифрования не найдены. Войдите снова",
+    "noRecipientKey": "У получателя нет публичного ключа — сообщение нельзя зашифровать",
+    "channelsUnavailable": "Все каналы связи недоступны",
+    "loadContacts": "Не удалось загрузить контакты",
+    "loadMessages": "Не удалось загрузить сообщения",
+    "addContact": "Ошибка добавления контакта"
+  },
+  "serverErrors": {
+    "token_missing": "Токен отсутствует!",
+    "token_expired": "Срок действия токена истёк. Войдите снова!",
+    "token_invalid": "Токен недействителен!",
+    "message_fields_required": "Получатель, текст и nonce обязательны",
+    "username_required": "Введите имя пользователя",
+    "user_not_found": "Пользователь не найден",
+    "cannot_add_self": "Нельзя добавить самого себя",
+    "already_contact": "Пользователь уже в вашем списке контактов",
+    "registration_fields_required": "Заполните все поля",
+    "user_exists": "Пользователь с таким именем уже существует",
+    "login_fields_required": "Заполните поля",
+    "invalid_credentials": "Неверный логин или пароль",
+    "key_not_found": "Ключ не найден"
+  }
+}

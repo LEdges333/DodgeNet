@@ -1,0 +1,96 @@
+{
+  "app": {
+    "tagline": "Turvallinen viestintäsovellus"
+  },
+  "nav": {
+    "chat": "Keskustelut",
+    "profile": "Profiili",
+    "settings": "Asetukset"
+  },
+  "connection": {
+    "protected": "Kanava on suojattu",
+    "lost": "Yhteys katkesi",
+    "node": "Solmu: {{name}}",
+    "nodes": {
+      "Primary": "Ensisijainen",
+      "None": "Ei mitään"
+    }
+  },
+  "chat": {
+    "title": "DodgeNet-keskustelu",
+    "placeholder": "Kirjoita viesti..."
+  },
+  "chatList": {
+    "loading": "Ladataan yhteystietoja...",
+    "title": "Yhteystiedot",
+    "cancel": "Peruuta",
+    "add": "Lisää",
+    "usernamePlaceholder": "Anna käyttäjätunnus...",
+    "search": "Hae",
+    "empty": "Sinulla ei ole vielä yhteystietoja",
+    "noMessages": "Ei viestejä",
+    "encrypted": "Salattu viesti"
+  },
+  "login": {
+    "title": "Kirjaudu sisään",
+    "usernamePlaceholder": "Käyttäjätunnus",
+    "passwordPlaceholder": "Salasana",
+    "submit": "Kirjaudu sisään",
+    "noAccount": "Ei tiliä?",
+    "signUp": "Rekisteröidy",
+    "welcome": "Tervetuloa, {{name}}!"
+  },
+  "registration": {
+    "title": "Rekisteröityminen",
+    "usernamePlaceholder": "Käyttäjätunnus",
+    "emailPlaceholder": "Sähköposti",
+    "passwordPlaceholder": "Salasana",
+    "submit": "Rekisteröidy",
+    "hasAccount": "Onko sinulla jo tili?",
+    "signIn": "Kirjaudu sisään",
+    "success": "Käyttäjä on rekisteröity onnistuneesti",
+    "error": "Virhe: {{message}}"
+  },
+  "profile": {
+    "loading": "Ladataan käyttäjätietoja...",
+    "title": "Profiili",
+    "name": "Nimi:",
+    "email": "Sähköposti:",
+    "edit": "Muokkaa profiilia",
+    "exit": "Kirjaudu ulos",
+    "signUp": "Rekisteröidy",
+    "noData": "Käyttäjätietoja ei löytynyt.",
+    "backToLogin": "Takaisin kirjautumiseen",
+    "networkError": "Verkkovirhe. Palvelin ei ole käytettävissä."
+  },
+  "settings": {
+    "title": "Asetukset",
+    "language": "Kieli"
+  },
+  "errors": {
+    "registration": "Rekisteröintivirhe",
+    "login": "Kirjautumisvirhe",
+    "profile": "Profiilia ei voitu ladata",
+    "noKeys": "Salausavaimia ei löytynyt. Kirjaudu sisään uudelleen",
+    "noRecipientKey": "Vastaanottajalla ei ole julkista avainta – viestiä ei voi salata",
+    "channelsUnavailable": "Kaikki yhteyskanavat ovat poissa käytöstä",
+    "loadContacts": "Yhteystietojen lataaminen epäonnistui",
+    "loadMessages": "Viestien lataaminen epäonnistui",
+    "addContact": "Yhteystiedon lisäämisessä tapahtui virhe"
+  },
+  "serverErrors": {
+    "token_missing": "Tunniste puuttuu!",
+    "token_expired": "Tunniste on vanhentunut. Kirjaudu sisään uudelleen!",
+    "token_invalid": "Tunniste ei kelpaa!",
+    "message_fields_required": "Vastaanottaja, teksti ja nonce ovat pakollisia",
+    "username_required": "Anna käyttäjätunnus",
+    "user_not_found": "Käyttäjää ei löytynyt",
+    "cannot_add_self": "Et voi lisätä itseäsi",
+    "already_contact": "Käyttäjä on jo yhteystiedoissasi",
+    "registration_fields_required": "Täytä kaikki kentät",
+    "user_exists": "Tämänniminen käyttäjä on jo olemassa",
+    "login_fields_required": "Täytä kentät",
+    "invalid_credentials": "Virheellinen käyttäjätunnus tai salasana",
+    "key_not_found": "Avainta ei löytynyt"
+  }
+}
