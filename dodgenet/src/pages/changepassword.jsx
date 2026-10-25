@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { changePassword } from '../services/api';
+import { handleFormArrowNav } from '../utils/formNavigation';
 import '../App.css';
 
 function ChangePassword() {
@@ -41,7 +42,7 @@ function ChangePassword() {
   return (
     <div className="register-main">
       <h1>{t('changePassword.title')}</h1>
-      <form className="register-form" onSubmit={handleSubmit}>
+      <form className="register-form" onSubmit={handleSubmit} onKeyDown={handleFormArrowNav}>
         <input
           type="password"
           placeholder={t('changePassword.oldPlaceholder')}

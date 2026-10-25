@@ -2,7 +2,6 @@ import React from 'react';
 import {Send} from 'lucide-react';
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
 import {useParams} from 'react-router-dom';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -76,8 +75,8 @@ function Chat({ status, setStatus}) {
               key={msg.id}
               className={`message-row ${isMine ? 'send' : 'get'}`}
             >
-              <div className={`message ${isMine ? 'message-send' : 'message-get'}`}>
-                {msg.text}
+              <div className={`message ${isMine ? 'message-send' : 'message-get'}${msg.decrypt_failed ? ' message-undecrypted' : ''}`}>
+                {msg.decrypt_failed ? t('chat.cannotDecrypt') : msg.text}
               </div>
             </div>
           );

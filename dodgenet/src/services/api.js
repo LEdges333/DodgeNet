@@ -1,7 +1,7 @@
 import axios from 'axios';
 import i18n from '../i18n';
 import { errorMessage } from './errors';
-import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, getMyPublicKey } from './crypto';
+import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, adoptLegacyKeys, importKeyFile, keyError } from './crypto';
 
 
 
@@ -67,7 +67,7 @@ export const registerUser = async (username, email, password) => {
       data: { username, email, password, public_key: publicKey },
     });
 
-    saveKeyPair(publicKey, privateKey);
+    saveKeyPair(username, publicKey, privateKey);
     return response.data;
   } catch (error) {
     throw new Error(errorMessage(error, 'errors.registration'));
@@ -87,6 +87,14 @@ export const loginUser = async (username, password) => {
       localStorage.setItem('username', response.data.username || username);
       localStorage.setItem('activeUsername', response.data.username || username);
       localStorage.setItem('userId', response.data.user_id);
+
+      // Keys saved by an older version (one pair per browser) are moved to this account if they match.
+      try {
+        const serverPublicKey = await getPublicKeyOf(response.data.user_id);
+        await adoptLegacyKeys(response.data.username || username, serverPublicKey);
+      } catch (e) {
+        console.warn('Could not check the local keys:', e);
+      }
     }
  
     return response.data;
@@ -124,6 +132,28 @@ export const changePassword = async (oldPassword, newPassword, confirmation) => 
 };
 
 
+// Import of a key backup file for the account that is logged in now.
+// The key is accepted only if its public key equals the one the server has for this account,
+// so a file of another account (or a forged one) can never replace the local keys.
+export const importKeys = async (file, passphrase) => {
+  const username = localStorage.getItem('activeUsername');
+  const userId = localStorage.getItem('userId');
+  if (!username || !userId) throw keyError('generic');
+
+  const { publicKey, privateKey } = await importKeyFile(file, passphrase);
+
+  let serverPublicKey;
+  try {
+    serverPublicKey = await getPublicKeyOf(userId);
+  } catch {
+    throw keyError('generic');
+  }
+  if (serverPublicKey !== publicKey) throw keyError('wrong_account');
+
+  saveKeyPair(username, publicKey, privateKey);
+};
+
+
 // Sending a message - encrypts it before sending.
 export const sendMessage = async (receiverId, text) => {
   const myPrivateKey = getMyPrivateKey();
@@ -153,7 +183,7 @@ export const sendMessage = async (receiverId, text) => {
       sender_id: Number(localStorage.getItem('userId')),
       receiver_id: Number(receiverId),
     };
-  } catch (error) {
+  } catch {
     throw new Error(i18n.t('errors.channelsUnavailable'));
   }
 };
@@ -174,8 +204,11 @@ export const contactsUser = async () => {
       c.last_message === 'No messages' ? { ...c, last_message: null } : c
     );
 
+    // No keys for this account on this device: nothing can be decrypted.
     if (!myPrivateKey) {
-      return contacts;
+      return contacts.map((c) =>
+        c.last_message && c.last_nonce ? { ...c, last_message: null, decrypt_failed: true } : c
+      );
     }
 
     const contactsWithDecrypted = await Promise.all(
@@ -191,8 +224,11 @@ export const contactsUser = async () => {
             theirPublicKey,
             myPrivateKey
           );
+          if (decrypted === null) {
+            return { ...contact, last_message: null, decrypt_failed: true };
+          }
           return { ...contact, last_message: decrypted };
-        } catch (e) {
+        } catch {
           return { ...contact, last_message: null, decrypt_failed: true };
         }
       })
@@ -214,17 +250,23 @@ export const getMessage = async (receiverId) => {
       headers: authHeader(),
     });
 
+    // No keys for this account on this device: nothing can be decrypted.
     if (!myPrivateKey) {
-      return response.data; 
+      return response.data.map((msg) =>
+        msg.nonce ? { ...msg, text: null, decrypt_failed: true } : msg
+      );
     }
 
     const otherPublicKey = await getPublicKeyOf(receiverId);
 
     const decryptedMessages = await Promise.all(
-      response.data.map(async (msg) => ({
-        ...msg,
-        text: await decryptMessage(msg.text, msg.nonce, otherPublicKey, myPrivateKey),
-      }))
+      response.data.map(async (msg) => {
+        // A message without a nonce was stored before encryption existed: it is plain text.
+        if (!msg.nonce) return msg;
+
+        const text = await decryptMessage(msg.text, msg.nonce, otherPublicKey, myPrivateKey);
+        return text === null ? { ...msg, text: null, decrypt_failed: true } : { ...msg, text };
+      })
     );
 
     return decryptedMessages;

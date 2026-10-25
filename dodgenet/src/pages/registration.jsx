@@ -2,8 +2,9 @@ import React from 'react';
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
-import {registerUser} from '../services/api';
+import {registerUser, loginUser} from '../services/api';
 import {useTranslation} from 'react-i18next';
+import {handleFormArrowNav} from '../utils/formNavigation';
 import '../App.css';
 
 
@@ -23,11 +24,19 @@ function Registration() {
 
     try {
       await registerUser(username, email, password);
-      alert(t('registration.success'));
-      navigate('/login');
     } catch (error) {
       alert(t('registration.error', { message: error.message }));
       console.error('Error Details:', error);
+      return;
+    }
+
+    // The account exists now: sign in right away instead of sending the user to the login page.
+    try {
+      await loginUser(username, password);
+      navigate('/');
+    } catch (error) {
+      console.error('Auto-login failed:', error);
+      navigate('/login');
     }
   };
 
@@ -35,7 +44,7 @@ function Registration() {
     <div className="register-main">
       <h1>{t('registration.title')}</h1>
       {/* We bind the function to the form submission event */}
-      <form className="register-form" onSubmit={handleRegister}>
+      <form className="register-form" onSubmit={handleRegister} onKeyDown={handleFormArrowNav}>
         <input 
           type="text" 
           placeholder={t('registration.usernamePlaceholder')} 

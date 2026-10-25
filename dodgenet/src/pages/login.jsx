@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import {loginUser} from '../services/api';
 import {useTranslation} from 'react-i18next';
+import {handleFormArrowNav} from '../utils/formNavigation';
 import '../App.css';
 
 function Login() {
@@ -20,7 +21,7 @@ function Login() {
       const data = await loginUser(username, password);
 
       alert(t('login.welcome', { name: data.username }));
-      navigate("/chat");
+      navigate("/");
     } catch (error) {
             
       alert(error.message);
@@ -33,6 +34,7 @@ function Login() {
         <form
           className="register-form"
           onSubmit={handleLogin}
+          onKeyDown={handleFormArrowNav}
           >
             <input
               type="text"

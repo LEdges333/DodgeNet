@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, setLanguage } from '../i18n';
 import { THEMES, getTheme, setTheme } from '../theme';
+import KeyBackup from '../components/KeyBackup';
 import '../App.css';
 
 function Settings() {
   const { t, i18n } = useTranslation();
   const [theme, setThemeState] = useState(getTheme);
+  // The keys belong to the account that is logged in, so the section is shown only then.
+  const isLoggedIn = Boolean(localStorage.getItem('token') && localStorage.getItem('activeUsername'));
 
   const handleThemeChange = (e) => {
     setTheme(e.target.value);
@@ -56,6 +59,8 @@ function Settings() {
           {t('settings.changePassword')}
         </Link>
       </div>
+
+      {isLoggedIn && <KeyBackup />}
     </div>
   );
 }

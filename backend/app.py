@@ -114,7 +114,7 @@ def get_messages(other_user_id):
         FROM messages
         WHERE (sender_id = ? AND receiver_id = ?)
            OR (sender_id = ? AND receiver_id = ?)
-        ORDER BY timestamp ASC
+        ORDER BY timestamp ASC, id ASC  -- id breaks ties: timestamp has 1 second resolution
     """, (g.user_id, other_user_id, other_user_id, g.user_id)).fetchall()
     conn.close()
 
@@ -150,7 +150,7 @@ def contactsUser():
                     (m.sender_id = u.id AND m.receiver_id = ?)
                     OR
                     (m.sender_id = ? AND m.receiver_id = u.id)
-                ORDER BY m.timestamp DESC
+                ORDER BY m.timestamp DESC, m.id DESC
                 LIMIT 1
             ) AS last_message,
             (
@@ -160,7 +160,7 @@ def contactsUser():
                     (m.sender_id = u.id AND m.receiver_id = ?)
                     OR
                     (m.sender_id = ? AND m.receiver_id = u.id)
-                ORDER BY m.timestamp DESC
+                ORDER BY m.timestamp DESC, m.id DESC
                 LIMIT 1
             ) AS last_nonce,
             (
@@ -170,7 +170,7 @@ def contactsUser():
                     (m.sender_id = u.id AND m.receiver_id = ?)
                     OR
                     (m.sender_id = ? AND m.receiver_id = u.id)
-                ORDER BY m.timestamp DESC
+                ORDER BY m.timestamp DESC, m.id DESC
                 LIMIT 1
             ) AS last_timestamp
 

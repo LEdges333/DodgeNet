@@ -18,7 +18,8 @@
   },
   "chat": {
     "title": "DodgeNet Chat",
-    "placeholder": "Enter message..."
+    "placeholder": "Enter message...",
+    "cannotDecrypt": "Couldn't decrypt this message"
   },
   "chatList": {
     "loading": "Loading contacts...",
@@ -48,7 +49,6 @@
     "submit": "Sign up",
     "hasAccount": "Already have an account?",
     "signIn": "Sign in",
-    "success": "User has been successfully registered",
     "error": "Error: {{message}}"
   },
   "profile": {
@@ -114,5 +114,31 @@
     "confirmPlaceholder": "Repeat new password",
     "submit": "Change password",
     "success": "Password successfully changed"
+  },
+  "keys": {
+    "title": "Encryption keys",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "Export keys",
+    "importTitle": "Import keys",
+    "passphrase": "File password",
+    "passphraseRepeat": "Repeat file password",
+    "exportButton": "Export",
+    "importButton": "Import",
+    "keyFile": "Key file",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "Choose a key file",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
   }
 }

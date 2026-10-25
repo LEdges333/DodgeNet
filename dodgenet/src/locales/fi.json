@@ -18,7 +18,8 @@
   },
   "chat": {
     "title": "DodgeNet-keskustelu",
-    "placeholder": "Kirjoita viesti..."
+    "placeholder": "Kirjoita viesti...",
+    "cannotDecrypt": "Viestiä ei voitu purkaa"
   },
   "chatList": {
     "loading": "Ladataan yhteystietoja...",
@@ -48,7 +49,6 @@
     "submit": "Rekisteröidy",
     "hasAccount": "Onko sinulla jo tili?",
     "signIn": "Kirjaudu sisään",
-    "success": "Käyttäjä on rekisteröity onnistuneesti",
     "error": "Virhe: {{message}}"
   },
   "profile": {
@@ -114,5 +114,31 @@
     "confirmPlaceholder": "Toista uusi salasana",
     "submit": "Vaihda salasana",
     "success": "Salasana vaihdettu onnistuneesti"
+  },
+  "keys": {
+    "title": "Salausavaimet",
+    "description": "Viestisi voi lukea vain yksityisellä avaimellasi, joka on tallennettu vain tähän selaimeen. Tallenna varmuuskopiotiedosto, jotta voit lukea historian toisella laitteella tai selaimen tyhjentämisen jälkeen.",
+    "exportTitle": "Vie avaimet",
+    "importTitle": "Tuo avaimet",
+    "passphrase": "Tiedoston salasana",
+    "passphraseRepeat": "Toista tiedoston salasana",
+    "exportButton": "Vie",
+    "importButton": "Tuo",
+    "keyFile": "Avaintiedosto",
+    "exported": "Avaintiedosto tallennettu. Säilytä se ja sen salasana turvallisessa paikassa.",
+    "imported": "Avaimet tuotu. Voit nyt lukea viestihistoriasi.",
+    "noLocalKeys": "Tällä laitteella ei ole tämän tilin avaimia, joten viotavaa ei ole.",
+    "warning": "Jokainen, jolla on tiedosto ja sen salasana, voi lukea viestisi.",
+    "errors": {
+      "passphraseShort": "Salasanan on oltava vähintään 8 merkkiä",
+      "passphraseMismatch": "Salasanat eivät täsmää",
+      "noFile": "Valitse avaintiedosto",
+      "invalid_file": "Tämä ei ole DodgeNetin avaintiedosto",
+      "wrong_passphrase": "Väärä salasana tai tiedosto on vioittunut",
+      "wrong_account": "Tämä avaintiedosto kuuluu toiselle tilille",
+      "no_keys": "Tällä laitteella ei ole tämän tilin avaimia",
+      "no_crypto": "Salaus ei ole käytettävissä (HTTPS vaaditaan)",
+      "generic": "Toimintoa ei voitu suorittaa"
+    }
   }
 }
