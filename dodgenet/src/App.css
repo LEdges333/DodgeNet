@@ -1,15 +1,58 @@
+/* Themes. The dark values are the original colours of the app.
+   data-theme is set on <html> by src/theme.js. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --field: #334155;
+  --border: #334155;
+  --border-subtle: #1e293b;
+  --text: #f8fafc;
+  --text-soft: #e2e8f0;
+  --text-muted: #94a3b8;
+  --input-bg: #1f2937;
+  --input-border: #374151;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --online: #22c55e;
+  --bubble-get-bg: #2a2d35;
+  --bubble-get-text: #d8dae0;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --field: #e2e8f0;
+  --border: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --text: #0f172a;
+  --text-soft: #334155;
+  --text-muted: #64748b;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --online: #16a34a;
+  --bubble-get-bg: #e2e8f0;
+  --bubble-get-text: #1e293b;
+  --shadow: rgba(15, 23, 42, 0.15);
+}
+
 .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: #0f172a; 
-  color: #f8fafc;
+  background-color: var(--bg); 
+  color: var(--text);
   font-family: sans-serif;
   overflow: hidden;
 }
 .main-content {
   flex-grow: 1;
-  background-color: #0f172a;
+  background-color: var(--bg);
   padding: 30px;
   gap: 20px;
   overflow-Y: auto;
@@ -17,7 +60,7 @@
 
 .header {
   padding: 20px;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .status-row {
   display: flex;
@@ -35,12 +78,12 @@
 .status-container {
   margin-top: auto;
   padding-top: 15px;
-  border-top: 1px solid #334155;
+  border-top: 1px solid var(--border);
 }
 
 /* Modifiers for different states */
 .online {
-  color: #22c55e;
+  color: var(--online);
 }
 
 .offline {
@@ -49,7 +92,7 @@
 
 .node-info {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
@@ -57,19 +100,19 @@
   width: 100%;
   max-width: 400px;
   height: 80vh;
-  background-color: #0f172a;
+  background-color: var(--bg);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid #1e293b;
+  box-shadow: 0 25px 50px -12px var(--shadow);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
 }
 
 .side-bar {
   width: 240px;
-  border-right: 1px solid #334155;
-  background-color: #1e293b;
-  color: #f8fafc;
+  border-right: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text);
   padding: 24px;
   display: flex; 
   flex-direction: column; 
@@ -87,13 +130,13 @@
 
 .Link {
   text-decoration: none;
-  color: #e2e8f0;
+  color: var(--text-soft);
   font-weight: 500;
 }
 
 .input-area {
   padding: 20px;
-  background-color: #1e293b;
+  background-color: var(--surface);
   display: flex;
   gap: 10px;
   border-radius: 16px;
@@ -101,16 +144,16 @@
 
 .message-input {
   flex: 1;
-  background-color: #334155;
+  background-color: var(--field);
   padding: 10px 15px;
-  color: white;
+  color: var(--text);
   outline: none;
   border: none;
   border-radius: 16px;
 }
 
 .send-button {
-  background-color: #3b82f6;
+  background-color: var(--accent);
   padding: 0 20px;
   color: white;
   font-weight: bold;
@@ -121,7 +164,7 @@
 }
 
 .send-button:hover { 
-  background-color: #60a5fa; 
+  background-color: var(--accent-hover); 
 }
 
 .register-form  {
@@ -139,13 +182,13 @@
 
 .contact-card {
   padding: 14px 10px;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .contact-card:hover {
-  background-color: #1e293b;
+  background-color: var(--surface);
 }
 
 .contact-card h3 {
@@ -154,7 +197,7 @@
 
 .contact-card p {
   margin: 0;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .chat-list {
@@ -207,9 +250,9 @@
   flex: 1;
   padding: 8px 12px;
   border-radius: 16px;
-  border: 1px solid #374151;
-  background-color: #1f2937;
-  color: white;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text);
 }
 
 .add-contact-form button[type="submit"] {
@@ -264,8 +307,8 @@
 }
  
 .message-get {
-  background-color: #2a2d35;
-  color: #d8dae0;
+  background-color: var(--bubble-get-bg);
+  color: var(--bubble-get-text);
   border-bottom-left-radius: 4px;
 }
 
@@ -283,15 +326,31 @@
   align-items: center;
   gap: 16px;
   padding: 14px 10px;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border);
 }
 
 .settings-select {
   padding: 8px 12px;
   border-radius: 16px;
-  border: 1px solid #374151;
-  background-color: #1f2937;
-  color: white;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text);
   font-size: 14px;
   cursor: pointer;
+}
+
+.settings-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.settings-link:hover {
+  text-decoration: underline;
+}
+
+.success-text {
+  color: var(--online);
+  font-size: 13px;
+  margin: 0;
 }

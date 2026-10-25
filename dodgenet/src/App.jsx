@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import Profile from './pages/profile';
 import Settings from './pages/settings';
+import ChangePassword from './pages/changepassword';
 import Chat from './pages/chat';
 import ChatList from './pages/chatlist';
 import Registration from './pages/registration';
@@ -49,6 +50,7 @@ function App() {
           />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/registration" element={<Registration />} /> 
           <Route path="/login" element={<Login />} />        
         </Routes>

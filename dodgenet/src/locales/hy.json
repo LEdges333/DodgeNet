@@ -65,7 +65,15 @@
   },
   "settings": {
     "title": "Կարգավորումներ",
-    "language": "Լեզու"
+    "language": "Լեզու",
+    "theme": "Թեմա",
+    "themes": {
+      "system": "Համակարգային",
+      "light": "Բաց",
+      "dark": "Մուգ"
+    },
+    "password": "Գաղտնաբառ",
+    "changePassword": "Փոխել գաղտնաբառը"
   },
   "errors": {
     "registration": "Գրանցման սխալ",
@@ -76,7 +84,8 @@
     "channelsUnavailable": "Կապի բոլոր ուղիները անհասանելի են",
     "loadContacts": "Չհաջողվեց բեռնել կոնտակտները",
     "loadMessages": "Չհաջողվեց բեռնել հաղորդագրությունները",
-    "addContact": "Կոնտակտ ավելացնելու սխալ"
+    "addContact": "Կոնտակտ ավելացնելու սխալ",
+    "changePassword": "Չհաջողվեց փոխել գաղտնաբառը"
   },
   "serverErrors": {
     "token_missing": "Թոքենը բացակայում է։",
@@ -91,6 +100,19 @@
     "user_exists": "Այդ անունով օգտատեր արդեն գոյություն ունի",
     "login_fields_required": "Լրացրեք դաշտերը",
     "invalid_credentials": "Սխալ մուտքանուն կամ գաղտնաբառ",
-    "key_not_found": "Բանալին չի գտնվել"
+    "key_not_found": "Բանալին չի գտնվել",
+    "email_exists": "Այս էլ. փոստով օգտատեր արդեն գոյություն ունի",
+    "password_fields_required": "Լրացրեք բոլոր դաշտերը",
+    "password_same_as_old": "Նոր գաղտնաբառը պետք է տարբերվի ընթացիկից",
+    "password_mismatch": "Գաղտնաբառերը չեն համընկնում",
+    "wrong_current_password": "Ընթացիկ գաղտնաբառը սխալ է"
+  },
+  "changePassword": {
+    "title": "Գաղտնաբառի փոփոխություն",
+    "oldPlaceholder": "Ընթացիկ գաղտնաբառ",
+    "newPlaceholder": "Նոր գաղտնաբառ",
+    "confirmPlaceholder": "Կրկնեք նոր գաղտնաբառը",
+    "submit": "Փոխել գաղտնաբառը",
+    "success": "Գաղտնաբառը հաջողությամբ փոխվեց"
   }
 }

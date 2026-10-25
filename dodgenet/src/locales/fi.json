@@ -65,7 +65,15 @@
   },
   "settings": {
     "title": "Asetukset",
-    "language": "Kieli"
+    "language": "Kieli",
+    "theme": "Teema",
+    "themes": {
+      "system": "Järjestelmän mukaan",
+      "light": "Vaalea",
+      "dark": "Tumma"
+    },
+    "password": "Salasana",
+    "changePassword": "Vaihda salasana"
   },
   "errors": {
     "registration": "Rekisteröintivirhe",
@@ -76,7 +84,8 @@
     "channelsUnavailable": "Kaikki yhteyskanavat ovat poissa käytöstä",
     "loadContacts": "Yhteystietojen lataaminen epäonnistui",
     "loadMessages": "Viestien lataaminen epäonnistui",
-    "addContact": "Yhteystiedon lisäämisessä tapahtui virhe"
+    "addContact": "Yhteystiedon lisäämisessä tapahtui virhe",
+    "changePassword": "Salasanan vaihtaminen epäonnistui"
   },
   "serverErrors": {
     "token_missing": "Tunniste puuttuu!",
@@ -91,6 +100,19 @@
     "user_exists": "Tämänniminen käyttäjä on jo olemassa",
     "login_fields_required": "Täytä kentät",
     "invalid_credentials": "Virheellinen käyttäjätunnus tai salasana",
-    "key_not_found": "Avainta ei löytynyt"
+    "key_not_found": "Avainta ei löytynyt",
+    "email_exists": "Tällä sähköpostiosoitteella on jo käyttäjä",
+    "password_fields_required": "Täytä kaikki kentät",
+    "password_same_as_old": "Uuden salasanan on oltava eri kuin nykyisen",
+    "password_mismatch": "Salasanat eivät täsmää",
+    "wrong_current_password": "Nykyinen salasana on väärä"
+  },
+  "changePassword": {
+    "title": "Salasanan vaihto",
+    "oldPlaceholder": "Nykyinen salasana",
+    "newPlaceholder": "Uusi salasana",
+    "confirmPlaceholder": "Toista uusi salasana",
+    "submit": "Vaihda salasana",
+    "success": "Salasana vaihdettu onnistuneesti"
   }
 }

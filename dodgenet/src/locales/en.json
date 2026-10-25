@@ -65,7 +65,15 @@
   },
   "settings": {
     "title": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "theme": "Theme",
+    "themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "password": "Password",
+    "changePassword": "Change password"
   },
   "errors": {
     "registration": "Registration error",
@@ -76,7 +84,8 @@
     "channelsUnavailable": "All communication channels are unavailable",
     "loadContacts": "Failed to load contacts",
     "loadMessages": "Failed to load messages",
-    "addContact": "Adding contact error"
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
   },
   "serverErrors": {
     "token_missing": "The token is missing!",
@@ -91,6 +100,19 @@
     "user_exists": "A user with this name already exists",
     "login_fields_required": "Fill in the fields",
     "invalid_credentials": "Incorrect login or password",
-    "key_not_found": "Key not found"
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "Change password",
+    "oldPlaceholder": "Current password",
+    "newPlaceholder": "New password",
+    "confirmPlaceholder": "Repeat new password",
+    "submit": "Change password",
+    "success": "Password successfully changed"
   }
 }

@@ -266,7 +266,10 @@ def registration():
     try:
         cursor.execute('INSERT INTO users (username, email, password_hash, public_key) VALUES (?, ?, ?, ?)', (username, email, hashed_password, public_key))
         conn.commit()
-    except sqlite3.IntegrityError:
+    except sqlite3.IntegrityError as e:
+        # SQLite reports which UNIQUE column failed, e.g. "UNIQUE constraint failed: users.email"
+        if "users.email" in str(e):
+            return api_error("email_exists", "User with such email already exist", 400)
         return api_error("user_exists", "User with such name already exist", 400)
     finally:
         conn.close()
@@ -318,6 +321,47 @@ def profile():
         return api_error("user_not_found", "User not found", 404)
 
     return jsonify({"id": user["id"], "username": user["username"], "email": user["email"]}), 200
+
+
+# Change password
+
+@app.route("/api/change-password", methods=["POST"])
+@token_required
+def change_password():
+    data = request.json or {}
+    old_password = data.get("old_password")
+    new_password = data.get("new_password")
+    confirmation = data.get("confirmation")
+
+    # Checking correctness of the input
+    if not old_password or not new_password or not confirmation:
+        return api_error("password_fields_required", "All fields are required", 400)
+    if old_password == new_password:
+        return api_error("password_same_as_old", "New password must be different from the old one", 400)
+    if new_password != confirmation:
+        return api_error("password_mismatch", "Passwords do not match", 400)
+
+    conn = get_db_connection()
+    user = conn.execute("SELECT password_hash FROM users WHERE id = ?", (g.user_id,)).fetchone()
+
+    if user is None:
+        conn.close()
+        return api_error("user_not_found", "User not found", 404)
+
+    # Checking the old password. 400 and not 401 on purpose: the session itself is valid,
+    # the client must not treat this as "log in again".
+    if not check_password_hash(user["password_hash"], old_password):
+        conn.close()
+        return api_error("wrong_current_password", "Current password is incorrect", 400)
+
+    conn.execute(
+        "UPDATE users SET password_hash = ? WHERE id = ?",
+        (generate_password_hash(new_password), g.user_id)
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"status": "success", "message": "Password successfully changed"}), 200
 
 
 # Endpoint with public key

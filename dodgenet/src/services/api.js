@@ -109,6 +109,21 @@ export const profilUser = async () => {
 };
 
 
+// Change password. The keys are not affected: they are not derived from the password.
+export const changePassword = async (oldPassword, newPassword, confirmation) => {
+  try {
+    const response = await requestWithFailover('/api/change-password', {
+      method: 'post',
+      data: { old_password: oldPassword, new_password: newPassword, confirmation },
+      headers: authHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(errorMessage(error, 'errors.changePassword'));
+  }
+};
+
+
 // Sending a message - encrypts it before sending.
 export const sendMessage = async (receiverId, text) => {
   const myPrivateKey = getMyPrivateKey();

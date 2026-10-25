@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, setLanguage } from '../i18n';
+import { THEMES, getTheme, setTheme } from '../theme';
 import '../App.css';
 
 function Settings() {
   const { t, i18n } = useTranslation();
+  const [theme, setThemeState] = useState(getTheme);
+
+  const handleThemeChange = (e) => {
+    setTheme(e.target.value);
+    setThemeState(e.target.value);
+  };
 
   return (
     <div className="settings-page">
@@ -24,6 +32,29 @@ function Settings() {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="settings-row">
+        <label htmlFor="theme-select">{t('settings.theme')}</label>
+        <select
+          id="theme-select"
+          className="settings-select"
+          value={theme}
+          onChange={handleThemeChange}
+        >
+          {THEMES.map((name) => (
+            <option key={name} value={name}>
+              {t(`settings.themes.${name}`)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="settings-row">
+        <span>{t('settings.password')}</span>
+        <Link className="settings-link" to="/change-password">
+          {t('settings.changePassword')}
+        </Link>
       </div>
     </div>
   );

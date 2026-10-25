@@ -65,7 +65,15 @@
   },
   "settings": {
     "title": "Настройки",
-    "language": "Язык"
+    "language": "Язык",
+    "theme": "Тема",
+    "themes": {
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "password": "Пароль",
+    "changePassword": "Сменить пароль"
   },
   "errors": {
     "registration": "Ошибка регистрации",
@@ -76,7 +84,8 @@
     "channelsUnavailable": "Все каналы связи недоступны",
     "loadContacts": "Не удалось загрузить контакты",
     "loadMessages": "Не удалось загрузить сообщения",
-    "addContact": "Ошибка добавления контакта"
+    "addContact": "Ошибка добавления контакта",
+    "changePassword": "Не удалось сменить пароль"
   },
   "serverErrors": {
     "token_missing": "Токен отсутствует!",
@@ -91,6 +100,19 @@
     "user_exists": "Пользователь с таким именем уже существует",
     "login_fields_required": "Заполните поля",
     "invalid_credentials": "Неверный логин или пароль",
-    "key_not_found": "Ключ не найден"
+    "key_not_found": "Ключ не найден",
+    "email_exists": "Пользователь с такой почтой уже существует",
+    "password_fields_required": "Заполните все поля",
+    "password_same_as_old": "Новый пароль должен отличаться от текущего",
+    "password_mismatch": "Пароли не совпадают",
+    "wrong_current_password": "Неверный текущий пароль"
+  },
+  "changePassword": {
+    "title": "Смена пароля",
+    "oldPlaceholder": "Текущий пароль",
+    "newPlaceholder": "Новый пароль",
+    "confirmPlaceholder": "Повторите новый пароль",
+    "submit": "Сменить пароль",
+    "success": "Пароль успешно изменён"
   }
 }
