@@ -1,0 +1,144 @@
+{
+  "app": {
+    "tagline": "सुरक्षित मैसेंजर"
+  },
+  "nav": {
+    "chat": "चैट",
+    "profile": "प्रोफ़ाइल",
+    "settings": "सेटिंग्स"
+  },
+  "connection": {
+    "protected": "संचार चैनल सुरक्षित है",
+    "lost": "कनेक्शन टूट गया",
+    "node": "नोड: {{name}}",
+    "nodes": {
+      "Primary": "प्राथमिक",
+      "None": "कोई नहीं"
+    }
+  },
+  "chat": {
+    "title": "DodgeNet चैट",
+    "placeholder": "संदेश लिखें...",
+    "cannotDecrypt": "इस संदेश को डिक्रिप्ट नहीं किया जा सका"
+  },
+  "chatList": {
+    "loading": "संपर्क लोड हो रहे हैं...",
+    "title": "संपर्क",
+    "cancel": "रद्द करें",
+    "add": "जोड़ें",
+    "usernamePlaceholder": "उपयोगकर्ता नाम दर्ज करें...",
+    "search": "खोजें",
+    "empty": "अभी आपके कोई संपर्क नहीं हैं",
+    "noMessages": "कोई संदेश नहीं",
+    "encrypted": "एन्क्रिप्ट किया गया संदेश"
+  },
+  "login": {
+    "title": "साइन इन",
+    "usernamePlaceholder": "यूज़रनेम",
+    "passwordPlaceholder": "पासवर्ड",
+    "submit": "साइन इन",
+    "noAccount": "खाता नहीं है?",
+    "signUp": "साइन अप",
+    "welcome": "स्वागत है, {{name}}!"
+  },
+  "registration": {
+    "title": "पंजीकरण",
+    "usernamePlaceholder": "यूज़रनेम",
+    "emailPlaceholder": "ईमेल",
+    "passwordPlaceholder": "पासवर्ड",
+    "submit": "साइन अप",
+    "hasAccount": "पहले से खाता है?",
+    "signIn": "साइन इन",
+    "error": "त्रुटि: {{message}}"
+  },
+  "profile": {
+    "loading": "उपयोगकर्ता डेटा लोड हो रहा है...",
+    "title": "प्रोफ़ाइल",
+    "name": "नाम:",
+    "email": "ईमेल:",
+    "edit": "प्रोफ़ाइल संपादित करें",
+    "exit": "बाहर निकलें",
+    "signUp": "साइन अप",
+    "noData": "उपयोगकर्ता डेटा नहीं मिला।",
+    "backToLogin": "साइन इन पर वापस जाएँ",
+    "networkError": "नेटवर्क त्रुटि। बैकएंड उपलब्ध नहीं है।"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "theme": "थीम",
+    "themes": {
+      "system": "सिस्टम",
+      "light": "हल्का",
+      "dark": "गहरा"
+    },
+    "password": "पासवर्ड",
+    "changePassword": "पासवर्ड बदलें"
+  },
+  "errors": {
+    "registration": "पंजीकरण त्रुटि",
+    "login": "लॉगिन त्रुटि",
+    "profile": "प्रोफ़ाइल लोड नहीं हो सकी",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "संपर्क लोड नहीं हो सके",
+    "loadMessages": "संदेश लोड नहीं हो सके",
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "पासवर्ड बदलें",
+    "oldPlaceholder": "वर्तमान पासवर्ड",
+    "newPlaceholder": "नया पासवर्ड",
+    "confirmPlaceholder": "नया पासवर्ड दोबारा दर्ज करें",
+    "submit": "पासवर्ड बदलें",
+    "success": "पासवर्ड सफलतापूर्वक बदल दिया गया"
+  },
+  "keys": {
+    "title": "एन्क्रिप्शन कुंजियाँ",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "कुंजियाँ निर्यात करें",
+    "importTitle": "कुंजियाँ आयात करें",
+    "passphrase": "फ़ाइल पासवर्ड",
+    "passphraseRepeat": "फ़ाइल पासवर्ड दोहराएँ",
+    "exportButton": "निर्यात",
+    "importButton": "आयात",
+    "keyFile": "कुंजी फ़ाइल",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "कुंजी फ़ाइल चुनें",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
+  }
+}

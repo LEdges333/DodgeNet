@@ -1,0 +1,144 @@
+{
+  "app": {
+    "tagline": "مراسلة آمنة"
+  },
+  "nav": {
+    "chat": "الدردشة",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات"
+  },
+  "connection": {
+    "protected": "قناة الاتصال محمية",
+    "lost": "انقطع الاتصال",
+    "node": "العقدة: {{name}}",
+    "nodes": {
+      "Primary": "أساسي",
+      "None": "لا شيء"
+    }
+  },
+  "chat": {
+    "title": "دردشة DodgeNet",
+    "placeholder": "اكتب رسالة...",
+    "cannotDecrypt": "تعذر فك تشفير هذه الرسالة"
+  },
+  "chatList": {
+    "loading": "جارٍ تحميل جهات الاتصال...",
+    "title": "جهات الاتصال",
+    "cancel": "إلغاء",
+    "add": "إضافة",
+    "usernamePlaceholder": "أدخل اسم المستخدم...",
+    "search": "بحث",
+    "empty": "ليس لديك جهات اتصال بعد",
+    "noMessages": "لا توجد رسائل",
+    "encrypted": "رسالة مشفرة"
+  },
+  "login": {
+    "title": "تسجيل الدخول",
+    "usernamePlaceholder": "اسم المستخدم",
+    "passwordPlaceholder": "كلمة المرور",
+    "submit": "تسجيل الدخول",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "إنشاء حساب",
+    "welcome": "مرحبًا، {{name}}!"
+  },
+  "registration": {
+    "title": "التسجيل",
+    "usernamePlaceholder": "اسم المستخدم",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "passwordPlaceholder": "كلمة المرور",
+    "submit": "إنشاء حساب",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "signIn": "تسجيل الدخول",
+    "error": "خطأ: {{message}}"
+  },
+  "profile": {
+    "loading": "جارٍ تحميل بيانات المستخدم...",
+    "title": "الملف الشخصي",
+    "name": "الاسم:",
+    "email": "البريد الإلكتروني:",
+    "edit": "تعديل الملف الشخصي",
+    "exit": "خروج",
+    "signUp": "إنشاء حساب",
+    "noData": "لم يتم العثور على بيانات المستخدم.",
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "networkError": "خطأ في الشبكة. الخادم الخلفي غير متاح."
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "themes": {
+      "system": "النظام",
+      "light": "فاتح",
+      "dark": "داكن"
+    },
+    "password": "كلمة المرور",
+    "changePassword": "تغيير كلمة المرور"
+  },
+  "errors": {
+    "registration": "خطأ في التسجيل",
+    "login": "خطأ في تسجيل الدخول",
+    "profile": "تعذر تحميل الملف الشخصي",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "تعذر تحميل جهات الاتصال",
+    "loadMessages": "تعذر تحميل الرسائل",
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "تغيير كلمة المرور",
+    "oldPlaceholder": "كلمة المرور الحالية",
+    "newPlaceholder": "كلمة المرور الجديدة",
+    "confirmPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+    "submit": "تغيير كلمة المرور",
+    "success": "تم تغيير كلمة المرور بنجاح"
+  },
+  "keys": {
+    "title": "مفاتيح التشفير",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "تصدير المفاتيح",
+    "importTitle": "استيراد المفاتيح",
+    "passphrase": "كلمة مرور الملف",
+    "passphraseRepeat": "أعد إدخال كلمة مرور الملف",
+    "exportButton": "تصدير",
+    "importButton": "استيراد",
+    "keyFile": "ملف المفاتيح",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "اختر ملف مفاتيح",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
+  }
+}

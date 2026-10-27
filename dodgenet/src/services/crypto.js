@@ -241,3 +241,84 @@ export async function importKeyFile(file, passphrase) {
 
   return { username: file.username, publicKey: file.publicKey, privateKey: sodium.to_base64(privateKeyBytes) };
 }
+
+
+// ---------------------------------------------------------------------------------------------
+// File encryption (attachments)
+//
+// Every file gets its own random 256-bit key and is encrypted with libsodium's secretstream
+// (XChaCha20-Poly1305) in 64 KiB chunks. The result is  header (24 bytes) + chunk + chunk + ...
+// Each chunk is authenticated and chained to the previous ones, the last one carries a FINAL tag:
+// so a changed, reordered, cut-off or extended file is detected when it is decrypted.
+// The key is NOT stored anywhere on the server: it travels inside the (end-to-end encrypted)
+// message envelope, see envelope.js.
+// ---------------------------------------------------------------------------------------------
+
+const FILE_CHUNK_SIZE = 64 * 1024;
+
+export async function encryptFile(bytes) {
+  await sodium.ready;
+  const stream = sodium.crypto_secretstream_xchacha20poly1305_init_push;
+  const TAG_MESSAGE = sodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE;
+  const TAG_FINAL = sodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL;
+
+  const key = sodium.crypto_secretstream_xchacha20poly1305_keygen();
+  const { state, header } = stream(key);
+
+  const parts = [header];
+  let offset = 0;
+  do {
+    const end = Math.min(offset + FILE_CHUNK_SIZE, bytes.length);
+    const isLast = end >= bytes.length;
+    parts.push(
+      sodium.crypto_secretstream_xchacha20poly1305_push(
+        state, bytes.subarray(offset, end), null, isLast ? TAG_FINAL : TAG_MESSAGE
+      )
+    );
+    offset = end;
+  } while (offset < bytes.length);
+
+  return { data: concatBytes(parts), key: sodium.to_base64(key) };
+}
+
+// Throws keyError('corrupt_file') if the key is wrong or the data was changed, cut or extended.
+export async function decryptFile(data, keyBase64) {
+  await sodium.ready;
+  const HEADER = sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES;
+  const CIPHER_CHUNK = FILE_CHUNK_SIZE + sodium.crypto_secretstream_xchacha20poly1305_ABYTES;
+  const TAG_FINAL = sodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL;
+
+  try {
+    if (data.length <= HEADER) throw new Error('too short');
+    const key = sodium.from_base64(keyBase64);
+    const state = sodium.crypto_secretstream_xchacha20poly1305_init_pull(data.subarray(0, HEADER), key);
+
+    const parts = [];
+    let offset = HEADER;
+    let sawFinal = false;
+    while (offset < data.length) {
+      if (sawFinal) throw new Error('data after the final chunk');
+      const end = Math.min(offset + CIPHER_CHUNK, data.length);
+      const result = sodium.crypto_secretstream_xchacha20poly1305_pull(state, data.subarray(offset, end));
+      if (!result) throw new Error('chunk rejected');
+      parts.push(result.message);
+      if (result.tag === TAG_FINAL) sawFinal = true;
+      offset = end;
+    }
+    if (!sawFinal) throw new Error('file is cut off');
+    return concatBytes(parts);
+  } catch {
+    throw keyError('corrupt_file');
+  }
+}
+
+function concatBytes(parts) {
+  const total = parts.reduce((sum, p) => sum + p.length, 0);
+  const out = new Uint8Array(total);
+  let pos = 0;
+  for (const p of parts) {
+    out.set(p, pos);
+    pos += p.length;
+  }
+  return out;
+}

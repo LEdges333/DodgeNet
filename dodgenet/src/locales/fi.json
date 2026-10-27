@@ -19,7 +19,19 @@
   "chat": {
     "title": "DodgeNet-keskustelu",
     "placeholder": "Kirjoita viesti...",
-    "cannotDecrypt": "Viestiä ei voitu purkaa"
+    "cannotDecrypt": "Viestiä ei voitu purkaa",
+    "attach": "Liitä tiedostoja",
+    "removeFile": "Poista",
+    "download": "Lataa",
+    "loadingFile": "Ladataan…",
+    "fileError": "Tiedostoa ei voitu ladata",
+    "unsupported": "Tätä viestiä ei voi näyttää",
+    "send": "Lähetä",
+    "errors": {
+      "fileTooLarge": "{{name}} on suurempi kuin {{max}} Mt",
+      "tooManyFiles": "Voit liittää enintään {{max}} tiedostoa",
+      "emptyFile": "{{name}} on tyhjä"
+    }
   },
   "chatList": {
     "loading": "Ladataan yhteystietoja...",
@@ -30,7 +42,9 @@
     "search": "Hae",
     "empty": "Sinulla ei ole vielä yhteystietoja",
     "noMessages": "Ei viestejä",
-    "encrypted": "Salattu viesti"
+    "encrypted": "Salattu viesti",
+    "attachment": "Liite",
+    "attachments": "Liitteitä: {{count}}"
   },
   "login": {
     "title": "Kirjaudu sisään",
@@ -85,7 +99,10 @@
     "loadContacts": "Yhteystietojen lataaminen epäonnistui",
     "loadMessages": "Viestien lataaminen epäonnistui",
     "addContact": "Yhteystiedon lisäämisessä tapahtui virhe",
-    "changePassword": "Salasanan vaihtaminen epäonnistui"
+    "changePassword": "Salasanan vaihtaminen epäonnistui",
+    "uploadFailed": "Tiedoston lähettäminen epäonnistui",
+    "downloadFailed": "Tiedoston lataaminen epäonnistui",
+    "emptyMessage": "Viesti on tyhjä"
   },
   "serverErrors": {
     "token_missing": "Tunniste puuttuu!",
@@ -105,7 +122,11 @@
     "password_fields_required": "Täytä kaikki kentät",
     "password_same_as_old": "Uuden salasanan on oltava eri kuin nykyisen",
     "password_mismatch": "Salasanat eivät täsmää",
-    "wrong_current_password": "Nykyinen salasana on väärä"
+    "wrong_current_password": "Nykyinen salasana on väärä",
+    "file_too_large": "Tiedosto on liian suuri",
+    "empty_file": "Tiedosto on tyhjä",
+    "attachment_not_found": "Tiedostoa ei löytynyt",
+    "recipient_required": "Vastaanottaja puuttuu"
   },
   "changePassword": {
     "title": "Salasanan vaihto",

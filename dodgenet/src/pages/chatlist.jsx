@@ -18,6 +18,16 @@ function ChatList() {
 
   const navigate = useNavigate();
 
+  // Text shown under a contact's name: the last message, or what it consists of.
+  const preview = (contact) => {
+    if (contact.decrypt_failed) return t('chatList.encrypted');
+    if (contact.last_unsupported) return t('chat.unsupported');
+    if (contact.last_message) return contact.last_message;
+    if (contact.last_files === 1) return t('chatList.attachment');
+    if (contact.last_files > 1) return t('chatList.attachments', { count: contact.last_files });
+    return t('chatList.noMessages');
+  };
+
   // Were moving the loading function out so that we can call it again after adding something.
   const loadContacts = async () => {
     try {
@@ -30,8 +40,14 @@ function ChatList() {
     }
   };
 
+  // First load. State is only set when the answer arrives (not inside the effect itself).
   useEffect(() => {
-    loadContacts();
+    let cancelled = false;
+    getContacts()
+      .then((data) => { if (!cancelled) setContacts(data); })
+      .catch((err) => console.error(err))
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, []);
 
   const handleAddContact = async (e) => {
@@ -104,7 +120,7 @@ function ChatList() {
             onClick={() => navigate(`/chat/${contact.id}`)}
           >
             <h3>{contact.username}</h3>
-            <p>{contact.decrypt_failed ? t('chatList.encrypted') : (contact.last_message || t('chatList.noMessages'))}</p>
+            <p>{preview(contact)}</p>
           </div>
         ))
       )}

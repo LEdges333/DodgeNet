@@ -1,0 +1,144 @@
+{
+  "app": {
+    "tagline": "安全即时通讯"
+  },
+  "nav": {
+    "chat": "聊天",
+    "profile": "个人资料",
+    "settings": "设置"
+  },
+  "connection": {
+    "protected": "通信通道已受保护",
+    "lost": "连接已断开",
+    "node": "节点：{{name}}",
+    "nodes": {
+      "Primary": "主节点",
+      "None": "无"
+    }
+  },
+  "chat": {
+    "title": "DodgeNet 聊天",
+    "placeholder": "输入消息...",
+    "cannotDecrypt": "无法解密此消息"
+  },
+  "chatList": {
+    "loading": "正在加载联系人...",
+    "title": "联系人",
+    "cancel": "取消",
+    "add": "添加",
+    "usernamePlaceholder": "输入用户名...",
+    "search": "搜索",
+    "empty": "你还没有联系人",
+    "noMessages": "没有消息",
+    "encrypted": "加密消息"
+  },
+  "login": {
+    "title": "登录",
+    "usernamePlaceholder": "用户名",
+    "passwordPlaceholder": "密码",
+    "submit": "登录",
+    "noAccount": "还没有账户？",
+    "signUp": "注册",
+    "welcome": "欢迎，{{name}}！"
+  },
+  "registration": {
+    "title": "注册",
+    "usernamePlaceholder": "用户名",
+    "emailPlaceholder": "电子邮箱",
+    "passwordPlaceholder": "密码",
+    "submit": "注册",
+    "hasAccount": "已有账户？",
+    "signIn": "登录",
+    "error": "错误：{{message}}"
+  },
+  "profile": {
+    "loading": "正在加载用户数据...",
+    "title": "个人资料",
+    "name": "姓名：",
+    "email": "电子邮箱：",
+    "edit": "编辑个人资料",
+    "exit": "退出",
+    "signUp": "注册",
+    "noData": "未找到用户数据。",
+    "backToLogin": "返回登录",
+    "networkError": "网络错误，后端服务不可用。"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "theme": "主题",
+    "themes": {
+      "system": "跟随系统",
+      "light": "浅色",
+      "dark": "深色"
+    },
+    "password": "密码",
+    "changePassword": "修改密码"
+  },
+  "errors": {
+    "registration": "注册错误",
+    "login": "登录错误",
+    "profile": "无法加载个人资料",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "无法加载联系人",
+    "loadMessages": "无法加载消息",
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "修改密码",
+    "oldPlaceholder": "当前密码",
+    "newPlaceholder": "新密码",
+    "confirmPlaceholder": "再次输入新密码",
+    "submit": "修改密码",
+    "success": "密码修改成功"
+  },
+  "keys": {
+    "title": "加密密钥",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "导出密钥",
+    "importTitle": "导入密钥",
+    "passphrase": "文件密码",
+    "passphraseRepeat": "再次输入文件密码",
+    "exportButton": "导出",
+    "importButton": "导入",
+    "keyFile": "密钥文件",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "请选择密钥文件",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
+  }
+}

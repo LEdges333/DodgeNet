@@ -1,7 +1,7 @@
 // Arrow Up / Arrow Down move the focus between the fields of a form
 // (and to the submit button after the last field). Use it as onKeyDown of a <form>.
 //
-//  <form onKeyDown={handleFormArrowNav}> ... </form>
+//   <form onKeyDown={handleFormArrowNav}> ... </form>
 //
 // Left / Right and Enter keep their normal behaviour.
 export function handleFormArrowNav(e) {

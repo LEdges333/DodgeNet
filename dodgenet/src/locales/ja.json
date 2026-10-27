@@ -1,0 +1,144 @@
+{
+  "app": {
+    "tagline": "セキュアメッセンジャー"
+  },
+  "nav": {
+    "chat": "チャット",
+    "profile": "プロフィール",
+    "settings": "設定"
+  },
+  "connection": {
+    "protected": "通信チャネルは保護されています",
+    "lost": "接続が切断されました",
+    "node": "ノード：{{name}}",
+    "nodes": {
+      "Primary": "プライマリ",
+      "None": "なし"
+    }
+  },
+  "chat": {
+    "title": "DodgeNet チャット",
+    "placeholder": "メッセージを入力...",
+    "cannotDecrypt": "このメッセージを復号できませんでした"
+  },
+  "chatList": {
+    "loading": "連絡先を読み込み中...",
+    "title": "連絡先",
+    "cancel": "キャンセル",
+    "add": "追加",
+    "usernamePlaceholder": "ユーザー名を入力...",
+    "search": "検索",
+    "empty": "連絡先はまだありません",
+    "noMessages": "メッセージはありません",
+    "encrypted": "暗号化されたメッセージ"
+  },
+  "login": {
+    "title": "ログイン",
+    "usernamePlaceholder": "ユーザー名",
+    "passwordPlaceholder": "パスワード",
+    "submit": "ログイン",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "signUp": "新規登録",
+    "welcome": "ようこそ、{{name}}さん！"
+  },
+  "registration": {
+    "title": "登録",
+    "usernamePlaceholder": "ユーザー名",
+    "emailPlaceholder": "メールアドレス",
+    "passwordPlaceholder": "パスワード",
+    "submit": "新規登録",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "signIn": "ログイン",
+    "error": "エラー：{{message}}"
+  },
+  "profile": {
+    "loading": "ユーザーデータを読み込み中...",
+    "title": "プロフィール",
+    "name": "名前：",
+    "email": "メール：",
+    "edit": "プロフィールを編集",
+    "exit": "ログアウト",
+    "signUp": "新規登録",
+    "noData": "ユーザーデータが見つかりません。",
+    "backToLogin": "ログインに戻る",
+    "networkError": "ネットワークエラー。バックエンドを利用できません。"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "theme": "テーマ",
+    "themes": {
+      "system": "システム",
+      "light": "ライト",
+      "dark": "ダーク"
+    },
+    "password": "パスワード",
+    "changePassword": "パスワードを変更"
+  },
+  "errors": {
+    "registration": "登録エラー",
+    "login": "ログインエラー",
+    "profile": "プロフィールを読み込めませんでした",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "連絡先を読み込めませんでした",
+    "loadMessages": "メッセージを読み込めませんでした",
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "パスワードを変更",
+    "oldPlaceholder": "現在のパスワード",
+    "newPlaceholder": "新しいパスワード",
+    "confirmPlaceholder": "新しいパスワードを再入力",
+    "submit": "パスワードを変更",
+    "success": "パスワードを変更しました"
+  },
+  "keys": {
+    "title": "暗号化キー",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "キーをエクスポート",
+    "importTitle": "キーをインポート",
+    "passphrase": "ファイルのパスワード",
+    "passphraseRepeat": "ファイルのパスワードを再入力",
+    "exportButton": "エクスポート",
+    "importButton": "インポート",
+    "keyFile": "キーファイル",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "キーファイルを選択してください",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
+  }
+}

@@ -1,8 +1,10 @@
 import os
+import re
+import secrets
 import sqlite3
 import jwt
 import datetime
-from flask import Flask, request, jsonify, g
+from flask import Flask, request, jsonify, g, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
 from functools import wraps
@@ -19,6 +21,16 @@ load_dotenv("key.env")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 DB_NAME = 'dodgenet.db'
+
+# Encrypted attachments are stored here, one file per attachment, named by its random id.
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+
+# The client limits a file to 10 MiB; the encrypted file is a little bigger (24-byte header
+# + 17 bytes per 64 KiB chunk), so the server limit leaves 64 KiB of room for that overhead.
+MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024 + 64 * 1024
+app.config['MAX_CONTENT_LENGTH'] = MAX_ATTACHMENT_BYTES   # Flask answers 413 for anything bigger
+
+ATTACHMENT_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{16,64}$')
 
 
 # For quick access to fields by name: user['password_hash']
@@ -362,6 +374,78 @@ def change_password():
     conn.close()
 
     return jsonify({"status": "success", "message": "Password successfully changed"}), 200
+
+
+# Too big request body (see MAX_CONTENT_LENGTH)
+@app.errorhandler(413)
+def request_too_large(_error):
+    return api_error("file_too_large", "The file is too large", 413)
+
+
+# Upload of an encrypted attachment.
+# The body is the raw ciphertext (Content-Type: application/octet-stream), the recipient is in the query:
+# POST /api/attachments?recipient_id=<id>. Only the uploader and the recipient can download it later.
+@app.route("/api/attachments", methods=["POST"])
+@token_required
+def upload_attachment():
+    recipient_id = request.args.get("recipient_id", type=int)
+    if not recipient_id:
+        return api_error("recipient_required", "Recipient is required", 400)
+
+    conn = get_db_connection()
+    recipient = conn.execute("SELECT id FROM users WHERE id = ?", (recipient_id,)).fetchone()
+    if recipient is None:
+        conn.close()
+        return api_error("user_not_found", "User not found", 404)
+
+    data = request.get_data()   # raises 413 (handled above) if the body exceeds MAX_CONTENT_LENGTH
+    if not data:
+        conn.close()
+        return api_error("empty_file", "The file is empty", 400)
+
+    attachment_id = secrets.token_urlsafe(16)   # 22 random URL-safe characters, cannot be guessed
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    with open(os.path.join(UPLOAD_DIR, attachment_id), "wb") as f:
+        f.write(data)
+
+    conn.execute(
+        "INSERT INTO attachments (id, uploader_id, recipient_id, size) VALUES (?, ?, ?, ?)",
+        (attachment_id, g.user_id, recipient_id, len(data))
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"id": attachment_id, "size": len(data)}), 201
+
+
+# Download of an encrypted attachment (only for its uploader and its recipient).
+# Someone else gets the same 404 as for an id that does not exist, so ids cannot be probed.
+@app.route("/api/attachments/<attachment_id>", methods=["GET"])
+@token_required
+def download_attachment(attachment_id):
+    if not ATTACHMENT_ID_PATTERN.match(attachment_id):
+        return api_error("attachment_not_found", "Attachment not found", 404)
+
+    conn = get_db_connection()
+    row = conn.execute(
+        "SELECT uploader_id, recipient_id FROM attachments WHERE id = ?", (attachment_id,)
+    ).fetchone()
+    conn.close()
+
+    if row is None or g.user_id not in (row["uploader_id"], row["recipient_id"]):
+        return api_error("attachment_not_found", "Attachment not found", 404)
+
+    path = os.path.join(UPLOAD_DIR, attachment_id)   # safe: the id matched the pattern and exists in the DB
+    if not os.path.isfile(path):
+        return api_error("attachment_not_found", "Attachment not found", 404)
+
+    response = send_file(
+        path, mimetype="application/octet-stream",
+        as_attachment=True, download_name="attachment.bin", max_age=0
+    )
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Cache-Control"] = "private, no-store"
+    return response
 
 
 # Endpoint with public key

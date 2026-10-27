@@ -19,7 +19,19 @@
   "chat": {
     "title": "DodgeNet զրույց",
     "placeholder": "Մուտքագրեք հաղորդագրություն...",
-    "cannotDecrypt": "Չհաջողվեց վերծանել հաղորդագրությունը"
+    "cannotDecrypt": "Չհաջողվեց վերծանել հաղորդագրությունը",
+    "attach": "Կցել ֆայլեր",
+    "removeFile": "Հեռացնել",
+    "download": "Ներբեռնել",
+    "loadingFile": "Բեռնվում է…",
+    "fileError": "Չհաջողվեց բեռնել ֆայլը",
+    "unsupported": "Այս հաղորդագրությունը հնարավոր չէ ցուցադրել",
+    "send": "Ուղարկել",
+    "errors": {
+      "fileTooLarge": "{{name}}-ը մեծ է {{max}} ՄԲ-ից",
+      "tooManyFiles": "Կարող եք կցել առավելագույնը {{max}} ֆայլ",
+      "emptyFile": "{{name}}-ը դատարկ է"
+    }
   },
   "chatList": {
     "loading": "Կոնտակտները բեռնվում են...",
@@ -30,7 +42,9 @@
     "search": "Որոնել",
     "empty": "Դուք դեռ կոնտակտներ չունեք",
     "noMessages": "Հաղորդագրություններ չկան",
-    "encrypted": "Գաղտնագրված հաղորդագրություն"
+    "encrypted": "Գաղտնագրված հաղորդագրություն",
+    "attachment": "Կցորդ",
+    "attachments": "Կցորդներ՝ {{count}}"
   },
   "login": {
     "title": "Մուտք",
@@ -85,7 +99,10 @@
     "loadContacts": "Չհաջողվեց բեռնել կոնտակտները",
     "loadMessages": "Չհաջողվեց բեռնել հաղորդագրությունները",
     "addContact": "Կոնտակտ ավելացնելու սխալ",
-    "changePassword": "Չհաջողվեց փոխել գաղտնաբառը"
+    "changePassword": "Չհաջողվեց փոխել գաղտնաբառը",
+    "uploadFailed": "Չհաջողվեց վերբեռնել ֆայլը",
+    "downloadFailed": "Չհաջողվեց ներբեռնել ֆայլը",
+    "emptyMessage": "Հաղորդագրությունը դատարկ է"
   },
   "serverErrors": {
     "token_missing": "Թոքենը բացակայում է։",
@@ -105,7 +122,11 @@
     "password_fields_required": "Լրացրեք բոլոր դաշտերը",
     "password_same_as_old": "Նոր գաղտնաբառը պետք է տարբերվի ընթացիկից",
     "password_mismatch": "Գաղտնաբառերը չեն համընկնում",
-    "wrong_current_password": "Ընթացիկ գաղտնաբառը սխալ է"
+    "wrong_current_password": "Ընթացիկ գաղտնաբառը սխալ է",
+    "file_too_large": "Ֆայլը չափազանց մեծ է",
+    "empty_file": "Ֆայլը դատարկ է",
+    "attachment_not_found": "Ֆայլը չի գտնվել",
+    "recipient_required": "Ստացողը նշված չէ"
   },
   "changePassword": {
     "title": "Գաղտնաբառի փոփոխություն",

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import i18n from '../i18n';
 import { errorMessage } from './errors';
-import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, adoptLegacyKeys, importKeyFile, keyError } from './crypto';
+import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, adoptLegacyKeys, importKeyFile, keyError, encryptFile, decryptFile } from './crypto';
+import { buildEnvelope, parseEnvelope, sanitizeFileName, MAX_FILES_PER_MESSAGE, MAX_FILE_SIZE } from './envelope';
 
 
 
@@ -26,6 +27,10 @@ async function requestWithFailover(path, options = {}) {
       });
       return response;
     } catch (error) {
+      // A 4xx answer means the server was reached and refused the request on purpose
+      // (wrong password, file too large...). Another front would refuse it too, so do not retry.
+      if (error.response && error.response.status < 500) throw error;
+
       lastError = error;
       console.warn(`The front ${front} is unavailable, trying the next one.`);
     }
@@ -155,19 +160,51 @@ export const importKeys = async (file, passphrase) => {
 
 
 // Sending a message - encrypts it before sending.
-export const sendMessage = async (receiverId, text) => {
+// A message can contain text, files, or both. `files` is an array of browser File objects.
+// Each file is encrypted in the browser and uploaded first; its id and key then go into the
+// message envelope, which is encrypted like any other message.
+export const sendMessage = async (receiverId, text, files = []) => {
   const myPrivateKey = getMyPrivateKey();
  
   if (!myPrivateKey) {
     throw new Error(i18n.t('errors.noKeys'));
+  }
+
+  if (!text && files.length === 0) {
+    throw new Error(i18n.t('errors.emptyMessage'));
+  }
+  if (files.length > MAX_FILES_PER_MESSAGE) {
+    throw new Error(i18n.t('chat.errors.tooManyFiles', { max: MAX_FILES_PER_MESSAGE }));
+  }
+  for (const file of files) {
+    if (file.size === 0) throw new Error(i18n.t('chat.errors.emptyFile', { name: file.name }));
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error(i18n.t('chat.errors.fileTooLarge', { name: file.name, max: MAX_FILE_SIZE / (1024 * 1024) }));
+    }
   }
  
   const recipientPublicKey = await getPublicKeyOf(receiverId);
   if (!recipientPublicKey) {
     throw new Error(i18n.t('errors.noRecipientKey'));
   }
- 
-  const { ciphertext, nonce } = await encryptMessage(text, recipientPublicKey, myPrivateKey);
+
+  // Encrypt and upload the files one by one (so only one file is in memory at a time).
+  const attachments = [];
+  for (const file of files) {
+    const { data, key } = await encryptFile(new Uint8Array(await file.arrayBuffer()));
+    const id = await uploadAttachment(receiverId, data);
+    attachments.push({
+      id,
+      key,
+      name: sanitizeFileName(file.name),
+      mime: file.type || 'application/octet-stream',
+      size: file.size,
+    });
+  }
+
+  const { ciphertext, nonce } = await encryptMessage(
+    buildEnvelope(text, attachments), recipientPublicKey, myPrivateKey
+  );
  
   try {
     const response = await requestWithFailover('/api/send-message', {
@@ -180,12 +217,51 @@ export const sendMessage = async (receiverId, text) => {
     return {
       id: response.data.id || Date.now(),
       text,
+      files: attachments,
       sender_id: Number(localStorage.getItem('userId')),
       receiver_id: Number(receiverId),
     };
   } catch {
     throw new Error(i18n.t('errors.channelsUnavailable'));
   }
+};
+
+// Uploads an encrypted file. The server only gets ciphertext and learns nothing about the file.
+async function uploadAttachment(recipientId, encryptedBytes) {
+  try {
+    const response = await requestWithFailover(`/api/attachments?recipient_id=${encodeURIComponent(recipientId)}`, {
+      method: 'post',
+      data: encryptedBytes,
+      headers: { ...authHeader(), 'Content-Type': 'application/octet-stream' },
+      timeout: 120000,            // a big file needs more than the 4 seconds of ordinary requests
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity,
+    });
+    return response.data.id;
+  } catch (error) {
+    throw new Error(errorMessage(error, 'errors.uploadFailed'));
+  }
+}
+
+// Downloads and decrypts an attachment described in a message envelope. Returns a Uint8Array.
+export const downloadAttachment = async (file) => {
+  let response;
+  try {
+    response = await requestWithFailover(`/api/attachments/${file.id}`, {
+      method: 'get',
+      headers: authHeader(),
+      responseType: 'arraybuffer',
+      timeout: 120000,
+      maxContentLength: Infinity,
+    });
+  } catch (error) {
+    throw new Error(errorMessage(error, 'errors.downloadFailed'));
+  }
+
+  const bytes = await decryptFile(new Uint8Array(response.data), file.key);
+  // The size written in the envelope must match, otherwise the file is not what the sender described.
+  if (bytes.length !== file.size) throw keyError('corrupt_file');
+  return bytes;
 };
 
 // Contact list
@@ -227,7 +303,14 @@ export const contactsUser = async () => {
           if (decrypted === null) {
             return { ...contact, last_message: null, decrypt_failed: true };
           }
-          return { ...contact, last_message: decrypted };
+          // The preview shows the text; for a message with only files the list shows "Attachment".
+          const envelope = parseEnvelope(decrypted);
+          return {
+            ...contact,
+            last_message: envelope.text || null,
+            last_files: envelope.files.length,
+            last_unsupported: envelope.unsupported,
+          };
         } catch {
           return { ...contact, last_message: null, decrypt_failed: true };
         }
@@ -264,8 +347,11 @@ export const getMessage = async (receiverId) => {
         // A message without a nonce was stored before encryption existed: it is plain text.
         if (!msg.nonce) return msg;
 
-        const text = await decryptMessage(msg.text, msg.nonce, otherPublicKey, myPrivateKey);
-        return text === null ? { ...msg, text: null, decrypt_failed: true } : { ...msg, text };
+        const plaintext = await decryptMessage(msg.text, msg.nonce, otherPublicKey, myPrivateKey);
+        if (plaintext === null) return { ...msg, text: null, decrypt_failed: true };
+
+        const { text, files, unsupported } = parseEnvelope(plaintext);
+        return { ...msg, text, files, unsupported };
       })
     );
 

@@ -40,6 +40,20 @@ def init_db():
             FOREIGN KEY (contact_id) REFERENCES users (id)
         )
     ''')
+    # attachments table: metadata only. 
+    # The file itself is stored on disk (backend/uploads/<id>)
+    # and is ciphertext: the server never sees file contents, names or types.
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS attachments (
+            id TEXT PRIMARY KEY,
+            uploader_id INTEGER NOT NULL,
+            recipient_id INTEGER NOT NULL,
+            size INTEGER NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (uploader_id) REFERENCES users (id),
+            FOREIGN KEY (recipient_id) REFERENCES users (id)
+        )
+    ''')
     conn.commit()
     conn.close()
 

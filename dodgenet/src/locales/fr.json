@@ -1,0 +1,144 @@
+{
+  "app": {
+    "tagline": "Messagerie sécurisée"
+  },
+  "nav": {
+    "chat": "Discussions",
+    "profile": "Profil",
+    "settings": "Paramètres"
+  },
+  "connection": {
+    "protected": "Canal protégé",
+    "lost": "Connexion perdue",
+    "node": "Nœud : {{name}}",
+    "nodes": {
+      "Primary": "Principal",
+      "None": "Aucun"
+    }
+  },
+  "chat": {
+    "title": "Discussion DodgeNet",
+    "placeholder": "Saisissez un message...",
+    "cannotDecrypt": "Impossible de déchiffrer ce message"
+  },
+  "chatList": {
+    "loading": "Chargement des contacts...",
+    "title": "Contacts",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "usernamePlaceholder": "Saisissez le nom d’utilisateur...",
+    "search": "Rechercher",
+    "empty": "Vous n’avez pas encore de contacts",
+    "noMessages": "Aucun message",
+    "encrypted": "Message chiffré"
+  },
+  "login": {
+    "title": "Se connecter",
+    "usernamePlaceholder": "Identifiant",
+    "passwordPlaceholder": "Mot de passe",
+    "submit": "Se connecter",
+    "noAccount": "Pas encore de compte ?",
+    "signUp": "S’inscrire",
+    "welcome": "Bienvenue, {{name}} !"
+  },
+  "registration": {
+    "title": "Inscription",
+    "usernamePlaceholder": "Identifiant",
+    "emailPlaceholder": "E-mail",
+    "passwordPlaceholder": "Mot de passe",
+    "submit": "S’inscrire",
+    "hasAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter",
+    "error": "Erreur : {{message}}"
+  },
+  "profile": {
+    "loading": "Chargement des données utilisateur...",
+    "title": "Profil",
+    "name": "Nom :",
+    "email": "E-mail :",
+    "edit": "Modifier le profil",
+    "exit": "Déconnexion",
+    "signUp": "S’inscrire",
+    "noData": "Aucune donnée utilisateur trouvée.",
+    "backToLogin": "Retour à la connexion",
+    "networkError": "Erreur réseau. Le serveur est indisponible."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "theme": "Thème",
+    "themes": {
+      "system": "Système",
+      "light": "Clair",
+      "dark": "Sombre"
+    },
+    "password": "Mot de passe",
+    "changePassword": "Changer le mot de passe"
+  },
+  "errors": {
+    "registration": "Erreur d’inscription",
+    "login": "Erreur de connexion",
+    "profile": "Impossible de charger le profil",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "Impossible de charger les contacts",
+    "loadMessages": "Impossible de charger les messages",
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "Changer le mot de passe",
+    "oldPlaceholder": "Mot de passe actuel",
+    "newPlaceholder": "Nouveau mot de passe",
+    "confirmPlaceholder": "Répéter le nouveau mot de passe",
+    "submit": "Changer le mot de passe",
+    "success": "Mot de passe modifié avec succès"
+  },
+  "keys": {
+    "title": "Clés de chiffrement",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "Exporter les clés",
+    "importTitle": "Importer les clés",
+    "passphrase": "Mot de passe du fichier",
+    "passphraseRepeat": "Répéter le mot de passe du fichier",
+    "exportButton": "Exporter",
+    "importButton": "Importer",
+    "keyFile": "Fichier de clés",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "Choisissez un fichier de clés",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
+  }
+}

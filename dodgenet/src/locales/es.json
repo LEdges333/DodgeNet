@@ -1,0 +1,144 @@
+{
+  "app": {
+    "tagline": "Mensajero seguro"
+  },
+  "nav": {
+    "chat": "Chat",
+    "profile": "Perfil",
+    "settings": "Configuración"
+  },
+  "connection": {
+    "protected": "Canal protegido",
+    "lost": "Conexión perdida",
+    "node": "Nodo: {{name}}",
+    "nodes": {
+      "Primary": "Principal",
+      "None": "Ninguno"
+    }
+  },
+  "chat": {
+    "title": "Chat de DodgeNet",
+    "placeholder": "Escribe un mensaje...",
+    "cannotDecrypt": "No se pudo descifrar este mensaje"
+  },
+  "chatList": {
+    "loading": "Cargando contactos...",
+    "title": "Contactos",
+    "cancel": "Cancelar",
+    "add": "Añadir",
+    "usernamePlaceholder": "Introduce el nombre de usuario...",
+    "search": "Buscar",
+    "empty": "Todavía no tienes contactos",
+    "noMessages": "No hay mensajes",
+    "encrypted": "Mensaje cifrado"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "usernamePlaceholder": "Usuario",
+    "passwordPlaceholder": "Contraseña",
+    "submit": "Iniciar sesión",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Registrarse",
+    "welcome": "¡Bienvenido, {{name}}!"
+  },
+  "registration": {
+    "title": "Registro",
+    "usernamePlaceholder": "Usuario",
+    "emailPlaceholder": "Correo electrónico",
+    "passwordPlaceholder": "Contraseña",
+    "submit": "Registrarse",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Iniciar sesión",
+    "error": "Error: {{message}}"
+  },
+  "profile": {
+    "loading": "Cargando datos del usuario...",
+    "title": "Perfil",
+    "name": "Nombre:",
+    "email": "Correo electrónico:",
+    "edit": "Editar perfil",
+    "exit": "Salir",
+    "signUp": "Registrarse",
+    "noData": "No se encontraron datos del usuario.",
+    "backToLogin": "Volver al inicio de sesión",
+    "networkError": "Error de red. El servidor no está disponible."
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themes": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "password": "Contraseña",
+    "changePassword": "Cambiar contraseña"
+  },
+  "errors": {
+    "registration": "Error de registro",
+    "login": "Error de inicio de sesión",
+    "profile": "No se pudo cargar el perfil",
+    "noKeys": "Encryption keys not found. Log in again",
+    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
+    "channelsUnavailable": "All communication channels are unavailable",
+    "loadContacts": "No se pudieron cargar los contactos",
+    "loadMessages": "No se pudieron cargar los mensajes",
+    "addContact": "Adding contact error",
+    "changePassword": "Failed to change password"
+  },
+  "serverErrors": {
+    "token_missing": "The token is missing!",
+    "token_expired": "The token has expired. Login again!",
+    "token_invalid": "The token is not valid!",
+    "message_fields_required": "Recipient, text and nonce are mandatory",
+    "username_required": "Enter username",
+    "user_not_found": "User not found",
+    "cannot_add_self": "You can't add yourself",
+    "already_contact": "User is already in your contact list",
+    "registration_fields_required": "Fill in all the fields",
+    "user_exists": "A user with this name already exists",
+    "login_fields_required": "Fill in the fields",
+    "invalid_credentials": "Incorrect login or password",
+    "key_not_found": "Key not found",
+    "email_exists": "A user with this email already exists",
+    "password_fields_required": "All fields are required",
+    "password_same_as_old": "New password must be different from the old one",
+    "password_mismatch": "Passwords do not match",
+    "wrong_current_password": "Current password is incorrect"
+  },
+  "changePassword": {
+    "title": "Cambiar contraseña",
+    "oldPlaceholder": "Contraseña actual",
+    "newPlaceholder": "Nueva contraseña",
+    "confirmPlaceholder": "Repite la nueva contraseña",
+    "submit": "Cambiar contraseña",
+    "success": "Contraseña cambiada correctamente"
+  },
+  "keys": {
+    "title": "Claves de cifrado",
+    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "exportTitle": "Exportar claves",
+    "importTitle": "Importar claves",
+    "passphrase": "Contraseña del archivo",
+    "passphraseRepeat": "Repite la contraseña del archivo",
+    "exportButton": "Exportar",
+    "importButton": "Importar",
+    "keyFile": "Archivo de claves",
+    "exported": "Key file saved. Keep it and its password in a safe place.",
+    "imported": "Keys imported. You can now read your message history.",
+    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
+    "warning": "Anyone who has the file and its password can read your messages.",
+    "errors": {
+      "passphraseShort": "The password must be at least 8 characters",
+      "passphraseMismatch": "Passwords do not match",
+      "noFile": "Selecciona un archivo de claves",
+      "invalid_file": "This is not a valid DodgeNet key file",
+      "wrong_passphrase": "Wrong password, or the file is damaged",
+      "wrong_account": "This key file belongs to a different account",
+      "no_keys": "There are no keys for this account on this device",
+      "no_crypto": "Encryption is not available here (HTTPS is required)",
+      "generic": "Could not complete the operation"
+    }
+  }
+}

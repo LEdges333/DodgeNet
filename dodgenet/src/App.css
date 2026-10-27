@@ -317,6 +317,126 @@
   opacity: 0.7;
 }
 
+/* Attachments */
+
+.attach-button {
+  background-color: var(--field);
+  color: var(--text);
+  padding: 0 12px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.attach-button:disabled,
+.send-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.attachment-bar {
+  padding: 8px 20px 0;
+  background-color: var(--surface);
+}
+
+.attachment-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.attachment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 4px 8px 4px 12px;
+  border-radius: 14px;
+  background-color: var(--field);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.attachment-chip-name {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-chip-remove {
+  display: inline-flex;
+  padding: 2px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.message-text {
+  white-space: pre-wrap;
+}
+
+.attachment {
+  margin-top: 6px;
+}
+
+.message-text + .attachment {
+  margin-top: 8px;
+}
+
+.attachment-image {
+  display: block;
+  max-width: 100%;
+  max-height: 240px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+}
+
+.attachment-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.attachment-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-size {
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.attachment-download {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.attachment-download:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.attachment-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
 /* Settings page */
 
 .settings-page {
