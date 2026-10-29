@@ -9,6 +9,7 @@
 ![React](https://img.shields.io/badge/react-frontend-61DAFB?logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/vite-build-646CFF?logo=vite&logoColor=white)
 ![libsodium](https://img.shields.io/badge/libsodium-crypto__box-4B8BBE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache-2.0-orange)](LICENSE)
 
 </div>
 
@@ -25,8 +26,7 @@
 > **Status: early development.** Registration, login, contacts and encrypted
 > messaging work. Private keys live in the browser's storage, so clearing it or
 > switching devices makes old messages unreadable until key export and import
-> are done. Messages sometimes show
-> "[Couldn't decrypt the message]" after sending; this is a known bug.
+> are done.
 
 ### Contens
 - [Description](#description)
