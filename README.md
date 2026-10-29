@@ -9,7 +9,7 @@
 ![React](https://img.shields.io/badge/react-frontend-61DAFB?logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/vite-build-646CFF?logo=vite&logoColor=white)
 ![libsodium](https://img.shields.io/badge/libsodium-crypto__box-4B8BBE)
-[![License: Apache-2.0](https://img.shields.io/github/licenseLEdges333/DodgeNet)](LICENSE)
+![License: Apache-2.0](https://img.shields.io/badge/license-Apache-2.0-orange)(LICENSE)
 
 </div>
 
