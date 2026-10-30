@@ -10,11 +10,7 @@
   "connection": {
     "protected": "Կապուղին պաշտպանված է",
     "lost": "Կապը խզվել է",
-    "node": "Հանգույց՝ {{name}}",
-    "nodes": {
-      "Primary": "Հիմնական",
-      "None": "Չկա"
-    }
+    "via": "Միացված է {{host}}-ի միջոցով"
   },
   "chat": {
     "title": "DodgeNet զրույց",
@@ -75,7 +71,16 @@
     "signUp": "Գրանցվել",
     "noData": "Օգտատիրոջ տվյալներ չեն գտնվել։",
     "backToLogin": "Վերադառնալ մուտքի էջ",
-    "networkError": "Ցանցի սխալ։ Սերվերը հասանելի չէ։"
+    "networkError": "Ցանցի սխալ։ Սերվերը հասանելի չէ։",
+    "photo": {
+      "change": "Փոխել լուսանկարը",
+      "remove": "Հեռացնել լուսանկարը",
+      "errors": {
+        "not_image": "Ընտրեք պատկերի ֆայլ",
+        "too_large": "Պատկերը մեծ է {{max}} ՄԲ-ից",
+        "unreadable": "Չհաջողվեց կարդալ պատկերը"
+      }
+    }
   },
   "settings": {
     "title": "Կարգավորումներ",
@@ -102,7 +107,9 @@
     "changePassword": "Չհաջողվեց փոխել գաղտնաբառը",
     "uploadFailed": "Չհաջողվեց վերբեռնել ֆայլը",
     "downloadFailed": "Չհաջողվեց ներբեռնել ֆայլը",
-    "emptyMessage": "Հաղորդագրությունը դատարկ է"
+    "emptyMessage": "Հաղորդագրությունը դատարկ է",
+    "avatarUpload": "Չհաջողվեց պահպանել լուսանկարը",
+    "avatarDelete": "Չհաջողվեց հեռացնել լուսանկարը"
   },
   "serverErrors": {
     "token_missing": "Թոքենը բացակայում է։",
@@ -126,7 +133,10 @@
     "file_too_large": "Ֆայլը չափազանց մեծ է",
     "empty_file": "Ֆայլը դատարկ է",
     "attachment_not_found": "Ֆայլը չի գտնվել",
-    "recipient_required": "Ստացողը նշված չէ"
+    "recipient_required": "Ստացողը նշված չէ",
+    "avatar_invalid": "Պատկերը վավեր չէ",
+    "avatar_too_large": "Պատկերը չափազանց մեծ է",
+    "avatar_not_found": "Լուսանկար չկա"
   },
   "changePassword": {
     "title": "Գաղտնաբառի փոփոխություն",

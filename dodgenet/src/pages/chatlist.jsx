@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserPlus, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { contactsUser as getContacts, addContact } from '../services/api';
+import Avatar from '../components/Avatar';
 import '../App.css';
 
 function ChatList() {
@@ -117,10 +118,13 @@ function ChatList() {
           <div
             key={contact.id}
             className="contact-card"
-            onClick={() => navigate(`/chat/${contact.id}`)}
+            onClick={() => navigate(`/chat/${contact.id}`, { state: { peer: contact } })}
           >
-            <h3>{contact.username}</h3>
-            <p>{preview(contact)}</p>
+            <Avatar userId={contact.id} version={contact.avatar_version} name={contact.username} size={44} />
+            <div className="contact-text">
+              <h3>{contact.username}</h3>
+              <p>{preview(contact)}</p>
+            </div>
           </div>
         ))
       )}

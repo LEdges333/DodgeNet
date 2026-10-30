@@ -10,11 +10,7 @@
   "connection": {
     "protected": "Kanava on suojattu",
     "lost": "Yhteys katkesi",
-    "node": "Solmu: {{name}}",
-    "nodes": {
-      "Primary": "Ensisijainen",
-      "None": "Ei mitään"
-    }
+    "via": "Yhdistetty osoitteen {{host}} kautta"
   },
   "chat": {
     "title": "DodgeNet-keskustelu",
@@ -75,7 +71,16 @@
     "signUp": "Rekisteröidy",
     "noData": "Käyttäjätietoja ei löytynyt.",
     "backToLogin": "Takaisin kirjautumiseen",
-    "networkError": "Verkkovirhe. Palvelin ei ole käytettävissä."
+    "networkError": "Verkkovirhe. Palvelin ei ole käytettävissä.",
+    "photo": {
+      "change": "Vaihda kuva",
+      "remove": "Poista kuva",
+      "errors": {
+        "not_image": "Valitse kuvatiedosto",
+        "too_large": "Kuva on suurempi kuin {{max}} Mt",
+        "unreadable": "Kuvaa ei voitu lukea"
+      }
+    }
   },
   "settings": {
     "title": "Asetukset",
@@ -102,7 +107,9 @@
     "changePassword": "Salasanan vaihtaminen epäonnistui",
     "uploadFailed": "Tiedoston lähettäminen epäonnistui",
     "downloadFailed": "Tiedoston lataaminen epäonnistui",
-    "emptyMessage": "Viesti on tyhjä"
+    "emptyMessage": "Viesti on tyhjä",
+    "avatarUpload": "Kuvan tallentaminen epäonnistui",
+    "avatarDelete": "Kuvan poistaminen epäonnistui"
   },
   "serverErrors": {
     "token_missing": "Tunniste puuttuu!",
@@ -126,7 +133,10 @@
     "file_too_large": "Tiedosto on liian suuri",
     "empty_file": "Tiedosto on tyhjä",
     "attachment_not_found": "Tiedostoa ei löytynyt",
-    "recipient_required": "Vastaanottaja puuttuu"
+    "recipient_required": "Vastaanottaja puuttuu",
+    "avatar_invalid": "Kuva ei kelpaa",
+    "avatar_too_large": "Kuva on liian suuri",
+    "avatar_not_found": "Ei kuvaa"
   },
   "changePassword": {
     "title": "Salasanan vaihto",

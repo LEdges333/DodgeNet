@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React from 'react'; 
 import './App.css';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -15,13 +15,11 @@ import Login from './pages/login';
 
 function App() {
   const { t } = useTranslation();
-  const [status, setStatus] = useState({ isOnline: true, node: 'Primary' });
-
   return (
     <div className="app-container">
       {/* sidebar for navigation */}
       <div className="side-bar">
-        <div>
+        <div className="side-bar-brand">
           <h2>DodgeNet</h2>
           <span>{t('app.tagline')}</span>
         </div>
@@ -34,7 +32,7 @@ function App() {
         </nav>
 
         {/* secure */}
-        <ConnectionStatus status={status} />
+        <ConnectionStatus />
       </div>
 
       {/* Main content area */}
@@ -44,10 +42,7 @@ function App() {
           <Route path="/" element={<ChatList />} />
           <Route path="/chatlist" element={<ChatList />} />
           {/* Chat page with a specific user */}
-          <Route 
-            path="/chat/:userId" 
-            element={<Chat status={status} setStatus={setStatus} />} 
-          />
+          <Route path="/chat/:userId" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/change-password" element={<ChangePassword />} />

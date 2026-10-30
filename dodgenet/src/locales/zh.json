@@ -10,16 +10,24 @@
   "connection": {
     "protected": "通信通道已受保护",
     "lost": "连接已断开",
-    "node": "节点：{{name}}",
-    "nodes": {
-      "Primary": "主节点",
-      "None": "无"
-    }
+    "via": "已通过 {{host}} 连接"
   },
   "chat": {
     "title": "DodgeNet 聊天",
     "placeholder": "输入消息...",
-    "cannotDecrypt": "无法解密此消息"
+    "cannotDecrypt": "无法解密此消息",
+    "attach": "添加附件",
+    "removeFile": "移除",
+    "download": "下载",
+    "loadingFile": "加载中…",
+    "fileError": "无法加载此文件",
+    "unsupported": "无法显示此消息",
+    "send": "发送",
+    "errors": {
+      "fileTooLarge": "{{name}} 超过 {{max}} MB",
+      "tooManyFiles": "最多可添加 {{max}} 个文件",
+      "emptyFile": "{{name}} 是空文件"
+    }
   },
   "chatList": {
     "loading": "正在加载联系人...",
@@ -30,7 +38,9 @@
     "search": "搜索",
     "empty": "你还没有联系人",
     "noMessages": "没有消息",
-    "encrypted": "加密消息"
+    "encrypted": "加密消息",
+    "attachment": "附件",
+    "attachments": "附件：{{count}} 个"
   },
   "login": {
     "title": "登录",
@@ -61,7 +71,16 @@
     "signUp": "注册",
     "noData": "未找到用户数据。",
     "backToLogin": "返回登录",
-    "networkError": "网络错误，后端服务不可用。"
+    "networkError": "网络错误，后端服务不可用。",
+    "photo": {
+      "change": "更换照片",
+      "remove": "删除照片",
+      "errors": {
+        "not_image": "请选择图片文件",
+        "too_large": "图片超过 {{max}} MB",
+        "unreadable": "无法读取此图片"
+      }
+    }
   },
   "settings": {
     "title": "设置",
@@ -79,33 +98,45 @@
     "registration": "注册错误",
     "login": "登录错误",
     "profile": "无法加载个人资料",
-    "noKeys": "Encryption keys not found. Log in again",
-    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
-    "channelsUnavailable": "All communication channels are unavailable",
+    "noKeys": "未找到加密密钥，请重新登录",
+    "noRecipientKey": "收件人没有公钥，无法加密此消息",
+    "channelsUnavailable": "所有通信通道均不可用",
     "loadContacts": "无法加载联系人",
     "loadMessages": "无法加载消息",
-    "addContact": "Adding contact error",
-    "changePassword": "Failed to change password"
+    "addContact": "添加联系人出错",
+    "changePassword": "无法修改密码",
+    "uploadFailed": "无法上传文件",
+    "downloadFailed": "无法下载文件",
+    "emptyMessage": "消息为空",
+    "avatarUpload": "无法保存照片",
+    "avatarDelete": "无法删除照片"
   },
   "serverErrors": {
-    "token_missing": "The token is missing!",
-    "token_expired": "The token has expired. Login again!",
-    "token_invalid": "The token is not valid!",
-    "message_fields_required": "Recipient, text and nonce are mandatory",
-    "username_required": "Enter username",
-    "user_not_found": "User not found",
-    "cannot_add_self": "You can't add yourself",
-    "already_contact": "User is already in your contact list",
-    "registration_fields_required": "Fill in all the fields",
-    "user_exists": "A user with this name already exists",
-    "login_fields_required": "Fill in the fields",
-    "invalid_credentials": "Incorrect login or password",
-    "key_not_found": "Key not found",
-    "email_exists": "A user with this email already exists",
-    "password_fields_required": "All fields are required",
-    "password_same_as_old": "New password must be different from the old one",
-    "password_mismatch": "Passwords do not match",
-    "wrong_current_password": "Current password is incorrect"
+    "token_missing": "缺少令牌！",
+    "token_expired": "令牌已过期，请重新登录！",
+    "token_invalid": "令牌无效！",
+    "message_fields_required": "收件人、文本和 nonce 为必填项",
+    "username_required": "请输入用户名",
+    "user_not_found": "未找到该用户",
+    "cannot_add_self": "不能添加自己",
+    "already_contact": "该用户已在你的联系人列表中",
+    "registration_fields_required": "请填写所有字段",
+    "user_exists": "已存在同名用户",
+    "login_fields_required": "请填写字段",
+    "invalid_credentials": "登录名或密码不正确",
+    "key_not_found": "未找到密钥",
+    "email_exists": "已存在使用此邮箱的用户",
+    "password_fields_required": "所有字段均为必填",
+    "password_same_as_old": "新密码不能与旧密码相同",
+    "password_mismatch": "两次输入的密码不一致",
+    "wrong_current_password": "当前密码不正确",
+    "file_too_large": "文件太大",
+    "empty_file": "文件为空",
+    "attachment_not_found": "未找到该文件",
+    "recipient_required": "必须指定收件人",
+    "avatar_invalid": "图片无效",
+    "avatar_too_large": "图片太大",
+    "avatar_not_found": "没有照片"
   },
   "changePassword": {
     "title": "修改密码",
@@ -117,7 +148,7 @@
   },
   "keys": {
     "title": "加密密钥",
-    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "description": "你的消息只能用你的私钥读取，私钥仅保存在此浏览器中。请保存一份备份文件，以便在其他设备上或清除浏览器数据后读取你的聊天记录。",
     "exportTitle": "导出密钥",
     "importTitle": "导入密钥",
     "passphrase": "文件密码",
@@ -125,20 +156,20 @@
     "exportButton": "导出",
     "importButton": "导入",
     "keyFile": "密钥文件",
-    "exported": "Key file saved. Keep it and its password in a safe place.",
-    "imported": "Keys imported. You can now read your message history.",
-    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
-    "warning": "Anyone who has the file and its password can read your messages.",
+    "exported": "密钥文件已保存。请将它和它的密码保存在安全的地方。",
+    "imported": "密钥已导入。现在你可以读取聊天记录了。",
+    "noLocalKeys": "此设备上没有该账号的密钥，因此没有可导出的内容。",
+    "warning": "任何拥有该文件及其密码的人都可以读取你的消息。",
     "errors": {
-      "passphraseShort": "The password must be at least 8 characters",
-      "passphraseMismatch": "Passwords do not match",
+      "passphraseShort": "密码至少需要 8 个字符",
+      "passphraseMismatch": "两次输入的密码不一致",
       "noFile": "请选择密钥文件",
-      "invalid_file": "This is not a valid DodgeNet key file",
-      "wrong_passphrase": "Wrong password, or the file is damaged",
-      "wrong_account": "This key file belongs to a different account",
-      "no_keys": "There are no keys for this account on this device",
-      "no_crypto": "Encryption is not available here (HTTPS is required)",
-      "generic": "Could not complete the operation"
+      "invalid_file": "这不是有效的 DodgeNet 密钥文件",
+      "wrong_passphrase": "密码错误，或文件已损坏",
+      "wrong_account": "此密钥文件属于另一个账号",
+      "no_keys": "此设备上没有该账号的密钥",
+      "no_crypto": "此处无法使用加密功能（需要 HTTPS）",
+      "generic": "无法完成操作"
     }
   }
 }

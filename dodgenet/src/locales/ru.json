@@ -10,11 +10,7 @@
   "connection": {
     "protected": "Канал защищён",
     "lost": "Соединение потеряно",
-    "node": "Узел: {{name}}",
-    "nodes": {
-      "Primary": "Основной",
-      "None": "Нет"
-    }
+    "via": "Подключено через {{host}}"
   },
   "chat": {
     "title": "Чат DodgeNet",
@@ -75,7 +71,16 @@
     "signUp": "Регистрация",
     "noData": "Данные пользователя не найдены.",
     "backToLogin": "Вернуться ко входу",
-    "networkError": "Ошибка сети. Сервер недоступен."
+    "networkError": "Ошибка сети. Сервер недоступен.",
+    "photo": {
+      "change": "Изменить фото",
+      "remove": "Удалить фото",
+      "errors": {
+        "not_image": "Выберите файл с изображением",
+        "too_large": "Изображение больше {{max}} МБ",
+        "unreadable": "Не удалось прочитать изображение"
+      }
+    }
   },
   "settings": {
     "title": "Настройки",
@@ -102,7 +107,9 @@
     "changePassword": "Не удалось сменить пароль",
     "uploadFailed": "Не удалось загрузить файл на сервер",
     "downloadFailed": "Не удалось скачать файл",
-    "emptyMessage": "Сообщение пустое"
+    "emptyMessage": "Сообщение пустое",
+    "avatarUpload": "Не удалось сохранить фото",
+    "avatarDelete": "Не удалось удалить фото"
   },
   "serverErrors": {
     "token_missing": "Токен отсутствует!",
@@ -126,7 +133,10 @@
     "file_too_large": "Файл слишком большой",
     "empty_file": "Файл пуст",
     "attachment_not_found": "Файл не найден",
-    "recipient_required": "Не указан получатель"
+    "recipient_required": "Не указан получатель",
+    "avatar_invalid": "Недопустимое изображение",
+    "avatar_too_large": "Изображение слишком большое",
+    "avatar_not_found": "Фото нет"
   },
   "changePassword": {
     "title": "Смена пароля",

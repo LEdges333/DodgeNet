@@ -57,6 +57,7 @@ i18n.use(initReactI18next).init({
     es: { translation: es },
     fi: { translation: fi },
     fr: { translation: fr },
+    hi: { translation: hi },
     hy: { translation: hy },
     ja: { translation: ja },
     pt: { translation: pt },
@@ -68,11 +69,16 @@ i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false }, // React сам экранирует вывод
 });
 
-// Атрибут lang на <html>: нужен для скринридеров и правильных шрифтов/переносов
-document.documentElement.lang = i18n.language;
-i18n.on('languageChanged', (lng) => {
+// Languages written from right to left: the whole page is mirrored for them (dir="rtl").
+const RTL_LANGUAGES = ['ar'];
+
+// Атрибут lang на <html>: нужен для скринридеров и правильных шрифтов/переносов; dir - направление письма
+function applyDocumentLanguage(lng) {
   document.documentElement.lang = lng;
-});
+  document.documentElement.dir = RTL_LANGUAGES.includes(lng) ? 'rtl' : 'ltr';
+}
+applyDocumentLanguage(i18n.language);
+i18n.on('languageChanged', applyDocumentLanguage);
 
 export const setLanguage = async (code) => {
   if (!supported.includes(code)) return;

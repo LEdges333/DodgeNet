@@ -10,16 +10,24 @@
   "connection": {
     "protected": "संचार चैनल सुरक्षित है",
     "lost": "कनेक्शन टूट गया",
-    "node": "नोड: {{name}}",
-    "nodes": {
-      "Primary": "प्राथमिक",
-      "None": "कोई नहीं"
-    }
+    "via": "{{host}} के माध्यम से जुड़ा है"
   },
   "chat": {
     "title": "DodgeNet चैट",
     "placeholder": "संदेश लिखें...",
-    "cannotDecrypt": "इस संदेश को डिक्रिप्ट नहीं किया जा सका"
+    "cannotDecrypt": "इस संदेश को डिक्रिप्ट नहीं किया जा सका",
+    "attach": "फ़ाइलें संलग्न करें",
+    "removeFile": "हटाएँ",
+    "download": "डाउनलोड करें",
+    "loadingFile": "लोड हो रहा है…",
+    "fileError": "यह फ़ाइल लोड नहीं हो सकी",
+    "unsupported": "यह संदेश प्रदर्शित नहीं किया जा सकता",
+    "send": "भेजें",
+    "errors": {
+      "fileTooLarge": "{{name}} {{max}} MB से बड़ी है",
+      "tooManyFiles": "आप अधिकतम {{max}} फ़ाइलें संलग्न कर सकते हैं",
+      "emptyFile": "{{name}} खाली है"
+    }
   },
   "chatList": {
     "loading": "संपर्क लोड हो रहे हैं...",
@@ -30,7 +38,9 @@
     "search": "खोजें",
     "empty": "अभी आपके कोई संपर्क नहीं हैं",
     "noMessages": "कोई संदेश नहीं",
-    "encrypted": "एन्क्रिप्ट किया गया संदेश"
+    "encrypted": "एन्क्रिप्ट किया गया संदेश",
+    "attachment": "संलग्नक",
+    "attachments": "संलग्नक: {{count}}"
   },
   "login": {
     "title": "साइन इन",
@@ -61,7 +71,16 @@
     "signUp": "साइन अप",
     "noData": "उपयोगकर्ता डेटा नहीं मिला।",
     "backToLogin": "साइन इन पर वापस जाएँ",
-    "networkError": "नेटवर्क त्रुटि। बैकएंड उपलब्ध नहीं है।"
+    "networkError": "नेटवर्क त्रुटि। बैकएंड उपलब्ध नहीं है।",
+    "photo": {
+      "change": "फ़ोटो बदलें",
+      "remove": "फ़ोटो हटाएँ",
+      "errors": {
+        "not_image": "कोई छवि फ़ाइल चुनें",
+        "too_large": "छवि {{max}} MB से बड़ी है",
+        "unreadable": "यह छवि पढ़ी नहीं जा सकी"
+      }
+    }
   },
   "settings": {
     "title": "सेटिंग्स",
@@ -79,33 +98,45 @@
     "registration": "पंजीकरण त्रुटि",
     "login": "लॉगिन त्रुटि",
     "profile": "प्रोफ़ाइल लोड नहीं हो सकी",
-    "noKeys": "Encryption keys not found. Log in again",
-    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
-    "channelsUnavailable": "All communication channels are unavailable",
+    "noKeys": "एन्क्रिप्शन कुंजियाँ नहीं मिलीं। कृपया फिर से लॉग इन करें",
+    "noRecipientKey": "प्राप्तकर्ता के पास सार्वजनिक कुंजी नहीं है — संदेश एन्क्रिप्ट नहीं किया जा सकता",
+    "channelsUnavailable": "सभी संचार चैनल अनुपलब्ध हैं",
     "loadContacts": "संपर्क लोड नहीं हो सके",
     "loadMessages": "संदेश लोड नहीं हो सके",
-    "addContact": "Adding contact error",
-    "changePassword": "Failed to change password"
+    "addContact": "संपर्क जोड़ने में त्रुटि",
+    "changePassword": "पासवर्ड बदला नहीं जा सका",
+    "uploadFailed": "फ़ाइल अपलोड नहीं हो सकी",
+    "downloadFailed": "फ़ाइल डाउनलोड नहीं हो सकी",
+    "emptyMessage": "संदेश खाली है",
+    "avatarUpload": "फ़ोटो सहेजी नहीं जा सकी",
+    "avatarDelete": "फ़ोटो हटाई नहीं जा सकी"
   },
   "serverErrors": {
-    "token_missing": "The token is missing!",
-    "token_expired": "The token has expired. Login again!",
-    "token_invalid": "The token is not valid!",
-    "message_fields_required": "Recipient, text and nonce are mandatory",
-    "username_required": "Enter username",
-    "user_not_found": "User not found",
-    "cannot_add_self": "You can't add yourself",
-    "already_contact": "User is already in your contact list",
-    "registration_fields_required": "Fill in all the fields",
-    "user_exists": "A user with this name already exists",
-    "login_fields_required": "Fill in the fields",
-    "invalid_credentials": "Incorrect login or password",
-    "key_not_found": "Key not found",
-    "email_exists": "A user with this email already exists",
-    "password_fields_required": "All fields are required",
-    "password_same_as_old": "New password must be different from the old one",
-    "password_mismatch": "Passwords do not match",
-    "wrong_current_password": "Current password is incorrect"
+    "token_missing": "टोकन अनुपलब्ध है!",
+    "token_expired": "टोकन की अवधि समाप्त हो गई है। कृपया फिर से लॉग इन करें!",
+    "token_invalid": "टोकन मान्य नहीं है!",
+    "message_fields_required": "प्राप्तकर्ता, पाठ और नॉन्स अनिवार्य हैं",
+    "username_required": "उपयोगकर्ता नाम दर्ज करें",
+    "user_not_found": "उपयोगकर्ता नहीं मिला",
+    "cannot_add_self": "आप स्वयं को नहीं जोड़ सकते",
+    "already_contact": "उपयोगकर्ता पहले से आपकी संपर्क सूची में है",
+    "registration_fields_required": "सभी फ़ील्ड भरें",
+    "user_exists": "इस नाम का उपयोगकर्ता पहले से मौजूद है",
+    "login_fields_required": "फ़ील्ड भरें",
+    "invalid_credentials": "लॉगिन या पासवर्ड गलत है",
+    "key_not_found": "कुंजी नहीं मिली",
+    "email_exists": "इस ईमेल का उपयोगकर्ता पहले से मौजूद है",
+    "password_fields_required": "सभी फ़ील्ड अनिवार्य हैं",
+    "password_same_as_old": "नया पासवर्ड पुराने पासवर्ड से अलग होना चाहिए",
+    "password_mismatch": "पासवर्ड मेल नहीं खाते",
+    "wrong_current_password": "वर्तमान पासवर्ड गलत है",
+    "file_too_large": "फ़ाइल बहुत बड़ी है",
+    "empty_file": "फ़ाइल खाली है",
+    "attachment_not_found": "फ़ाइल नहीं मिली",
+    "recipient_required": "प्राप्तकर्ता आवश्यक है",
+    "avatar_invalid": "छवि मान्य नहीं है",
+    "avatar_too_large": "छवि बहुत बड़ी है",
+    "avatar_not_found": "कोई फ़ोटो नहीं"
   },
   "changePassword": {
     "title": "पासवर्ड बदलें",
@@ -117,7 +148,7 @@
   },
   "keys": {
     "title": "एन्क्रिप्शन कुंजियाँ",
-    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "description": "आपके संदेश केवल आपकी निजी कुंजी से पढ़े जा सकते हैं, जो सिर्फ़ इसी ब्राउज़र में सहेजी गई है। किसी दूसरे डिवाइस पर या ब्राउज़र डेटा साफ़ करने के बाद अपना इतिहास पढ़ने के लिए एक बैकअप फ़ाइल सहेज लें।",
     "exportTitle": "कुंजियाँ निर्यात करें",
     "importTitle": "कुंजियाँ आयात करें",
     "passphrase": "फ़ाइल पासवर्ड",
@@ -125,20 +156,20 @@
     "exportButton": "निर्यात",
     "importButton": "आयात",
     "keyFile": "कुंजी फ़ाइल",
-    "exported": "Key file saved. Keep it and its password in a safe place.",
-    "imported": "Keys imported. You can now read your message history.",
-    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
-    "warning": "Anyone who has the file and its password can read your messages.",
+    "exported": "कुंजी फ़ाइल सहेज ली गई। इसे और इसके पासवर्ड को सुरक्षित स्थान पर रखें।",
+    "imported": "कुंजियाँ आयात हो गईं। अब आप अपना संदेश इतिहास पढ़ सकते हैं।",
+    "noLocalKeys": "इस डिवाइस पर इस खाते की कोई कुंजी नहीं है, इसलिए निर्यात करने के लिए कुछ नहीं है।",
+    "warning": "फ़ाइल और उसका पासवर्ड रखने वाला कोई भी व्यक्ति आपके संदेश पढ़ सकता है।",
     "errors": {
-      "passphraseShort": "The password must be at least 8 characters",
-      "passphraseMismatch": "Passwords do not match",
+      "passphraseShort": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए",
+      "passphraseMismatch": "पासवर्ड मेल नहीं खाते",
       "noFile": "कुंजी फ़ाइल चुनें",
-      "invalid_file": "This is not a valid DodgeNet key file",
-      "wrong_passphrase": "Wrong password, or the file is damaged",
-      "wrong_account": "This key file belongs to a different account",
-      "no_keys": "There are no keys for this account on this device",
-      "no_crypto": "Encryption is not available here (HTTPS is required)",
-      "generic": "Could not complete the operation"
+      "invalid_file": "यह मान्य DodgeNet कुंजी फ़ाइल नहीं है",
+      "wrong_passphrase": "पासवर्ड गलत है या फ़ाइल क्षतिग्रस्त है",
+      "wrong_account": "यह कुंजी फ़ाइल किसी दूसरे खाते की है",
+      "no_keys": "इस डिवाइस पर इस खाते की कोई कुंजी नहीं है",
+      "no_crypto": "यहाँ एन्क्रिप्शन उपलब्ध नहीं है (HTTPS आवश्यक है)",
+      "generic": "कार्रवाई पूरी नहीं हो सकी"
     }
   }
 }

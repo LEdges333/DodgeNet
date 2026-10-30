@@ -10,16 +10,24 @@
   "connection": {
     "protected": "Kanal ist geschützt",
     "lost": "Verbindung verloren",
-    "node": "Knoten: {{name}}",
-    "nodes": {
-      "Primary": "Primär",
-      "None": "Keiner"
-    }
+    "via": "Verbunden über {{host}}"
   },
   "chat": {
     "title": "DodgeNet-Chat",
     "placeholder": "Nachricht eingeben...",
-    "cannotDecrypt": "Diese Nachricht konnte nicht entschlüsselt werden"
+    "cannotDecrypt": "Diese Nachricht konnte nicht entschlüsselt werden",
+    "attach": "Dateien anhängen",
+    "removeFile": "Entfernen",
+    "download": "Herunterladen",
+    "loadingFile": "Wird geladen…",
+    "fileError": "Diese Datei konnte nicht geladen werden",
+    "unsupported": "Diese Nachricht kann nicht angezeigt werden",
+    "send": "Senden",
+    "errors": {
+      "fileTooLarge": "{{name}} ist größer als {{max}} MB",
+      "tooManyFiles": "Du kannst höchstens {{max}} Dateien anhängen",
+      "emptyFile": "{{name}} ist leer"
+    }
   },
   "chatList": {
     "loading": "Kontakte werden geladen...",
@@ -30,7 +38,9 @@
     "search": "Suchen",
     "empty": "Du hast noch keine Kontakte",
     "noMessages": "Keine Nachrichten",
-    "encrypted": "Verschlüsselte Nachricht"
+    "encrypted": "Verschlüsselte Nachricht",
+    "attachment": "Anhang",
+    "attachments": "Anhänge: {{count}}"
   },
   "login": {
     "title": "Anmelden",
@@ -61,7 +71,16 @@
     "signUp": "Registrieren",
     "noData": "Keine Benutzerdaten gefunden.",
     "backToLogin": "Zurück zur Anmeldung",
-    "networkError": "Netzwerkfehler. Backend ist nicht verfügbar."
+    "networkError": "Netzwerkfehler. Backend ist nicht verfügbar.",
+    "photo": {
+      "change": "Foto ändern",
+      "remove": "Foto entfernen",
+      "errors": {
+        "not_image": "Wähle eine Bilddatei aus",
+        "too_large": "Das Bild ist größer als {{max}} MB",
+        "unreadable": "Dieses Bild konnte nicht gelesen werden"
+      }
+    }
   },
   "settings": {
     "title": "Einstellungen",
@@ -79,33 +98,45 @@
     "registration": "Registrierungsfehler",
     "login": "Anmeldefehler",
     "profile": "Profil konnte nicht geladen werden",
-    "noKeys": "Encryption keys not found. Log in again",
-    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
-    "channelsUnavailable": "All communication channels are unavailable",
+    "noKeys": "Verschlüsselungsschlüssel nicht gefunden. Melde dich erneut an",
+    "noRecipientKey": "Der Empfänger hat keinen öffentlichen Schlüssel – die Nachricht kann nicht verschlüsselt werden",
+    "channelsUnavailable": "Alle Kommunikationskanäle sind nicht verfügbar",
     "loadContacts": "Kontakte konnten nicht geladen werden",
     "loadMessages": "Nachrichten konnten nicht geladen werden",
-    "addContact": "Adding contact error",
-    "changePassword": "Failed to change password"
+    "addContact": "Fehler beim Hinzufügen des Kontakts",
+    "changePassword": "Das Passwort konnte nicht geändert werden",
+    "uploadFailed": "Die Datei konnte nicht hochgeladen werden",
+    "downloadFailed": "Die Datei konnte nicht heruntergeladen werden",
+    "emptyMessage": "Die Nachricht ist leer",
+    "avatarUpload": "Das Foto konnte nicht gespeichert werden",
+    "avatarDelete": "Das Foto konnte nicht entfernt werden"
   },
   "serverErrors": {
-    "token_missing": "The token is missing!",
-    "token_expired": "The token has expired. Login again!",
-    "token_invalid": "The token is not valid!",
-    "message_fields_required": "Recipient, text and nonce are mandatory",
-    "username_required": "Enter username",
-    "user_not_found": "User not found",
-    "cannot_add_self": "You can't add yourself",
-    "already_contact": "User is already in your contact list",
-    "registration_fields_required": "Fill in all the fields",
-    "user_exists": "A user with this name already exists",
-    "login_fields_required": "Fill in the fields",
-    "invalid_credentials": "Incorrect login or password",
-    "key_not_found": "Key not found",
-    "email_exists": "A user with this email already exists",
-    "password_fields_required": "All fields are required",
-    "password_same_as_old": "New password must be different from the old one",
-    "password_mismatch": "Passwords do not match",
-    "wrong_current_password": "Current password is incorrect"
+    "token_missing": "Das Token fehlt!",
+    "token_expired": "Das Token ist abgelaufen. Melde dich erneut an!",
+    "token_invalid": "Das Token ist ungültig!",
+    "message_fields_required": "Empfänger, Text und Nonce sind erforderlich",
+    "username_required": "Gib einen Benutzernamen ein",
+    "user_not_found": "Benutzer nicht gefunden",
+    "cannot_add_self": "Du kannst dich nicht selbst hinzufügen",
+    "already_contact": "Der Benutzer ist bereits in deiner Kontaktliste",
+    "registration_fields_required": "Fülle alle Felder aus",
+    "user_exists": "Ein Benutzer mit diesem Namen existiert bereits",
+    "login_fields_required": "Fülle die Felder aus",
+    "invalid_credentials": "Falscher Benutzername oder falsches Passwort",
+    "key_not_found": "Schlüssel nicht gefunden",
+    "email_exists": "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits",
+    "password_fields_required": "Alle Felder sind erforderlich",
+    "password_same_as_old": "Das neue Passwort muss sich vom alten unterscheiden",
+    "password_mismatch": "Die Passwörter stimmen nicht überein",
+    "wrong_current_password": "Das aktuelle Passwort ist falsch",
+    "file_too_large": "Die Datei ist zu groß",
+    "empty_file": "Die Datei ist leer",
+    "attachment_not_found": "Die Datei wurde nicht gefunden",
+    "recipient_required": "Ein Empfänger ist erforderlich",
+    "avatar_invalid": "Das Bild ist ungültig",
+    "avatar_too_large": "Das Bild ist zu groß",
+    "avatar_not_found": "Kein Foto"
   },
   "changePassword": {
     "title": "Passwort ändern",
@@ -117,7 +148,7 @@
   },
   "keys": {
     "title": "Verschlüsselungsschlüssel",
-    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "description": "Deine Nachrichten lassen sich nur mit deinem privaten Schlüssel lesen, der nur in diesem Browser gespeichert ist. Speichere eine Sicherungsdatei, um deinen Verlauf auf einem anderen Gerät oder nach dem Leeren des Browsers lesen zu können.",
     "exportTitle": "Schlüssel exportieren",
     "importTitle": "Schlüssel importieren",
     "passphrase": "Dateipasswort",
@@ -125,20 +156,20 @@
     "exportButton": "Exportieren",
     "importButton": "Importieren",
     "keyFile": "Schlüsseldatei",
-    "exported": "Key file saved. Keep it and its password in a safe place.",
-    "imported": "Keys imported. You can now read your message history.",
-    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
-    "warning": "Anyone who has the file and its password can read your messages.",
+    "exported": "Schlüsseldatei gespeichert. Bewahre sie und ihr Passwort an einem sicheren Ort auf.",
+    "imported": "Schlüssel importiert. Du kannst jetzt deinen Nachrichtenverlauf lesen.",
+    "noLocalKeys": "Auf diesem Gerät gibt es keine Schlüssel für dieses Konto, daher gibt es nichts zu exportieren.",
+    "warning": "Jeder, der die Datei und ihr Passwort hat, kann deine Nachrichten lesen.",
     "errors": {
-      "passphraseShort": "The password must be at least 8 characters",
-      "passphraseMismatch": "Passwords do not match",
+      "passphraseShort": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "passphraseMismatch": "Die Passwörter stimmen nicht überein",
       "noFile": "Schlüsseldatei auswählen",
-      "invalid_file": "This is not a valid DodgeNet key file",
-      "wrong_passphrase": "Wrong password, or the file is damaged",
-      "wrong_account": "This key file belongs to a different account",
-      "no_keys": "There are no keys for this account on this device",
-      "no_crypto": "Encryption is not available here (HTTPS is required)",
-      "generic": "Could not complete the operation"
+      "invalid_file": "Das ist keine gültige DodgeNet-Schlüsseldatei",
+      "wrong_passphrase": "Falsches Passwort oder die Datei ist beschädigt",
+      "wrong_account": "Diese Schlüsseldatei gehört zu einem anderen Konto",
+      "no_keys": "Auf diesem Gerät gibt es keine Schlüssel für dieses Konto",
+      "no_crypto": "Verschlüsselung ist hier nicht verfügbar (HTTPS erforderlich)",
+      "generic": "Der Vorgang konnte nicht abgeschlossen werden"
     }
   }
 }

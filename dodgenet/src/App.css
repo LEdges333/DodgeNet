@@ -74,13 +74,13 @@
 }
 
 /* Базовый стиль текста статуса
-  Main text stetus stile */
+  Main text style status */
 .status-label {
   font-weight: 500;
 }
 
 /* Блок статуса подключения
-  Connrction status */
+  Connection status */
 .status-container {
   margin-top: auto;
   padding-top: 15px;
@@ -113,8 +113,8 @@
   background-color: var(--bg);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 50px -12px var(--shadow);
-  border: 1px solid var(--border-subtle);
+  box-shadow: none;
+  border: none;
   border-radius: 16px;
 }
 
@@ -144,12 +144,14 @@
   font-weight: 500;
 }
 
-.input-area {
-  padding: 12px 20px 20px;
+/* Message enter window */
+
+.input-area {  
+  padding: 12px 20px 20px; /* 12px 20px 20px */
   background-color: var(--surface);
   display: flex;
   gap: 10px;
-  border-radius: 0 0 16px 16px;
+  border-radius: 16px 16px 16px 16px;
   min-width: 0;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -359,6 +361,7 @@
 .attachment-bar {
   padding: 8px 20px 0;
   background-color: var(--surface);
+  border-radius: 
   min-width: 0;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -580,8 +583,33 @@ body,
   overflow: hidden;
 }
 
-.messenger-card .header {
+.messenger-card .chat-header {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chat-contact-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .message-row,
@@ -606,7 +634,11 @@ body,
     padding: 14px;
   }
 
-  .chat-window { 
+  .messenger-card .chat-header {
+    padding: 10px 12px 14px;
+  }
+
+  .chat-window {
     padding: 12px;
   }
 

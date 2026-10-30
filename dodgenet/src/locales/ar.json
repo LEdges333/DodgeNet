@@ -10,16 +10,24 @@
   "connection": {
     "protected": "قناة الاتصال محمية",
     "lost": "انقطع الاتصال",
-    "node": "العقدة: {{name}}",
-    "nodes": {
-      "Primary": "أساسي",
-      "None": "لا شيء"
-    }
+    "via": "متصل عبر {{host}}"
   },
   "chat": {
     "title": "دردشة DodgeNet",
     "placeholder": "اكتب رسالة...",
-    "cannotDecrypt": "تعذر فك تشفير هذه الرسالة"
+    "cannotDecrypt": "تعذر فك تشفير هذه الرسالة",
+    "attach": "إرفاق ملفات",
+    "removeFile": "إزالة",
+    "download": "تنزيل",
+    "loadingFile": "جارٍ التحميل…",
+    "fileError": "تعذّر تحميل هذا الملف",
+    "unsupported": "لا يمكن عرض هذه الرسالة",
+    "send": "إرسال",
+    "errors": {
+      "fileTooLarge": "{{name}} أكبر من {{max}} ميغابايت",
+      "tooManyFiles": "يمكنك إرفاق {{max}} ملفات كحد أقصى",
+      "emptyFile": "الملف {{name}} فارغ"
+    }
   },
   "chatList": {
     "loading": "جارٍ تحميل جهات الاتصال...",
@@ -30,7 +38,9 @@
     "search": "بحث",
     "empty": "ليس لديك جهات اتصال بعد",
     "noMessages": "لا توجد رسائل",
-    "encrypted": "رسالة مشفرة"
+    "encrypted": "رسالة مشفرة",
+    "attachment": "مرفق",
+    "attachments": "المرفقات: {{count}}"
   },
   "login": {
     "title": "تسجيل الدخول",
@@ -61,7 +71,16 @@
     "signUp": "إنشاء حساب",
     "noData": "لم يتم العثور على بيانات المستخدم.",
     "backToLogin": "العودة إلى تسجيل الدخول",
-    "networkError": "خطأ في الشبكة. الخادم الخلفي غير متاح."
+    "networkError": "خطأ في الشبكة. الخادم الخلفي غير متاح.",
+    "photo": {
+      "change": "تغيير الصورة",
+      "remove": "إزالة الصورة",
+      "errors": {
+        "not_image": "اختر ملف صورة",
+        "too_large": "الصورة أكبر من {{max}} ميغابايت",
+        "unreadable": "تعذّرت قراءة هذه الصورة"
+      }
+    }
   },
   "settings": {
     "title": "الإعدادات",
@@ -79,33 +98,45 @@
     "registration": "خطأ في التسجيل",
     "login": "خطأ في تسجيل الدخول",
     "profile": "تعذر تحميل الملف الشخصي",
-    "noKeys": "Encryption keys not found. Log in again",
-    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
-    "channelsUnavailable": "All communication channels are unavailable",
+    "noKeys": "لم يتم العثور على مفاتيح التشفير. سجّل الدخول مرة أخرى",
+    "noRecipientKey": "ليس لدى المستلم مفتاح عام، لذا لا يمكن تشفير الرسالة",
+    "channelsUnavailable": "جميع قنوات الاتصال غير متاحة",
     "loadContacts": "تعذر تحميل جهات الاتصال",
     "loadMessages": "تعذر تحميل الرسائل",
-    "addContact": "Adding contact error",
-    "changePassword": "Failed to change password"
+    "addContact": "خطأ في إضافة جهة الاتصال",
+    "changePassword": "تعذّر تغيير كلمة المرور",
+    "uploadFailed": "تعذّر رفع الملف",
+    "downloadFailed": "تعذّر تنزيل الملف",
+    "emptyMessage": "الرسالة فارغة",
+    "avatarUpload": "تعذّر حفظ الصورة",
+    "avatarDelete": "تعذّر إزالة الصورة"
   },
   "serverErrors": {
-    "token_missing": "The token is missing!",
-    "token_expired": "The token has expired. Login again!",
-    "token_invalid": "The token is not valid!",
-    "message_fields_required": "Recipient, text and nonce are mandatory",
-    "username_required": "Enter username",
-    "user_not_found": "User not found",
-    "cannot_add_self": "You can't add yourself",
-    "already_contact": "User is already in your contact list",
-    "registration_fields_required": "Fill in all the fields",
-    "user_exists": "A user with this name already exists",
-    "login_fields_required": "Fill in the fields",
-    "invalid_credentials": "Incorrect login or password",
-    "key_not_found": "Key not found",
-    "email_exists": "A user with this email already exists",
-    "password_fields_required": "All fields are required",
-    "password_same_as_old": "New password must be different from the old one",
-    "password_mismatch": "Passwords do not match",
-    "wrong_current_password": "Current password is incorrect"
+    "token_missing": "رمز الدخول مفقود!",
+    "token_expired": "انتهت صلاحية رمز الدخول. سجّل الدخول مرة أخرى!",
+    "token_invalid": "رمز الدخول غير صالح!",
+    "message_fields_required": "المستلم والنص وقيمة nonce حقول مطلوبة",
+    "username_required": "أدخل اسم المستخدم",
+    "user_not_found": "المستخدم غير موجود",
+    "cannot_add_self": "لا يمكنك إضافة نفسك",
+    "already_contact": "المستخدم موجود بالفعل في جهات اتصالك",
+    "registration_fields_required": "املأ جميع الحقول",
+    "user_exists": "يوجد مستخدم بهذا الاسم بالفعل",
+    "login_fields_required": "املأ الحقول",
+    "invalid_credentials": "اسم المستخدم أو كلمة المرور غير صحيحة",
+    "key_not_found": "المفتاح غير موجود",
+    "email_exists": "يوجد مستخدم بهذا البريد الإلكتروني بالفعل",
+    "password_fields_required": "جميع الحقول مطلوبة",
+    "password_same_as_old": "يجب أن تختلف كلمة المرور الجديدة عن القديمة",
+    "password_mismatch": "كلمتا المرور غير متطابقتين",
+    "wrong_current_password": "كلمة المرور الحالية غير صحيحة",
+    "file_too_large": "الملف كبير جدًا",
+    "empty_file": "الملف فارغ",
+    "attachment_not_found": "لم يتم العثور على الملف",
+    "recipient_required": "المستلم مطلوب",
+    "avatar_invalid": "الصورة غير صالحة",
+    "avatar_too_large": "الصورة كبيرة جدًا",
+    "avatar_not_found": "لا توجد صورة"
   },
   "changePassword": {
     "title": "تغيير كلمة المرور",
@@ -117,7 +148,7 @@
   },
   "keys": {
     "title": "مفاتيح التشفير",
-    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "description": "لا يمكن قراءة رسائلك إلا بمفتاحك الخاص، المخزَّن في هذا المتصفح فقط. احفظ ملفًا احتياطيًا لتتمكن من قراءة محفوظاتك على جهاز آخر أو بعد مسح بيانات المتصفح.",
     "exportTitle": "تصدير المفاتيح",
     "importTitle": "استيراد المفاتيح",
     "passphrase": "كلمة مرور الملف",
@@ -125,20 +156,20 @@
     "exportButton": "تصدير",
     "importButton": "استيراد",
     "keyFile": "ملف المفاتيح",
-    "exported": "Key file saved. Keep it and its password in a safe place.",
-    "imported": "Keys imported. You can now read your message history.",
-    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
-    "warning": "Anyone who has the file and its password can read your messages.",
+    "exported": "تم حفظ ملف المفاتيح. احتفظ به مع كلمة مروره في مكان آمن.",
+    "imported": "تم استيراد المفاتيح. يمكنك الآن قراءة سجل رسائلك.",
+    "noLocalKeys": "لا توجد مفاتيح لهذا الحساب على هذا الجهاز، لذا لا يوجد ما يمكن تصديره.",
+    "warning": "يستطيع أي شخص يملك الملف وكلمة مروره قراءة رسائلك.",
     "errors": {
-      "passphraseShort": "The password must be at least 8 characters",
-      "passphraseMismatch": "Passwords do not match",
+      "passphraseShort": "يجب ألا تقل كلمة المرور عن 8 أحرف",
+      "passphraseMismatch": "كلمتا المرور غير متطابقتين",
       "noFile": "اختر ملف مفاتيح",
-      "invalid_file": "This is not a valid DodgeNet key file",
-      "wrong_passphrase": "Wrong password, or the file is damaged",
-      "wrong_account": "This key file belongs to a different account",
-      "no_keys": "There are no keys for this account on this device",
-      "no_crypto": "Encryption is not available here (HTTPS is required)",
-      "generic": "Could not complete the operation"
+      "invalid_file": "هذا ليس ملف مفاتيح صالحًا لـ DodgeNet",
+      "wrong_passphrase": "كلمة المرور خاطئة أو الملف تالف",
+      "wrong_account": "ملف المفاتيح هذا يخص حسابًا آخر",
+      "no_keys": "لا توجد مفاتيح لهذا الحساب على هذا الجهاز",
+      "no_crypto": "التشفير غير متاح هنا (يلزم HTTPS)",
+      "generic": "تعذّر إتمام العملية"
     }
   }
 }

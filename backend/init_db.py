@@ -40,6 +40,17 @@ def init_db():
             FOREIGN KEY (contact_id) REFERENCES users (id)
         )
     ''')
+    # Profile photo: a small image stored in the users table (the browser shrinks it to 256x256 first).
+    # CREATE TABLE IF NOT EXISTS does not change an existing table, so the columns are added here
+    # if they are missing; this works for new and for old databases.
+    user_columns = {row[1] for row in cursor.execute("PRAGMA table_info(users)")}
+    if 'avatar' not in user_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN avatar BLOB")
+    if 'avatar_type' not in user_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN avatar_type TEXT")
+    if 'avatar_version' not in user_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN avatar_version INTEGER NOT NULL DEFAULT 0")
+
     # attachments table: metadata only. 
     # The file itself is stored on disk (backend/uploads/<id>)
     # and is ciphertext: the server never sees file contents, names or types.

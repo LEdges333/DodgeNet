@@ -10,16 +10,24 @@
   "connection": {
     "protected": "Canal protegido",
     "lost": "Conexão perdida",
-    "node": "Nó: {{name}}",
-    "nodes": {
-      "Primary": "Principal",
-      "None": "Nenhum"
-    }
+    "via": "Conectado via {{host}}"
   },
   "chat": {
     "title": "Chat DodgeNet",
     "placeholder": "Digite uma mensagem...",
-    "cannotDecrypt": "Não foi possível descriptografar esta mensagem"
+    "cannotDecrypt": "Não foi possível descriptografar esta mensagem",
+    "attach": "Anexar arquivos",
+    "removeFile": "Remover",
+    "download": "Baixar",
+    "loadingFile": "Carregando…",
+    "fileError": "Não foi possível carregar este arquivo",
+    "unsupported": "Esta mensagem não pode ser exibida",
+    "send": "Enviar",
+    "errors": {
+      "fileTooLarge": "{{name}} é maior que {{max}} MB",
+      "tooManyFiles": "Você pode anexar até {{max}} arquivos",
+      "emptyFile": "{{name}} está vazio"
+    }
   },
   "chatList": {
     "loading": "Carregando contatos...",
@@ -30,7 +38,9 @@
     "search": "Pesquisar",
     "empty": "Você ainda não tem contatos",
     "noMessages": "Sem mensagens",
-    "encrypted": "Mensagem criptografada"
+    "encrypted": "Mensagem criptografada",
+    "attachment": "Anexo",
+    "attachments": "Anexos: {{count}}"
   },
   "login": {
     "title": "Entrar",
@@ -61,7 +71,16 @@
     "signUp": "Cadastrar-se",
     "noData": "Nenhum dado de usuário encontrado.",
     "backToLogin": "Voltar para o login",
-    "networkError": "Erro de rede. O servidor está indisponível."
+    "networkError": "Erro de rede. O servidor está indisponível.",
+    "photo": {
+      "change": "Alterar foto",
+      "remove": "Remover foto",
+      "errors": {
+        "not_image": "Escolha um arquivo de imagem",
+        "too_large": "A imagem é maior que {{max}} MB",
+        "unreadable": "Não foi possível ler esta imagem"
+      }
+    }
   },
   "settings": {
     "title": "Configurações",
@@ -79,33 +98,45 @@
     "registration": "Erro de cadastro",
     "login": "Erro de login",
     "profile": "Não foi possível carregar o perfil",
-    "noKeys": "Encryption keys not found. Log in again",
-    "noRecipientKey": "The recipient does not have a public key — the message cannot be encrypted",
-    "channelsUnavailable": "All communication channels are unavailable",
+    "noKeys": "Chaves de criptografia não encontradas. Faça login novamente",
+    "noRecipientKey": "O destinatário não tem uma chave pública — a mensagem não pode ser criptografada",
+    "channelsUnavailable": "Todos os canais de comunicação estão indisponíveis",
     "loadContacts": "Falha ao carregar contatos",
     "loadMessages": "Falha ao carregar mensagens",
-    "addContact": "Adding contact error",
-    "changePassword": "Failed to change password"
+    "addContact": "Erro ao adicionar o contato",
+    "changePassword": "Não foi possível alterar a senha",
+    "uploadFailed": "Não foi possível enviar o arquivo",
+    "downloadFailed": "Não foi possível baixar o arquivo",
+    "emptyMessage": "A mensagem está vazia",
+    "avatarUpload": "Não foi possível salvar a foto",
+    "avatarDelete": "Não foi possível remover a foto"
   },
   "serverErrors": {
-    "token_missing": "The token is missing!",
-    "token_expired": "The token has expired. Login again!",
-    "token_invalid": "The token is not valid!",
-    "message_fields_required": "Recipient, text and nonce are mandatory",
-    "username_required": "Enter username",
-    "user_not_found": "User not found",
-    "cannot_add_self": "You can't add yourself",
-    "already_contact": "User is already in your contact list",
-    "registration_fields_required": "Fill in all the fields",
-    "user_exists": "A user with this name already exists",
-    "login_fields_required": "Fill in the fields",
-    "invalid_credentials": "Incorrect login or password",
-    "key_not_found": "Key not found",
-    "email_exists": "A user with this email already exists",
-    "password_fields_required": "All fields are required",
-    "password_same_as_old": "New password must be different from the old one",
-    "password_mismatch": "Passwords do not match",
-    "wrong_current_password": "Current password is incorrect"
+    "token_missing": "O token está ausente!",
+    "token_expired": "O token expirou. Faça login novamente!",
+    "token_invalid": "O token não é válido!",
+    "message_fields_required": "Destinatário, texto e nonce são obrigatórios",
+    "username_required": "Digite o nome de usuário",
+    "user_not_found": "Usuário não encontrado",
+    "cannot_add_self": "Você não pode adicionar a si mesmo",
+    "already_contact": "O usuário já está na sua lista de contatos",
+    "registration_fields_required": "Preencha todos os campos",
+    "user_exists": "Já existe um usuário com este nome",
+    "login_fields_required": "Preencha os campos",
+    "invalid_credentials": "Login ou senha incorretos",
+    "key_not_found": "Chave não encontrada",
+    "email_exists": "Já existe um usuário com este e-mail",
+    "password_fields_required": "Todos os campos são obrigatórios",
+    "password_same_as_old": "A nova senha deve ser diferente da anterior",
+    "password_mismatch": "As senhas não coincidem",
+    "wrong_current_password": "A senha atual está incorreta",
+    "file_too_large": "O arquivo é muito grande",
+    "empty_file": "O arquivo está vazio",
+    "attachment_not_found": "O arquivo não foi encontrado",
+    "recipient_required": "O destinatário é obrigatório",
+    "avatar_invalid": "A imagem não é válida",
+    "avatar_too_large": "A imagem é muito grande",
+    "avatar_not_found": "Sem foto"
   },
   "changePassword": {
     "title": "Alterar senha",
@@ -117,7 +148,7 @@
   },
   "keys": {
     "title": "Chaves de criptografia",
-    "description": "Your messages can only be read with your private key, which is stored only in this browser. Save a backup file to read your history on another device or after clearing the browser.",
+    "description": "Suas mensagens só podem ser lidas com a sua chave privada, que fica guardada apenas neste navegador. Salve um arquivo de backup para ler seu histórico em outro dispositivo ou depois de limpar o navegador.",
     "exportTitle": "Exportar chaves",
     "importTitle": "Importar chaves",
     "passphrase": "Senha do arquivo",
@@ -125,20 +156,20 @@
     "exportButton": "Exportar",
     "importButton": "Importar",
     "keyFile": "Arquivo de chaves",
-    "exported": "Key file saved. Keep it and its password in a safe place.",
-    "imported": "Keys imported. You can now read your message history.",
-    "noLocalKeys": "There are no keys for this account on this device, so there is nothing to export.",
-    "warning": "Anyone who has the file and its password can read your messages.",
+    "exported": "Arquivo de chaves salvo. Guarde-o, junto com a senha, em um lugar seguro.",
+    "imported": "Chaves importadas. Agora você pode ler seu histórico de mensagens.",
+    "noLocalKeys": "Não há chaves desta conta neste dispositivo, então não há nada para exportar.",
+    "warning": "Qualquer pessoa que tenha o arquivo e a senha dele pode ler suas mensagens.",
     "errors": {
-      "passphraseShort": "The password must be at least 8 characters",
-      "passphraseMismatch": "Passwords do not match",
+      "passphraseShort": "A senha deve ter pelo menos 8 caracteres",
+      "passphraseMismatch": "As senhas não coincidem",
       "noFile": "Escolha um arquivo de chaves",
-      "invalid_file": "This is not a valid DodgeNet key file",
-      "wrong_passphrase": "Wrong password, or the file is damaged",
-      "wrong_account": "This key file belongs to a different account",
-      "no_keys": "There are no keys for this account on this device",
-      "no_crypto": "Encryption is not available here (HTTPS is required)",
-      "generic": "Could not complete the operation"
+      "invalid_file": "Este não é um arquivo de chaves válido do DodgeNet",
+      "wrong_passphrase": "Senha incorreta ou arquivo danificado",
+      "wrong_account": "Este arquivo de chaves pertence a outra conta",
+      "no_keys": "Não há chaves desta conta neste dispositivo",
+      "no_crypto": "A criptografia não está disponível aqui (é necessário HTTPS)",
+      "generic": "Não foi possível concluir a operação"
     }
   }
 }

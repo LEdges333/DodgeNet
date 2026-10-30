@@ -10,11 +10,7 @@
   "connection": {
     "protected": "Channel is protected",
     "lost": "Connection lost",
-    "node": "Node: {{name}}",
-    "nodes": {
-      "Primary": "Primary",
-      "None": "None"
-    }
+    "via": "Connected via {{host}}"
   },
   "chat": {
     "title": "DodgeNet Chat",
@@ -75,7 +71,16 @@
     "signUp": "Sign up",
     "noData": "No user data was found.",
     "backToLogin": "Go back to sign in",
-    "networkError": "Network error. Backend is unavailable."
+    "networkError": "Network error. Backend is unavailable.",
+    "photo": {
+      "change": "Change photo",
+      "remove": "Remove photo",
+      "errors": {
+        "not_image": "Choose an image file",
+        "too_large": "The image is larger than {{max}} MB",
+        "unreadable": "Could not read this image"
+      }
+    }
   },
   "settings": {
     "title": "Settings",
@@ -102,7 +107,9 @@
     "changePassword": "Failed to change password",
     "uploadFailed": "Could not upload the file",
     "downloadFailed": "Could not download the file",
-    "emptyMessage": "The message is empty"
+    "emptyMessage": "The message is empty",
+    "avatarUpload": "Could not save the photo",
+    "avatarDelete": "Could not remove the photo"
   },
   "serverErrors": {
     "token_missing": "The token is missing!",
@@ -126,7 +133,10 @@
     "file_too_large": "The file is too large",
     "empty_file": "The file is empty",
     "attachment_not_found": "The file was not found",
-    "recipient_required": "Recipient is required"
+    "recipient_required": "Recipient is required",
+    "avatar_invalid": "The image is not valid",
+    "avatar_too_large": "The image is too large",
+    "avatar_not_found": "No photo"
   },
   "changePassword": {
     "title": "Change password",

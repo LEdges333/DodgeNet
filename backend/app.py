@@ -32,6 +32,65 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_ATTACHMENT_BYTES   # Flask answers 413 fo
 
 ATTACHMENT_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{16,64}$')
 
+# Profile photo: the browser sends a 256x256 image of a few tens of KB. The server still checks everything,
+# because a modified client could send anything.
+MAX_AVATAR_BYTES = 256 * 1024
+MAX_AVATAR_SIDE = 1024   # pixels; protects the browsers of other users from huge images ("decompression bombs")
+
+
+def image_info(data):
+    """Returns (mime_type, width, height) for a JPEG, PNG or WebP image, or None if data is not one of them.
+
+    Only the headers are read; the image is not decoded. The result is based on the content itself,
+    never on what the client says the file is.
+    """
+    try:
+        # PNG: 8-byte signature, then the IHDR chunk with the size
+        if data[:8] == b'\x89PNG\r\n\x1a\n' and data[12:16] == b'IHDR':
+            return 'image/png', int.from_bytes(data[16:20], 'big'), int.from_bytes(data[20:24], 'big')
+
+        # JPEG: a sequence of segments; the size is in the first "start of frame" segment
+        if data[:3] == b'\xff\xd8\xff':
+            i = 2
+            while i + 4 <= len(data):
+                if data[i] != 0xFF:
+                    return None
+                marker = data[i + 1]
+                if marker == 0xFF:            # padding byte
+                    i += 1
+                    continue
+                if marker == 0x01 or 0xD0 <= marker <= 0xD8:   # segments without a length
+                    i += 2
+                    continue
+                if marker == 0xD9:            # end of image before any frame header
+                    return None
+                length = int.from_bytes(data[i + 2:i + 4], 'big')
+                is_frame = 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC)
+                if is_frame:
+                    height = int.from_bytes(data[i + 5:i + 7], 'big')
+                    width = int.from_bytes(data[i + 7:i + 9], 'big')
+                    return 'image/jpeg', width, height
+                i += 2 + length
+            return None
+
+        # WebP: RIFF container; lossy (VP8), lossless (VP8L) or extended (VP8X)
+        if data[:4] == b'RIFF' and data[8:12] == b'WEBP':
+            kind = data[12:16]
+            if kind == b'VP8 ' and data[23:26] == b'\x9d\x01\x2a':
+                width = int.from_bytes(data[26:28], 'little') & 0x3FFF
+                height = int.from_bytes(data[28:30], 'little') & 0x3FFF
+                return 'image/webp', width, height
+            if kind == b'VP8L' and data[20] == 0x2F:
+                bits = int.from_bytes(data[21:25], 'little')
+                return 'image/webp', (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+            if kind == b'VP8X' and len(data) >= 30:
+                width = int.from_bytes(data[24:27], 'little') + 1
+                height = int.from_bytes(data[27:30], 'little') + 1
+                return 'image/webp', width, height
+    except IndexError:
+        pass
+    return None
+
 
 # For quick access to fields by name: user['password_hash']
 def get_db_connection():
@@ -155,6 +214,7 @@ def contactsUser():
         SELECT
             u.id,
             u.username,
+            CASE WHEN u.avatar IS NULL THEN NULL ELSE u.avatar_version END AS avatar_version,
             (
                 SELECT text
                 FROM messages m
@@ -202,6 +262,7 @@ def contactsUser():
         {
             "id": c["id"],
             "username": c["username"],
+            "avatar_version": c["avatar_version"],
             "last_message": c["last_message"] or "No messages",
             "last_nonce": c["last_nonce"],
             "last_timestamp": c["last_timestamp"]
@@ -324,7 +385,9 @@ def login():
 def profile():
     conn = get_db_connection()
     user = conn.execute(
-        "SELECT id, username, email FROM users WHERE id = ?",
+        "SELECT id, username, email, "
+        "CASE WHEN avatar IS NULL THEN NULL ELSE avatar_version END AS avatar_version "
+        "FROM users WHERE id = ?",
         (g.user_id,)
     ).fetchone()
     conn.close()
@@ -332,7 +395,77 @@ def profile():
     if not user:
         return api_error("user_not_found", "User not found", 404)
 
-    return jsonify({"id": user["id"], "username": user["username"], "email": user["email"]}), 200
+    return jsonify({
+        "id": user["id"], "username": user["username"], "email": user["email"],
+        "avatar_version": user["avatar_version"],   # null = no photo
+    }), 200
+
+
+# Profile photo.
+# PUT    /api/profile/avatar          raw image bytes (JPEG, PNG or WebP, up to 256 KB, up to 1024x1024 pixels)
+# DELETE /api/profile/avatar          removes the photo
+# GET    /api/users/<id>/avatar       the photo of a user; allowed for the user himself and for his contacts
+# Every change raises "avatar_version"; clients put it in the URL (?v=) so a new photo is never served from cache.
+
+@app.route("/api/profile/avatar", methods=["PUT"])
+@token_required
+def set_avatar():
+    data = request.get_data()   # up to MAX_CONTENT_LENGTH; the avatar limit is checked below
+    if not data:
+        return api_error("avatar_invalid", "The image is not valid", 400)
+    if len(data) > MAX_AVATAR_BYTES:
+        return api_error("avatar_too_large", "The image is too large", 413)
+
+    info = image_info(data)
+    if info is None:
+        return api_error("avatar_invalid", "The image is not valid", 400)
+    mime_type, width, height = info
+    if not (1 <= width <= MAX_AVATAR_SIDE and 1 <= height <= MAX_AVATAR_SIDE):
+        return api_error("avatar_invalid", "The image is not valid", 400)
+
+    conn = get_db_connection()
+    conn.execute(
+        "UPDATE users SET avatar = ?, avatar_type = ?, avatar_version = avatar_version + 1 WHERE id = ?",
+        (data, mime_type, g.user_id)
+    )
+    conn.commit()
+    version = conn.execute("SELECT avatar_version FROM users WHERE id = ?", (g.user_id,)).fetchone()[0]
+    conn.close()
+    return jsonify({"avatar_version": version}), 200
+
+
+@app.route("/api/profile/avatar", methods=["DELETE"])
+@token_required
+def delete_avatar():
+    conn = get_db_connection()
+    conn.execute(
+        "UPDATE users SET avatar = NULL, avatar_type = NULL, avatar_version = avatar_version + 1 WHERE id = ?",
+        (g.user_id,)
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"avatar_version": None}), 200
+
+
+@app.route("/api/users/<int:user_id>/avatar", methods=["GET"])
+@token_required
+def get_avatar(user_id):
+    conn = get_db_connection()
+    allowed = user_id == g.user_id or conn.execute(
+        "SELECT 1 FROM contacts WHERE user_id = ? AND contact_id = ?", (g.user_id, user_id)
+    ).fetchone() is not None
+    row = conn.execute("SELECT avatar, avatar_type FROM users WHERE id = ?", (user_id,)).fetchone() if allowed else None
+    conn.close()
+
+    # "No such user", "no photo" and "not allowed" look the same on purpose: ids cannot be probed.
+    if row is None or row["avatar"] is None:
+        return api_error("avatar_not_found", "No photo", 404)
+
+    response = app.response_class(bytes(row["avatar"]), mimetype=row["avatar_type"])
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Content-Security-Policy"] = "default-src 'none'; sandbox"
+    response.headers["Cache-Control"] = "private, max-age=3600"   # safe: the URL changes with the version
+    return response
 
 
 # Change password

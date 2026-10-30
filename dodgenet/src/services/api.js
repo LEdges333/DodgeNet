@@ -2,6 +2,7 @@ import axios from 'axios';
 import i18n from '../i18n';
 import { errorMessage } from './errors';
 import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, adoptLegacyKeys, importKeyFile, keyError, encryptFile, decryptFile } from './crypto';
+import { reportReachable, reportUnreachable } from './connection';
 import { buildEnvelope, parseEnvelope, sanitizeFileName, MAX_FILES_PER_MESSAGE, MAX_FILE_SIZE } from './envelope';
 
 
@@ -25,17 +26,22 @@ async function requestWithFailover(path, options = {}) {
         timeout: 4000,
         ...options,
       });
+      reportReachable(front);
       return response;
     } catch (error) {
       // A 4xx answer means the server was reached and refused the request on purpose
       // (wrong password, file too large...). Another front would refuse it too, so do not retry.
-      if (error.response && error.response.status < 500) throw error;
+      if (error.response && error.response.status < 500) {
+        reportReachable(front);
+        throw error;
+      }
 
       lastError = error;
       console.warn(`The front ${front} is unavailable, trying the next one.`);
     }
   }
 
+  reportUnreachable();   // every front failed: this is the only case that shows "Connection lost"
   throw lastError;
 }
 
@@ -88,6 +94,7 @@ export const loginUser = async (username, password) => {
     });
  
     if (response.data.token) {
+      clearAvatarCache();
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', response.data.username || username);
       localStorage.setItem('activeUsername', response.data.username || username);
@@ -121,6 +128,59 @@ export const profilUser = async () => {
   }
 };
 
+
+// Profile photo. The browser has already made it a small 256x256 image (see services/image.js).
+export const uploadAvatar = async (blob) => {
+  try {
+    const response = await requestWithFailover('/api/profile/avatar', {
+      method: 'put',
+      data: blob,
+      headers: { ...authHeader(), 'Content-Type': blob.type || 'application/octet-stream' },
+    });
+    return response.data.avatar_version;
+  } catch (error) {
+    throw new Error(errorMessage(error, 'errors.avatarUpload'));
+  }
+};
+
+export const deleteAvatar = async () => {
+  try {
+    await requestWithFailover('/api/profile/avatar', { method: 'delete', headers: authHeader() });
+  } catch (error) {
+    throw new Error(errorMessage(error, 'errors.avatarDelete'));
+  }
+};
+
+// The photo of a user as an address an <img> can show (a blob: URL). The request needs the login token,
+// which an <img src> cannot send, so the image is fetched here. The version is part of the cache key:
+// a new photo has a new version and is fetched again, an unchanged one is never fetched twice.
+const avatarCache = new Map();
+
+export function getAvatarUrl(userId, version) {
+  const key = `${userId}:${version}`;
+  if (!avatarCache.has(key)) {
+    const request = requestWithFailover(`/api/users/${userId}/avatar?v=${version}`, {
+      method: 'get',
+      headers: authHeader(),
+      responseType: 'arraybuffer',
+    })
+      .then((response) => URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] })))
+      .catch((error) => {
+        avatarCache.delete(key);   // do not remember a failure
+        throw error;
+      });
+    avatarCache.set(key, request);
+  }
+  return avatarCache.get(key);
+}
+
+// Photos of the previous account must not stay in memory after another login.
+function clearAvatarCache() {
+  for (const request of avatarCache.values()) {
+    request.then((url) => URL.revokeObjectURL(url)).catch(() => {});
+  }
+  avatarCache.clear();
+}
 
 // Change password. The keys are not affected: they are not derived from the password.
 export const changePassword = async (oldPassword, newPassword, confirmation) => {

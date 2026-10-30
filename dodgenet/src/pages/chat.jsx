@@ -5,8 +5,7 @@ import {Link} from 'react-router-dom';
 import {useParams} from 'react-router-dom';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {sendMessage, getMessage} from '../services/api';
-import ConnectionStatus from '../components/ConnectionStatus';
+import {sendMessage, getMessage, contactsUser} from '../services/api';
 import Attachment from '../components/Attachment';
 import {MAX_FILE_SIZE, MAX_FILES_PER_MESSAGE} from '../services/envelope';
 import '../App.css';
@@ -18,6 +17,7 @@ function Chat({ status, setStatus}) {
   const {userId} = useParams();
   const [input, setInput] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
+  const [contact, setContact] = useState(null);
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [attachError, setAttachError] = useState(null); // { key, params }: a translation key, so it follows the language
   const [sending, setSending] = useState(false);
@@ -87,23 +87,37 @@ function Chat({ status, setStatus}) {
     }
   };
   useEffect(() => {
+    let cancelled = false;
+    const loadContact = async () => {
+      try {
+        const contacts = await contactsUser();
+        if (!cancelled) setContact(contacts.find((item) => String(item.id) === String(userId)) || null);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadContact();
+
     const loadMessages = async () => {
         try {
             const data = await getMessage(userId);
-            setChatMessages(data);
+            if (!cancelled) setChatMessages(data);
         } catch (err) {
             console.error(err);
         }
     };
  
     loadMessages();
+    return () => { cancelled = true; };
 }, [userId]);
 
   return (
     <div className="messenger-card">
-      <div className="header">
-        <h2>{t('chat.title')}</h2>
-        <ConnectionStatus status={status} />
+      <div className="chat-header">
+        <div className="chat-contact-avatar" aria-hidden="true">
+          {(contact?.username || '?').trim().charAt(0).toUpperCase()}
+        </div>
+        <h2>{contact?.username || t('chat.title')}</h2>
       </div>
 
       <div className="chat-window">
