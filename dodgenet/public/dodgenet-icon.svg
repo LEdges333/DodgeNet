@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DodgeNet">
+  <title>DodgeNet</title>
+  <g fill="none" stroke="#7138F5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Shield -->
+    <path d="M256 55 430 126 V246 C430 351 360 421 256 466 C152 421 82 351 82 246 V126 Z"
+          stroke-width="30"/>
+    <!-- Message bubble -->
+    <path d="M160 174 H352 C375 174 393 192 393 215 V298 C393 321 375 339 352 339 H232 L174 382 V339 C143 339 119 321 119 298 V215 C119 192 137 174 160 174 Z"
+          stroke-width="25"/>
+  </g>
+  <g fill="#7138F5">
+    <circle cx="202" cy="256" r="15"/>
+    <circle cx="256" cy="256" r="15"/>
+    <circle cx="310" cy="256" r="15"/>
+  </g>
+</svg>
