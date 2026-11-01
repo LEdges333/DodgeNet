@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} больше {{max}} МБ",
       "tooManyFiles": "Можно прикрепить не более {{max}} файлов",
       "emptyFile": "Файл {{name}} пуст"
-    }
+    },
+    "sending": "Отправка…",
+    "notSent": "Не отправлено",
+    "retry": "Повторить",
+    "discard": "Удалить"
   },
   "chatList": {
     "loading": "Загрузка контактов...",
@@ -136,7 +140,8 @@
     "recipient_required": "Не указан получатель",
     "avatar_invalid": "Недопустимое изображение",
     "avatar_too_large": "Изображение слишком большое",
-    "avatar_not_found": "Фото нет"
+    "avatar_not_found": "Фото нет",
+    "attachment_invalid": "Вложение недействительно или уже использовано"
   },
   "changePassword": {
     "title": "Смена пароля",

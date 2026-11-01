@@ -248,31 +248,42 @@ export const sendMessage = async (receiverId, text, files = []) => {
     throw new Error(i18n.t('errors.noRecipientKey'));
   }
 
-  // Encrypt and upload the files one by one (so only one file is in memory at a time).
+  // Files are uploaded BEFORE the message, so a failure in between (the connection is lost, the server refuses
+  // the message) would leave uploaded files that belong to no message. Their ids are remembered here:
+  // the server ties them to the message when it is stored, and on a failure they are deleted again.
   const attachments = [];
-  for (const file of files) {
-    const { data, key } = await encryptFile(new Uint8Array(await file.arrayBuffer()));
-    const id = await uploadAttachment(receiverId, data);
-    attachments.push({
-      id,
-      key,
-      name: sanitizeFileName(file.name),
-      mime: file.type || 'application/octet-stream',
-      size: file.size,
-    });
-  }
-
-  const { ciphertext, nonce } = await encryptMessage(
-    buildEnvelope(text, attachments), recipientPublicKey, myPrivateKey
-  );
- 
+  const uploadedIds = [];
   try {
-    const response = await requestWithFailover('/api/send-message', {
-      method: 'post',
-      data: { receiver_id: receiverId, text: ciphertext, nonce },
-      headers: authHeader(),
-    });
- 
+    // Encrypt and upload the files one by one (so only one file is in memory at a time).
+    for (const file of files) {
+      const { data, key } = await encryptFile(new Uint8Array(await file.arrayBuffer()));
+      const id = await uploadAttachment(receiverId, data);
+      uploadedIds.push(id);
+      attachments.push({
+        id,
+        key,
+        name: sanitizeFileName(file.name),
+        mime: file.type || 'application/octet-stream',
+        size: file.size,
+      });
+    }
+
+    const { ciphertext, nonce } = await encryptMessage(
+      buildEnvelope(text, attachments), recipientPublicKey, myPrivateKey
+    );
+
+    let response;
+    try {
+      response = await requestWithFailover('/api/send-message', {
+        method: 'post',
+        data: { receiver_id: receiverId, text: ciphertext, nonce, attachments: uploadedIds },
+        headers: authHeader(),
+      });
+    } catch (error) {
+      // the server's own reason when it gave one, "no connection" otherwise
+      throw new Error(errorMessage(error, 'errors.channelsUnavailable'));
+    }
+
     // We return the original text for instant display.
     return {
       id: response.data.id || Date.now(),
@@ -281,10 +292,24 @@ export const sendMessage = async (receiverId, text, files = []) => {
       sender_id: Number(localStorage.getItem('userId')),
       receiver_id: Number(receiverId),
     };
-  } catch {
-    throw new Error(i18n.t('errors.channelsUnavailable'));
+  } catch (error) {
+    discardUploads(uploadedIds);   // not awaited: the person should see "not sent" at once
+    throw error;
   }
 };
+
+// Deletes uploads of a message that was not sent. Best effort: the server refuses to delete a file that belongs
+// to a stored message, so this is safe even when the message did arrive and only the answer was lost.
+// Whatever cannot be deleted now (no connection) is removed by the server's own cleanup after an hour.
+function discardUploads(ids) {
+  return Promise.allSettled(
+    ids.map((id) => requestWithFailover(`/api/attachments/${id}`, {
+      method: 'delete',
+      headers: authHeader(),
+      timeout: 8000,
+    }))
+  );
+}
 
 // Uploads an encrypted file. The server only gets ciphertext and learns nothing about the file.
 async function uploadAttachment(recipientId, encryptedBytes) {

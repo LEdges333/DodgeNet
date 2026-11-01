@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} ist größer als {{max}} MB",
       "tooManyFiles": "Du kannst höchstens {{max}} Dateien anhängen",
       "emptyFile": "{{name}} ist leer"
-    }
+    },
+    "sending": "Wird gesendet…",
+    "notSent": "Nicht gesendet",
+    "retry": "Erneut versuchen",
+    "discard": "Löschen"
   },
   "chatList": {
     "loading": "Kontakte werden geladen...",
@@ -136,7 +140,8 @@
     "recipient_required": "Ein Empfänger ist erforderlich",
     "avatar_invalid": "Das Bild ist ungültig",
     "avatar_too_large": "Das Bild ist zu groß",
-    "avatar_not_found": "Kein Foto"
+    "avatar_not_found": "Kein Foto",
+    "attachment_invalid": "Ein Anhang ist ungültig oder wurde bereits verwendet"
   },
   "changePassword": {
     "title": "Passwort ändern",

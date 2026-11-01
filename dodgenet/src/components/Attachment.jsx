@@ -3,13 +3,8 @@ import { File as FileIcon, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { downloadAttachment } from '../services/api';
 import { isInlineImage } from '../services/envelope';
+import { formatSize } from '../utils/format';
 import '../App.css';
-
-function formatSize(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
 
 // One attached file inside a message bubble.
 // Photos (jpeg, png, gif, webp) are shown in the chat; every other file is only offered for download.

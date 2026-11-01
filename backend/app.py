@@ -2,6 +2,7 @@ import os
 import re
 import secrets
 import sqlite3
+import time
 import jwt
 import datetime
 from flask import Flask, request, jsonify, g, send_file
@@ -31,6 +32,15 @@ MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024 + 64 * 1024
 app.config['MAX_CONTENT_LENGTH'] = MAX_ATTACHMENT_BYTES   # Flask answers 413 for anything bigger
 
 ATTACHMENT_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{16,64}$')
+
+# A message may contain at most this many files (the client has the same limit).
+MAX_ATTACHMENTS_PER_MESSAGE = 5
+
+# An upload that is not part of a sent message after this time is a leftover (the connection was lost between
+# the upload and the message, the browser was closed...) and is deleted. A normal send needs seconds.
+ORPHAN_ATTACHMENT_TTL_MINUTES = 60
+ORPHAN_CLEANUP_INTERVAL_SECONDS = 600   # how often the cleanup may run while the server is busy
+_last_orphan_cleanup = 0.0
 
 # Profile photo: the browser sends a 256x256 image of a few tens of KB. The server still checks everything,
 # because a modified client could send anything.
@@ -160,6 +170,14 @@ def send_message():
     if not receiver_id or not text or not nonce:
         return api_error("message_fields_required", "Recipient, text and nonce mandatory", 400)
 
+    # Files uploaded for this message. The server cannot see inside the encrypted message, so the client lists
+    # their ids here: the message and the files are tied together, and the files stop being "leftovers".
+    attachment_ids = data.get("attachments") or []
+    if (not isinstance(attachment_ids, list) or len(attachment_ids) > MAX_ATTACHMENTS_PER_MESSAGE
+            or len(set(map(str, attachment_ids))) != len(attachment_ids)
+            or not all(isinstance(i, str) and ATTACHMENT_ID_PATTERN.match(i) for i in attachment_ids)):
+        return api_error("attachment_invalid", "An attachment is not valid or was already used", 400)
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(
@@ -167,6 +185,20 @@ def send_message():
         (g.user_id, receiver_id, text, nonce)
     )
     message_id = cursor.lastrowid
+
+    # Every file must be an unclaimed upload of this user for this recipient. All or nothing: if one is wrong,
+    # the message is not stored either.
+    for attachment_id in attachment_ids:
+        claimed = cursor.execute(
+            "UPDATE attachments SET claimed = 1 "
+            "WHERE id = ? AND uploader_id = ? AND recipient_id = ? AND claimed = 0",
+            (attachment_id, g.user_id, receiver_id)
+        )
+        if claimed.rowcount != 1:
+            conn.rollback()
+            conn.close()
+            return api_error("attachment_invalid", "An attachment is not valid or was already used", 400)
+
     conn.commit()
     conn.close()
 
@@ -521,6 +553,8 @@ def request_too_large(_error):
 @app.route("/api/attachments", methods=["POST"])
 @token_required
 def upload_attachment():
+    cleanup_orphans_if_due()
+
     recipient_id = request.args.get("recipient_id", type=int)
     if not recipient_id:
         return api_error("recipient_required", "Recipient is required", 400)
@@ -542,13 +576,81 @@ def upload_attachment():
         f.write(data)
 
     conn.execute(
-        "INSERT INTO attachments (id, uploader_id, recipient_id, size) VALUES (?, ?, ?, ?)",
+        "INSERT INTO attachments (id, uploader_id, recipient_id, size, claimed) VALUES (?, ?, ?, ?, 0)",
         (attachment_id, g.user_id, recipient_id, len(data))
     )
     conn.commit()
     conn.close()
 
     return jsonify({"id": attachment_id, "size": len(data)}), 201
+
+
+# Deletes an upload that has not become part of a message (the client calls it when sending failed).
+# Only the uploader can do it, and only while the file is unclaimed: a file that belongs to a sent message
+# is never deleted here, even if the client thinks the send failed (for example, the answer got lost).
+@app.route("/api/attachments/<attachment_id>", methods=["DELETE"])
+@token_required
+def delete_attachment(attachment_id):
+    if not ATTACHMENT_ID_PATTERN.match(attachment_id):
+        return api_error("attachment_not_found", "Attachment not found", 404)
+
+    conn = get_db_connection()
+    deleted = conn.execute(
+        "DELETE FROM attachments WHERE id = ? AND uploader_id = ? AND claimed = 0",
+        (attachment_id, g.user_id)
+    ).rowcount
+    conn.commit()
+    conn.close()
+
+    if deleted != 1:
+        return api_error("attachment_not_found", "Attachment not found", 404)
+    remove_upload_file(attachment_id)
+    return jsonify({"deleted": True}), 200
+
+
+def remove_upload_file(attachment_id):
+    try:
+        os.remove(os.path.join(UPLOAD_DIR, attachment_id))
+    except FileNotFoundError:
+        pass
+
+
+def cleanup_orphan_attachments(ttl_minutes=ORPHAN_ATTACHMENT_TTL_MINUTES):
+    """Deletes uploads that never became part of a message, and files that have no record at all.
+
+    Returns the number of removed files. Files that belong to a sent message (claimed = 1) are never touched.
+    """
+    conn = get_db_connection()
+    old_unclaimed = conn.execute(
+        "SELECT id FROM attachments WHERE claimed = 0 AND created_at < datetime('now', ?)",
+        (f"-{int(ttl_minutes)} minutes",)
+    ).fetchall()
+    for row in old_unclaimed:
+        conn.execute("DELETE FROM attachments WHERE id = ? AND claimed = 0", (row["id"],))
+        remove_upload_file(row["id"])
+    conn.commit()
+    removed = len(old_unclaimed)
+
+    # A file on disk without any record (the server stopped between writing the file and recording it).
+    if os.path.isdir(UPLOAD_DIR):
+        known = {row["id"] for row in conn.execute("SELECT id FROM attachments")}
+        cutoff = time.time() - int(ttl_minutes) * 60
+        for name in os.listdir(UPLOAD_DIR):
+            path = os.path.join(UPLOAD_DIR, name)
+            if (name not in known and ATTACHMENT_ID_PATTERN.match(name)
+                    and os.path.isfile(path) and os.path.getmtime(path) < cutoff):
+                os.remove(path)
+                removed += 1
+    conn.close()
+    return removed
+
+
+def cleanup_orphans_if_due():
+    # Called on uploads, so a busy server cleans up by itself without a scheduler; at most every 10 minutes.
+    global _last_orphan_cleanup
+    if time.time() - _last_orphan_cleanup >= ORPHAN_CLEANUP_INTERVAL_SECONDS:
+        _last_orphan_cleanup = time.time()
+        cleanup_orphan_attachments()
 
 
 # Download of an encrypted attachment (only for its uploader and its recipient).
@@ -598,4 +700,5 @@ def get_user_key(user_id):
 
 if __name__ == "__main__":
     init_db()
+    cleanup_orphan_attachments()   # leftovers of failed sends from before the server was stopped
     app.run(debug=True, port=5000)

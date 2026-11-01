@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} 超过 {{max}} MB",
       "tooManyFiles": "最多可添加 {{max}} 个文件",
       "emptyFile": "{{name}} 是空文件"
-    }
+    },
+    "sending": "发送中…",
+    "notSent": "未发送",
+    "retry": "重试",
+    "discard": "删除"
   },
   "chatList": {
     "loading": "正在加载联系人...",
@@ -136,7 +140,8 @@
     "recipient_required": "必须指定收件人",
     "avatar_invalid": "图片无效",
     "avatar_too_large": "图片太大",
-    "avatar_not_found": "没有照片"
+    "avatar_not_found": "没有照片",
+    "attachment_invalid": "附件无效或已被使用"
   },
   "changePassword": {
     "title": "修改密码",

@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} {{max}} MB से बड़ी है",
       "tooManyFiles": "आप अधिकतम {{max}} फ़ाइलें संलग्न कर सकते हैं",
       "emptyFile": "{{name}} खाली है"
-    }
+    },
+    "sending": "भेजा जा रहा है…",
+    "notSent": "भेजा नहीं गया",
+    "retry": "फिर कोशिश करें",
+    "discard": "हटाएँ"
   },
   "chatList": {
     "loading": "संपर्क लोड हो रहे हैं...",
@@ -136,7 +140,8 @@
     "recipient_required": "प्राप्तकर्ता आवश्यक है",
     "avatar_invalid": "छवि मान्य नहीं है",
     "avatar_too_large": "छवि बहुत बड़ी है",
-    "avatar_not_found": "कोई फ़ोटो नहीं"
+    "avatar_not_found": "कोई फ़ोटो नहीं",
+    "attachment_invalid": "कोई संलग्नक मान्य नहीं है या पहले ही उपयोग हो चुका है"
   },
   "changePassword": {
     "title": "पासवर्ड बदलें",

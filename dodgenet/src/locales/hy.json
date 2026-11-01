@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}}-ը մեծ է {{max}} ՄԲ-ից",
       "tooManyFiles": "Կարող եք կցել առավելագույնը {{max}} ֆայլ",
       "emptyFile": "{{name}}-ը դատարկ է"
-    }
+    },
+    "sending": "Ուղարկվում է…",
+    "notSent": "Չի ուղարկվել",
+    "retry": "Կրկնել",
+    "discard": "Ջնջել"
   },
   "chatList": {
     "loading": "Կոնտակտները բեռնվում են...",
@@ -136,7 +140,8 @@
     "recipient_required": "Ստացողը նշված չէ",
     "avatar_invalid": "Պատկերը վավեր չէ",
     "avatar_too_large": "Պատկերը չափազանց մեծ է",
-    "avatar_not_found": "Լուսանկար չկա"
+    "avatar_not_found": "Լուսանկար չկա",
+    "attachment_invalid": "Կցորդը վավեր չէ կամ արդեն օգտագործվել է"
   },
   "changePassword": {
     "title": "Գաղտնաբառի փոփոխություն",

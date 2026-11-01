@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} أكبر من {{max}} ميغابايت",
       "tooManyFiles": "يمكنك إرفاق {{max}} ملفات كحد أقصى",
       "emptyFile": "الملف {{name}} فارغ"
-    }
+    },
+    "sending": "جارٍ الإرسال…",
+    "notSent": "لم يُرسل",
+    "retry": "إعادة المحاولة",
+    "discard": "حذف"
   },
   "chatList": {
     "loading": "جارٍ تحميل جهات الاتصال...",
@@ -136,7 +140,8 @@
     "recipient_required": "المستلم مطلوب",
     "avatar_invalid": "الصورة غير صالحة",
     "avatar_too_large": "الصورة كبيرة جدًا",
-    "avatar_not_found": "لا توجد صورة"
+    "avatar_not_found": "لا توجد صورة",
+    "attachment_invalid": "المرفق غير صالح أو سبق استخدامه"
   },
   "changePassword": {
     "title": "تغيير كلمة المرور",

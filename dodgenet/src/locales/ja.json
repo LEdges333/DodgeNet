@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} は {{max}} MB を超えています",
       "tooManyFiles": "添付できるファイルは最大 {{max}} 個です",
       "emptyFile": "{{name}} は空です"
-    }
+    },
+    "sending": "送信中…",
+    "notSent": "未送信",
+    "retry": "再試行",
+    "discard": "削除"
   },
   "chatList": {
     "loading": "連絡先を読み込み中...",
@@ -136,7 +140,8 @@
     "recipient_required": "宛先が必要です",
     "avatar_invalid": "画像が無効です",
     "avatar_too_large": "画像が大きすぎます",
-    "avatar_not_found": "写真がありません"
+    "avatar_not_found": "写真がありません",
+    "attachment_invalid": "添付ファイルが無効か、すでに使用されています"
   },
   "changePassword": {
     "title": "パスワードを変更",

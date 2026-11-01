@@ -27,7 +27,11 @@
       "fileTooLarge": "{{name}} on suurempi kuin {{max}} Mt",
       "tooManyFiles": "Voit liittää enintään {{max}} tiedostoa",
       "emptyFile": "{{name}} on tyhjä"
-    }
+    },
+    "sending": "Lähetetään…",
+    "notSent": "Ei lähetetty",
+    "retry": "Yritä uudelleen",
+    "discard": "Poista"
   },
   "chatList": {
     "loading": "Ladataan yhteystietoja...",
@@ -136,7 +140,8 @@
     "recipient_required": "Vastaanottaja puuttuu",
     "avatar_invalid": "Kuva ei kelpaa",
     "avatar_too_large": "Kuva on liian suuri",
-    "avatar_not_found": "Ei kuvaa"
+    "avatar_not_found": "Ei kuvaa",
+    "attachment_invalid": "Liite ei kelpaa tai se on jo käytetty"
   },
   "changePassword": {
     "title": "Salasanan vaihto",

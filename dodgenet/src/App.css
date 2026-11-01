@@ -41,9 +41,18 @@
   --shadow: rgba(15, 23, 42, 0.15);
 }
 
+/* The page itself never scrolls: it is exactly one window. Only the areas inside it scroll
+   (the message list, a long page in the main area). The default 8px margin of body used to make
+   the page bigger than the window, which showed a second pair of scrollbars. */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
 .app-container {
   display: flex;
-  height: 100vh;
+  height: 100%;
+  height: 100dvh;   /* the real visible height on phones, where the address bar comes and goes */
   width: 100%;
   min-width: 0;
   background-color: var(--bg); 
@@ -55,11 +64,15 @@
   flex: 1 1 0;
   min-width: 0;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   background-color: var(--bg);
   padding: 30px;
   gap: 20px;
-  overflow-Y: auto;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
 .header {
@@ -103,9 +116,11 @@
 }
 
 .messenger-card {
+  box-sizing: border-box;   /* width: 100% must include the 1px border, otherwise the area scrolls sideways */
+  flex: 1;              /* takes all the height of the main area ... */
+  min-height: 0;        /* ... and lets the message list inside it scroll instead of growing */
   width: 100%;
   max-width: none;
-  height: calc(100vh - 60px);
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
@@ -116,11 +131,13 @@
   box-shadow: none;
   border: none;
   border-radius: 16px;
+  overflow: hidden;
 }
 
 .side-bar {
   width: 240px;
-  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+  border-inline-end: 1px solid var(--border);   /* the edge towards the content, also when the page is mirrored */
   background-color: var(--surface);
   color: var(--text);
   padding: 24px;
@@ -146,12 +163,12 @@
 
 /* Message enter window */
 
-.input-area {  
-  padding: 12px 20px 20px; /* 12px 20px 20px */
-  background-color: var(--surface);
+.input-area {
+  /* No background here: the composer paints it once. Two touching boxes with the same colour leave
+     a faint line between them at some zoom levels (125%), because their edges are rounded to pixels separately. */
+  padding: 12px 20px 20px;
   display: flex;
   gap: 10px;
-  border-radius: 16px 16px 16px 16px;
   min-width: 0;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -198,6 +215,9 @@
 }
 
 .contact-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   padding: 14px 10px;
   border-bottom: 1px solid var(--border);
   cursor: pointer;
@@ -208,6 +228,10 @@
   background-color: var(--surface);
 }
 
+.contact-text {
+  min-width: 0;
+}
+
 .contact-card h3 {
   margin: 0 0 4px;
 }
@@ -215,6 +239,9 @@
 .contact-card p {
   margin: 0;
   color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .chat-list {
@@ -296,6 +323,11 @@
   overflow-x: hidden;
   overscroll-behavior: contain;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.chat-messages {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -325,13 +357,13 @@
 .message-send {
   background-color: #4f7cff;
   color: #ffffff;
-  border-bottom-right-radius: 4px;
+  border-end-end-radius: 4px;     /* the "tail" of the bubble, mirrored for right-to-left languages */
 }
  
 .message-get {
   background-color: var(--bubble-get-bg);
   color: var(--bubble-get-text);
-  border-bottom-left-radius: 4px;
+  border-end-start-radius: 4px;
 }
 
 .message-undecrypted {
@@ -358,13 +390,28 @@
   cursor: default;
 }
 
-.attachment-bar {
-  padding: 8px 20px 0;
+/* The chosen files and the input field are one block at the bottom of the card. It grows with the files,
+   but never takes more than a part of the card: the files then scroll inside it. */
+.composer {
+  flex-shrink: 0;
   background-color: var(--surface);
-  border-radius: 
+  border-top: 1px solid var(--border-subtle);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.attachment-bar {
+  padding: 12px 20px 0;
+  max-height: 120px;
+  overflow-y: auto;
+  scrollbar-width: thin;
   min-width: 0;
   box-sizing: border-box;
   flex-shrink: 0;
+}
+
+.attachment-bar .error-text {
+  margin: 6px 0 0;
 }
 
 .attachment-chips {
@@ -386,7 +433,7 @@
 }
 
 .attachment-chip-name {
-  max-width: 150px;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -562,6 +609,67 @@
   cursor: default;
 }
 
+/* Chat header: photo and name of the person */
+
+.chat-header {
+  background-color: var(--surface);   /* the layout (padding, border) is in ".messenger-card .chat-header" below */
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 18px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Profile photo (round) */
+
+.avatar {
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 600;
+  user-select: none;
+}
+
+.profile-page {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.profile-photo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 16px 0 20px;
+}
+
+.profile-photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-photo-actions .error-text {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.settings-button.secondary {
+  background-color: var(--field);
+  color: var(--text);
+}
 
 /* Chat layout: keep attachment previews inside the composer and avoid nested page scrollbars. */
 html,
@@ -598,20 +706,6 @@ body,
   font-weight: 600;
 }
 
-.chat-contact-avatar {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
 .message-row,
 .message {
   min-width: 0;
@@ -621,29 +715,104 @@ body,
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 700px) {
+/* A message that is being sent, or could not be sent */
+
+.message-pending {
+  opacity: 0.8;
+}
+
+.message-failed {
+  opacity: 1;
+  outline: 2px solid #ef4444;
+  outline-offset: -2px;
+}
+
+.message-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.message-status button {
+  padding: 2px 10px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.message-status button:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Narrow windows (phones): the side bar becomes a bar on top */
+
+@media (max-width: 760px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .side-bar {
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+    padding: 10px 16px;
+    border-inline-end: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .side-bar h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  .side-bar-brand span {
+    display: none;     /* the tagline does not fit */
+  }
+
+  .nav-bar {
+    flex-direction: row;
+    gap: 16px;
+    margin-top: 0;
+    flex: 1;
+  }
+
+  .status-container {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 12px;
+  }
+
+  .node-info {
+    margin-top: 0;
+  }
+
   .main-content {
     padding: 12px;
-  }
-
-  .messenger-card {
-    height: calc(100vh - 24px);
-  }
-
-  .header {
-    padding: 14px;
   }
 
   .messenger-card .chat-header {
     padding: 10px 12px 14px;
   }
 
-  .chat-window {
-    padding: 12px;
+  .messenger-card {
+    border-radius: 12px;
   }
 
-  .attachment-bar {
-    padding: 8px 12px 0;
+  .chat-window {
+    padding: 12px;
   }
 
   .input-area {
@@ -651,7 +820,17 @@ body,
     gap: 8px;
   }
 
+  .chat-header,
+  .attachment-bar {
+    padding-inline: 12px;
+  }
+
   .message {
     max-width: 88%;
+  }
+
+  .profile-photo {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

@@ -65,6 +65,14 @@ def init_db():
             FOREIGN KEY (recipient_id) REFERENCES users (id)
         )
     ''')
+    # "claimed" = the file belongs to a sent message. An upload starts as 0 (not claimed) and becomes 1 when the
+    # message that contains it is sent; files that stay at 0 are leftovers of a failed send and are cleaned up.
+    # DEFAULT 1 on purpose: files that already exist are assumed to be in use (their messages are encrypted,
+    # the server cannot check), so the cleanup never touches them.
+    attachment_columns = {row[1] for row in cursor.execute("PRAGMA table_info(attachments)")}
+    if 'claimed' not in attachment_columns:
+        cursor.execute("ALTER TABLE attachments ADD COLUMN claimed INTEGER NOT NULL DEFAULT 1")
+
     conn.commit()
     conn.close()
 
