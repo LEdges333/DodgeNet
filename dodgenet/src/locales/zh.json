@@ -31,7 +31,30 @@
     "sending": "发送中…",
     "notSent": "未发送",
     "retry": "重试",
-    "discard": "删除"
+    "discard": "删除",
+    "voice": {
+      "record": "录制语音消息",
+      "starting": "正在等待麦克风…",
+      "recording": "正在录音",
+      "stop": "停止录音",
+      "send": "发送语音消息",
+      "delete": "删除录音",
+      "message": "语音消息",
+      "play": "播放",
+      "pause": "暂停",
+      "speed": "播放速度",
+      "seek": "播放位置",
+      "cantPlay": "此浏览器无法播放这段声音，你可以下载它。",
+      "maxReached": "已达到最大时长",
+      "errors": {
+        "denied": "麦克风访问被阻止，请在浏览器设置中允许。",
+        "no_device": "未找到麦克风",
+        "unsupported": "此浏览器无法录音",
+        "insecure": "录音需要安全连接（HTTPS）",
+        "failed": "无法录音",
+        "too_short": "录音太短"
+      }
+    }
   },
   "chatList": {
     "loading": "正在加载联系人...",

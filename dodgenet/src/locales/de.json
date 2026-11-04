@@ -31,7 +31,30 @@
     "sending": "Wird gesendet…",
     "notSent": "Nicht gesendet",
     "retry": "Erneut versuchen",
-    "discard": "Löschen"
+    "discard": "Löschen",
+    "voice": {
+      "record": "Sprachnachricht aufnehmen",
+      "starting": "Warte auf das Mikrofon…",
+      "recording": "Aufnahme läuft",
+      "stop": "Aufnahme beenden",
+      "send": "Sprachnachricht senden",
+      "delete": "Aufnahme löschen",
+      "message": "Sprachnachricht",
+      "play": "Abspielen",
+      "pause": "Pause",
+      "speed": "Wiedergabegeschwindigkeit",
+      "seek": "Position",
+      "cantPlay": "Dieser Browser kann diesen Ton nicht abspielen. Du kannst ihn herunterladen.",
+      "maxReached": "Maximale Länge erreicht",
+      "errors": {
+        "denied": "Der Zugriff auf das Mikrofon ist blockiert. Erlaube ihn in den Browsereinstellungen.",
+        "no_device": "Kein Mikrofon gefunden",
+        "unsupported": "Dieser Browser kann keinen Ton aufnehmen",
+        "insecure": "Für die Aufnahme ist eine sichere Verbindung (HTTPS) nötig",
+        "failed": "Der Ton konnte nicht aufgenommen werden",
+        "too_short": "Die Aufnahme ist zu kurz"
+      }
+    }
   },
   "chatList": {
     "loading": "Kontakte werden geladen...",

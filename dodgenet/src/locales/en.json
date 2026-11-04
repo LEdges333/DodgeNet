@@ -31,7 +31,30 @@
     "sending": "Sending…",
     "notSent": "Not sent",
     "retry": "Retry",
-    "discard": "Delete"
+    "discard": "Delete",
+    "voice": {
+      "record": "Record a voice message",
+      "starting": "Waiting for the microphone…",
+      "recording": "Recording",
+      "stop": "Stop recording",
+      "send": "Send voice message",
+      "delete": "Delete recording",
+      "message": "Voice message",
+      "play": "Play",
+      "pause": "Pause",
+      "speed": "Playback speed",
+      "seek": "Position",
+      "cantPlay": "This browser cannot play this sound. You can download it.",
+      "maxReached": "Maximum length reached",
+      "errors": {
+        "denied": "Microphone access is blocked. Allow it in the browser settings.",
+        "no_device": "No microphone found",
+        "unsupported": "This browser cannot record sound",
+        "insecure": "Recording needs a secure connection (HTTPS)",
+        "failed": "Could not record sound",
+        "too_short": "The recording is too short"
+      }
+    }
   },
   "chatList": {
     "loading": "Loading contacts...",

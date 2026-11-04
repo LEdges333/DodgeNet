@@ -31,7 +31,30 @@
     "sending": "Lähetetään…",
     "notSent": "Ei lähetetty",
     "retry": "Yritä uudelleen",
-    "discard": "Poista"
+    "discard": "Poista",
+    "voice": {
+      "record": "Nauhoita ääniviesti",
+      "starting": "Odotetaan mikrofonia…",
+      "recording": "Tallennus käynnissä",
+      "stop": "Lopeta tallennus",
+      "send": "Lähetä ääniviesti",
+      "delete": "Poista tallenne",
+      "message": "Ääniviesti",
+      "play": "Toista",
+      "pause": "Tauko",
+      "speed": "Toistonopeus",
+      "seek": "Kohta",
+      "cantPlay": "Tämä selain ei voi toistaa tätä ääntä. Voit ladata sen.",
+      "maxReached": "Enimmäispituus saavutettu",
+      "errors": {
+        "denied": "Mikrofonin käyttö on estetty. Salli se selaimen asetuksissa.",
+        "no_device": "Mikrofonia ei löytynyt",
+        "unsupported": "Tämä selain ei voi tallentaa ääntä",
+        "insecure": "Tallennus vaatii suojatun yhteyden (HTTPS)",
+        "failed": "Äänen tallentaminen epäonnistui",
+        "too_short": "Tallenne on liian lyhyt"
+      }
+    }
   },
   "chatList": {
     "loading": "Ladataan yhteystietoja...",

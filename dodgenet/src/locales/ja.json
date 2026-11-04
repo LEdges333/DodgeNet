@@ -31,7 +31,30 @@
     "sending": "送信中…",
     "notSent": "未送信",
     "retry": "再試行",
-    "discard": "削除"
+    "discard": "削除",
+    "voice": {
+      "record": "音声メッセージを録音",
+      "starting": "マイクを待っています…",
+      "recording": "録音中",
+      "stop": "録音を停止",
+      "send": "音声メッセージを送信",
+      "delete": "録音を削除",
+      "message": "音声メッセージ",
+      "play": "再生",
+      "pause": "一時停止",
+      "speed": "再生速度",
+      "seek": "再生位置",
+      "cantPlay": "このブラウザではこの音声を再生できません。ダウンロードできます。",
+      "maxReached": "最大の長さに達しました",
+      "errors": {
+        "denied": "マイクへのアクセスがブロックされています。ブラウザの設定で許可してください。",
+        "no_device": "マイクが見つかりません",
+        "unsupported": "このブラウザでは録音できません",
+        "insecure": "録音には安全な接続（HTTPS）が必要です",
+        "failed": "録音できませんでした",
+        "too_short": "録音が短すぎます"
+      }
+    }
   },
   "chatList": {
     "loading": "連絡先を読み込み中...",

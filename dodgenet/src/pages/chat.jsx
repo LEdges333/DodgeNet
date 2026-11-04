@@ -1,12 +1,14 @@
 import React from 'react';
-import {Send, Paperclip, X, File as FileIcon} from 'lucide-react';
+import {Send, Paperclip, X, Mic, File as FileIcon} from 'lucide-react';
 import {useState, useRef, useEffect, useLayoutEffect} from 'react';
 import {useParams, useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {sendMessage, getMessage, contactsUser} from '../services/api';
 import Avatar from '../components/Avatar';
 import Attachment from '../components/Attachment';
-import {formatSize} from '../utils/format';
+import VoiceBar from '../components/VoiceBar';
+import {useVoiceRecorder} from '../hooks/useVoiceRecorder';
+import {formatSize, formatDuration} from '../utils/format';
 import {MAX_FILE_SIZE, MAX_FILES_PER_MESSAGE} from '../services/envelope';
 import '../App.css';
 
@@ -38,7 +40,7 @@ function Chat() {
   // Messages that are being sent, or could not be sent. They are shown at the end of the chat like any message,
   // so the input field and the chosen files are free again as soon as "Send" is pressed. A message that failed
   // (no connection...) stays with its text and files and can be sent again.
-  const [pending, setPending] = useState([]); // { localId, userId, text, files: File[], status: 'sending' | 'failed', error }
+  const [pending, setPending] = useState([]); // { localId, userId, text, files: File[], meta: [], status: 'sending' | 'failed', error }
   const sendQueue = useRef(Promise.resolve());
   const lastLocalId = useRef(0);
   const openChat = useRef(userId);
@@ -108,7 +110,7 @@ function Chat() {
     sendQueue.current = sendQueue.current.then(async () => {
       setPending((list) => list.map((p) => (p.localId === item.localId ? { ...p, status: 'sending', error: null } : p)));
       try {
-        const message = await sendMessage(item.userId, item.text, item.files);
+        const message = await sendMessage(item.userId, item.text, item.files, item.meta);
         setPending((list) => list.filter((p) => p.localId !== item.localId));
         if (openChat.current === item.userId) {
           stickToBottom.current = true;
@@ -120,21 +122,44 @@ function Chat() {
     });
   };
 
+  // Puts a message in the chat as "sending" and starts sending it. `meta[i]` describes files[i] (a voice message).
+  const enqueue = (text, files, meta = []) => {
+    const item = { localId: ++lastLocalId.current, userId, text, files, meta, status: 'sending', error: null };
+    stickToBottom.current = true;
+    setPending((list) => [...list, item]);
+    runSend(item);
+  };
+
   const handleSend = () => {
     // A message needs text or at least one file. Spaces alone are not a message.
     const text = input.trim() ? input : '';
     if (!text && attachedFiles.length === 0) return;
 
-    const item = { localId: ++lastLocalId.current, userId, text, files: attachedFiles, status: 'sending', error: null };
-
     // The input field and the files are cleared right away: the message now lives in the chat (as "sending").
+    const files = attachedFiles;
     setInput('');
     setAttachedFiles([]);
     setAttachError(null);
-    stickToBottom.current = true;
-    setPending((list) => [...list, item]);
-    runSend(item);
+    enqueue(text, files);
   };
+
+  // Voice messages: record, listen, send. The recording is an ordinary attachment marked as "voice".
+  const voice = useVoiceRecorder();
+  const { discard: discardVoice } = voice;
+  useEffect(() => { discardVoice(); }, [userId, discardVoice]);   // a recording belongs to one chat
+
+  const startVoice = async () => {
+    setAttachError(null);
+    try {
+      await voice.start();
+    } catch (err) {
+      setAttachError({ key: `chat.voice.errors.${err.code ?? 'failed'}` });
+    }
+  };
+  const sendVoice = (file, meta) => enqueue('', [file], [meta]);
+  const voiceError = voice.error ? { key: `chat.voice.errors.${voice.error}` } : null;
+  const shownError = attachError ?? voiceError;
+  const canSend = input.trim() !== '' || attachedFiles.length > 0;
 
   const discardPending = (item) => setPending((list) => list.filter((p) => p.localId !== item.localId));
   useEffect(() => {
@@ -194,11 +219,19 @@ function Chat() {
               {p.text && <div className="message-text">{p.text}</div>}
               {p.files.map((file, i) => (
                 <div className="attachment" key={i}>
-                  <div className="attachment-file">
-                    <FileIcon size={18} aria-hidden="true" />
-                    <span className="attachment-name" title={file.name}>{file.name}</span>
-                    <span className="attachment-size">{formatSize(file.size)}</span>
-                  </div>
+                  {p.meta?.[i]?.kind === 'voice' ? (
+                    <div className="attachment-file">
+                      <Mic size={18} aria-hidden="true" />
+                      <span className="attachment-name">{t('chat.voice.message')}</span>
+                      <span className="attachment-size">{formatDuration(p.meta[i].duration)}</span>
+                    </div>
+                  ) : (
+                    <div className="attachment-file">
+                      <FileIcon size={18} aria-hidden="true" />
+                      <span className="attachment-name" title={file.name}>{file.name}</span>
+                      <span className="attachment-size">{formatSize(file.size)}</span>
+                    </div>
+                  )}
                 </div>
               ))}
               <div className="message-status" role={p.status === 'failed' ? 'alert' : 'status'}>
@@ -217,7 +250,7 @@ function Chat() {
       </div>
 
       <div className="composer">
-      {(attachedFiles.length > 0 || attachError) && (
+      {(attachedFiles.length > 0 || shownError) && (
         <div className="attachment-bar">
           {attachedFiles.length > 0 && (
             <div className="attachment-chips">
@@ -237,38 +270,50 @@ function Chat() {
               ))}
             </div>
           )}
-          {attachError && <p className="error-text">{t(attachError.key, attachError.params)}</p>}
+          {shownError && <p className="error-text">{t(shownError.key, shownError.params)}</p>}
         </div>
       )}
 
       <div className="input-area">
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          hidden
-          data-testid="file-input"
-          onChange={handleFilesChosen}
-        />
-        <button
-          type="button"
-          className="attach-button"
-          onClick={() => fileInputRef.current?.click()}
-          aria-label={t('chat.attach')}
-          title={t('chat.attach')}
-        >
-          <Paperclip/>
-        </button>
-        <input 
-          className="message-input"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={t('chat.placeholder')}
-          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-        />
-        <button className="send-button" onClick={handleSend} aria-label={t('chat.send')}>
-          <Send/>
-        </button>
+        {voice.phase !== 'idle' ? (
+          <VoiceBar voice={voice} onSend={sendVoice} />
+        ) : (
+          <>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              hidden
+              data-testid="file-input"
+              onChange={handleFilesChosen}
+            />
+            <button
+              type="button"
+              className="attach-button"
+              onClick={() => fileInputRef.current?.click()}
+              aria-label={t('chat.attach')}
+              title={t('chat.attach')}
+            >
+              <Paperclip/>
+            </button>
+            <input 
+              className="message-input"
+              value={input}
+              onChange={(e) => { setInput(e.target.value); voice.clearError(); }}
+              placeholder={t('chat.placeholder')}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            />
+            {canSend ? (
+              <button className="send-button" onClick={handleSend} aria-label={t('chat.send')}>
+                <Send/>
+              </button>
+            ) : (
+              <button className="send-button mic-button" onClick={startVoice} aria-label={t('chat.voice.record')} title={t('chat.voice.record')}>
+                <Mic/>
+              </button>
+            )}
+          </>
+        )}
       </div>
       </div>
     </div>

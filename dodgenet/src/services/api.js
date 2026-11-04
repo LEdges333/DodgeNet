@@ -3,7 +3,7 @@ import i18n from '../i18n';
 import { errorMessage } from './errors';
 import { generateKeyPair, encryptMessage, decryptMessage, saveKeyPair, getMyPrivateKey, adoptLegacyKeys, importKeyFile, keyError, encryptFile, decryptFile } from './crypto';
 import { reportReachable, reportUnreachable } from './connection';
-import { buildEnvelope, parseEnvelope, sanitizeFileName, MAX_FILES_PER_MESSAGE, MAX_FILE_SIZE } from './envelope';
+import { buildEnvelope, parseEnvelope, sanitizeFileName, MAX_FILES_PER_MESSAGE, MAX_FILE_SIZE, MAX_VOICE_SECONDS } from './envelope';
 
 
 
@@ -223,7 +223,7 @@ export const importKeys = async (file, passphrase) => {
 // A message can contain text, files, or both. `files` is an array of browser File objects.
 // Each file is encrypted in the browser and uploaded first; its id and key then go into the
 // message envelope, which is encrypted like any other message.
-export const sendMessage = async (receiverId, text, files = []) => {
+export const sendMessage = async (receiverId, text, files = [], meta = []) => {
   const myPrivateKey = getMyPrivateKey();
  
   if (!myPrivateKey) {
@@ -255,17 +255,26 @@ export const sendMessage = async (receiverId, text, files = []) => {
   const uploadedIds = [];
   try {
     // Encrypt and upload the files one by one (so only one file is in memory at a time).
-    for (const file of files) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
       const { data, key } = await encryptFile(new Uint8Array(await file.arrayBuffer()));
       const id = await uploadAttachment(receiverId, data);
       uploadedIds.push(id);
-      attachments.push({
+      const entry = {
         id,
         key,
         name: sanitizeFileName(file.name),
-        mime: file.type || 'application/octet-stream',
+        // the plain type only: a recorder says "audio/webm;codecs=opus", the envelope wants "audio/webm"
+        mime: (file.type || 'application/octet-stream').split(';')[0].trim().toLowerCase(),
         size: file.size,
-      });
+      };
+      // `meta[i]` describes the i-th file; {kind: 'voice', duration} makes it a voice message
+      const info = meta[i];
+      if (info?.kind === 'voice' && Number.isFinite(info.duration) && info.duration > 0 && info.duration <= MAX_VOICE_SECONDS + 5) {
+        entry.kind = 'voice';
+        entry.duration = Math.round(info.duration * 10) / 10;
+      }
+      attachments.push(entry);
     }
 
     const { ciphertext, nonce } = await encryptMessage(

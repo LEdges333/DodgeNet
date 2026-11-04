@@ -715,6 +715,200 @@ body,
   overflow-wrap: anywhere;
 }
 
+/* Voice messages */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* What the composer shows while a voice message is made: recording, or listening before sending */
+
+.voice-bar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.voice-icon-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.voice-icon-button:hover {
+  color: #ef4444;
+}
+
+.voice-rec-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: voice-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes voice-blink {
+  50% { opacity: 0.25; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-rec-dot { animation: none; }
+}
+
+.voice-time {
+  min-width: 3.2ch;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.voice-level {
+  flex: 1;
+  min-width: 20px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--field);
+  overflow: hidden;
+}
+
+.voice-level i {
+  display: block;
+  height: 100%;
+  background-color: #ef4444;
+  transform-origin: left center;
+  transition: transform 0.08s linear;
+}
+
+[dir="rtl"] .voice-level i {
+  transform-origin: right center;
+}
+
+.voice-stop {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: #ef4444;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.voice-status {
+  flex: 1;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.voice-review-player {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The player: voice messages and sound files */
+
+.audio-player {
+  min-width: 220px;
+  width: 100%;
+}
+
+.audio-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.audio-play {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.audio-play:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.audio-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.audio-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.audio-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.audio-seek {
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  accent-color: currentColor;
+}
+
+.audio-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.audio-speed {
+  min-width: 36px;
+  min-height: 24px;        /* big enough to hit with a finger (24px is the minimum of the accessibility guidelines) */
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.voice-bar .send-button {
+  flex-shrink: 0;          /* the player is wide; it must not squeeze the send button */
+  min-width: 48px;
+  min-height: 36px;
+}
+
 /* A message that is being sent, or could not be sent */
 
 .message-pending {

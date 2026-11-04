@@ -31,7 +31,30 @@
     "sending": "Envoi en cours…",
     "notSent": "Non envoyé",
     "retry": "Réessayer",
-    "discard": "Supprimer"
+    "discard": "Supprimer",
+    "voice": {
+      "record": "Enregistrer un message vocal",
+      "starting": "En attente du microphone…",
+      "recording": "Enregistrement en cours",
+      "stop": "Arrêter l’enregistrement",
+      "send": "Envoyer le message vocal",
+      "delete": "Supprimer l’enregistrement",
+      "message": "Message vocal",
+      "play": "Lire",
+      "pause": "Pause",
+      "speed": "Vitesse de lecture",
+      "seek": "Position",
+      "cantPlay": "Ce navigateur ne peut pas lire ce son. Vous pouvez le télécharger.",
+      "maxReached": "Durée maximale atteinte",
+      "errors": {
+        "denied": "L’accès au microphone est bloqué. Autorisez-le dans les paramètres du navigateur.",
+        "no_device": "Aucun microphone trouvé",
+        "unsupported": "Ce navigateur ne peut pas enregistrer le son",
+        "insecure": "L’enregistrement nécessite une connexion sécurisée (HTTPS)",
+        "failed": "Impossible d’enregistrer le son",
+        "too_short": "L’enregistrement est trop court"
+      }
+    }
   },
   "chatList": {
     "loading": "Chargement des contacts...",

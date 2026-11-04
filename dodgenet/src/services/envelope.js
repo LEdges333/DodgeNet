@@ -2,7 +2,8 @@
 //
 // Everything that goes into a message is put into one small JSON document BEFORE encryption:
 //
-//   { "v": 1, "text": "optional caption", "files": [ { id, key, name, mime, size }, ... ] }
+//   { "v": 1, "text": "optional caption", "files": [ { id, key, name, mime, size, kind?, duration? }, ... ] }
+//   (kind: "voice" and duration, in seconds, mark a voice message)
 //
 // - text and files are both optional, but a message needs at least one of them;
 // - for every file: `id` is the encrypted file on the server, `key` decrypts it, and the name, type and
@@ -29,6 +30,21 @@ export const INLINE_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'imag
 export function isInlineImage(file) {
   return INLINE_IMAGE_TYPES.includes(file.mime);
 }
+
+// Sound that is played inside the chat (a player instead of a plain file card). Only formats that browsers
+// play natively, and only by their plain type: parameters such as ";codecs=opus" are not part of the type here.
+export const INLINE_AUDIO_TYPES = [
+  'audio/webm', 'audio/ogg', 'audio/mp4', 'audio/mpeg', 'audio/wav', 'audio/x-wav',
+  'audio/aac', 'audio/flac', 'audio/x-m4a',
+];
+
+export function isInlineAudio(file) {
+  return INLINE_AUDIO_TYPES.includes(file.mime);
+}
+
+// A voice message is an audio attachment recorded in the app. It is marked with kind: "voice" and carries its
+// length (the recorded file itself has no usable length in its header).
+export const MAX_VOICE_SECONDS = 600;
 
 // A file name comes from another person: remove path parts and characters that are unsafe in file names.
 export function sanitizeFileName(name) {
@@ -81,9 +97,18 @@ export function parseEnvelope(plaintext) {
   if (!rawFiles.every(validFile)) return UNSUPPORTED;
 
   const text = data.text ?? '';
-  const files = rawFiles.map((f) => ({
-    id: f.id, key: f.key, mime: f.mime, size: f.size, name: sanitizeFileName(f.name),
-  }));
+  const files = rawFiles.map((f) => {
+    const file = { id: f.id, key: f.key, mime: f.mime, size: f.size, name: sanitizeFileName(f.name) };
+    // optional voice-message fields; anything wrong with them just makes it an ordinary audio file
+    if (
+      f.kind === 'voice' && INLINE_AUDIO_TYPES.includes(f.mime) &&
+      Number.isFinite(f.duration) && f.duration > 0 && f.duration <= MAX_VOICE_SECONDS + 5
+    ) {
+      file.kind = 'voice';
+      file.duration = Math.round(f.duration * 10) / 10;
+    }
+    return file;
+  });
   if (!text && files.length === 0) return UNSUPPORTED;       // an empty message cannot be valid
 
   return { text, files, unsupported: false };

@@ -31,7 +31,30 @@
     "sending": "Enviando…",
     "notSent": "No enviado",
     "retry": "Reintentar",
-    "discard": "Eliminar"
+    "discard": "Eliminar",
+    "voice": {
+      "record": "Grabar un mensaje de voz",
+      "starting": "Esperando el micrófono…",
+      "recording": "Grabando",
+      "stop": "Detener la grabación",
+      "send": "Enviar mensaje de voz",
+      "delete": "Eliminar la grabación",
+      "message": "Mensaje de voz",
+      "play": "Reproducir",
+      "pause": "Pausa",
+      "speed": "Velocidad de reproducción",
+      "seek": "Posición",
+      "cantPlay": "Este navegador no puede reproducir este sonido. Puedes descargarlo.",
+      "maxReached": "Se alcanzó la duración máxima",
+      "errors": {
+        "denied": "El acceso al micrófono está bloqueado. Permítelo en los ajustes del navegador.",
+        "no_device": "No se encontró ningún micrófono",
+        "unsupported": "Este navegador no puede grabar sonido",
+        "insecure": "Grabar requiere una conexión segura (HTTPS)",
+        "failed": "No se pudo grabar el sonido",
+        "too_short": "La grabación es demasiado corta"
+      }
+    }
   },
   "chatList": {
     "loading": "Cargando contactos...",

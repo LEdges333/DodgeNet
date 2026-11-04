@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { File as FileIcon, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { downloadAttachment } from '../services/api';
-import { isInlineImage } from '../services/envelope';
+import { isInlineImage, isInlineAudio } from '../services/envelope';
+import AudioPlayer from './AudioPlayer';
 import { formatSize } from '../utils/format';
 import '../App.css';
 
 // One attached file inside a message bubble.
-// Photos (jpeg, png, gif, webp) are shown in the chat; every other file is only offered for download.
+// Photos (jpeg, png, gif, webp) are shown in the chat, sound (voice messages and sound files) gets a player;
+// every other file is only offered for download.
 // The file is downloaded and decrypted in the browser; the name, type and size come from the
 // encrypted message envelope (already validated), never from the server.
 function Attachment({ file }) {
   const { t } = useTranslation();
   const isImage = isInlineImage(file);
+  const isAudio = !isImage && isInlineAudio(file);
 
   const [imageUrl, setImageUrl] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -41,11 +44,25 @@ function Attachment({ file }) {
     };
   }, [file, isImage]);
 
+  // Sound is downloaded only when the person presses play (or download), not by itself like photos.
+  const audioUrl = useRef(null);
+  const getAudioUrl = useCallback(async () => {
+    if (!audioUrl.current) {
+      const bytes = await downloadAttachment(file);
+      audioUrl.current = URL.createObjectURL(new Blob([bytes], { type: file.mime }));
+    }
+    return audioUrl.current;
+  }, [file]);
+  useEffect(() => () => {
+    if (audioUrl.current) URL.revokeObjectURL(audioUrl.current);
+    audioUrl.current = null;
+  }, []);
+
   const handleDownload = async () => {
     setBusy(true);
     setFailed(false);
     try {
-      let href = imageUrl;
+      let href = imageUrl ?? audioUrl.current;
       let temporary = false;
       if (!href) {
         // Not an octet-stream blob of the sender's choosing: whatever the type says, it is saved as a file.
@@ -66,6 +83,23 @@ function Attachment({ file }) {
       setBusy(false);
     }
   };
+
+  if (isAudio) {
+    return (
+      <div className="attachment">
+        <AudioPlayer
+          voice={file.kind === 'voice'}
+          label={file.kind === 'voice' ? t('chat.voice.message') : file.name}
+          duration={file.duration ?? 0}
+          mime={file.mime}
+          getUrl={getAudioUrl}
+          onDownload={handleDownload}
+          downloading={busy}
+        />
+        {failed && <p className="attachment-note">{t('chat.fileError')}</p>}
+      </div>
+    );
+  }
 
   return (
     <div className="attachment">
