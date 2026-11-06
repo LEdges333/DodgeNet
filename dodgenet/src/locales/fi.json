@@ -52,8 +52,10 @@
         "unsupported": "Tämä selain ei voi tallentaa ääntä",
         "insecure": "Tallennus vaatii suojatun yhteyden (HTTPS)",
         "failed": "Äänen tallentaminen epäonnistui",
-        "too_short": "Tallenne on liian lyhyt"
-      }
+        "too_short": "Tallenne on liian lyhyt",
+        "device_lost": "Mikrofoni irtosi"
+      },
+      "deviceLost": "Mikrofoni irtosi. Tallennus pysäytettiin."
     }
   },
   "chatList": {

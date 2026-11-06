@@ -13,6 +13,12 @@ import {MAX_FILE_SIZE, MAX_FILES_PER_MESSAGE} from '../services/envelope';
 import '../App.css';
 
 
+// The text for a recording problem. For a general failure the technical name is added in brackets,
+// so that someone who reports it can say what exactly it was ("Could not record sound (NotReadableError)").
+function voiceErrorMessage(code = 'failed', detail = null) {
+  return { key: `chat.voice.errors.${code}`, suffix: code === 'failed' && detail ? ` (${detail})` : '' };
+}
+
 function Chat() {
   const { t } = useTranslation();
 
@@ -153,11 +159,11 @@ function Chat() {
     try {
       await voice.start();
     } catch (err) {
-      setAttachError({ key: `chat.voice.errors.${err.code ?? 'failed'}` });
+      setAttachError(voiceErrorMessage(err.code, err.detail));
     }
   };
   const sendVoice = (file, meta) => enqueue('', [file], [meta]);
-  const voiceError = voice.error ? { key: `chat.voice.errors.${voice.error}` } : null;
+  const voiceError = voice.error ? voiceErrorMessage(voice.error.code, voice.error.detail) : null;
   const shownError = attachError ?? voiceError;
   const canSend = input.trim() !== '' || attachedFiles.length > 0;
 
@@ -270,7 +276,7 @@ function Chat() {
               ))}
             </div>
           )}
-          {shownError && <p className="error-text">{t(shownError.key, shownError.params)}</p>}
+          {shownError && <p className="error-text">{t(shownError.key, shownError.params)}{shownError.suffix ?? ''}</p>}
         </div>
       )}
 

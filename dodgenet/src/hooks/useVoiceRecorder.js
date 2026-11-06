@@ -21,8 +21,8 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
   const [phase, setPhase] = useState('idle');
   const [startedAt, setStartedAt] = useState(0);        // performance.now() of the moment recording began
   const [review, setReview] = useState(null);           // { file, url, duration, mime }
-  const [error, setError] = useState(null);             // an error code of services/voice.js
-  const [limitReached, setLimitReached] = useState(false);
+  const [error, setError] = useState(null);             // { code, detail } of a VoiceError (services/voice.js)
+  const [note, setNote] = useState(null);               // 'limit' | 'device': why the recording was stopped by itself
 
   const phaseRef = useRef('idle');                      // the same as `phase`, but readable right away
   const controller = useRef(null);
@@ -54,7 +54,7 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
     controller.current?.cancel();
     controller.current = null;
     releaseReview();
-    setLimitReached(false);
+    setNote(null);
     changePhase('idle');
   }, [changePhase, releaseReview]);
 
@@ -62,7 +62,7 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
   const start = useCallback(async () => {
     if (phaseRef.current !== 'idle') return;
     setError(null);
-    setLimitReached(false);
+    setNote(null);
     changePhase('starting');
     const mine = ++attempt.current;
 
@@ -71,15 +71,17 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
       recording = await startRecording({
         maxSeconds,
         onLevel: (level) => levelListener.current?.(level),
-        onLimit: (result, failure) => {
+        // the recording ended by itself: time is up, the microphone was disconnected, or the recorder failed
+        onEnd: (result, failure, reason) => {
           if (mine !== attempt.current) return;
           controller.current = null;
           if (failure || !result) {
-            setError(failure?.code ?? 'failed');
+            const code = failure?.code === 'too_short' && reason === 'device' ? 'device_lost' : (failure?.code ?? 'failed');
+            setError({ code, detail: failure?.detail ?? null });
             changePhase('idle');
             return;
           }
-          setLimitReached(true);
+          setNote(reason === 'limit' || reason === 'device' ? reason : null);   // what was recorded is kept for review
           showReview(result);
         },
       });
@@ -109,7 +111,7 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
     } catch (failure) {
       if (mine !== attempt.current) return;
       controller.current = null;
-      setError(failure.code ?? 'failed');
+      setError({ code: failure.code ?? 'failed', detail: failure.detail ?? null });
       changePhase('idle');
     }
   }, [changePhase, showReview]);
@@ -119,7 +121,7 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
     const taken = reviewRef.current;
     if (!taken) return null;
     releaseReview();
-    setLimitReached(false);
+    setNote(null);
     changePhase('idle');
     return { file: taken.file, meta: { kind: 'voice', duration: taken.duration } };
   }, [changePhase, releaseReview]);
@@ -134,5 +136,5 @@ export function useVoiceRecorder({ maxSeconds = MAX_VOICE_SECONDS } = {}) {
     if (reviewRef.current) URL.revokeObjectURL(reviewRef.current.url);
   }, []);
 
-  return { phase, startedAt, review, error, limitReached, maxSeconds, setLevelListener, start, stop, discard, take, clearError };
+  return { phase, startedAt, review, error, note, maxSeconds, setLevelListener, start, stop, discard, take, clearError };
 }

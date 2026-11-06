@@ -52,8 +52,10 @@
         "unsupported": "Este navegador não consegue gravar som",
         "insecure": "A gravação exige uma conexão segura (HTTPS)",
         "failed": "Não foi possível gravar o som",
-        "too_short": "A gravação é muito curta"
-      }
+        "too_short": "A gravação é muito curta",
+        "device_lost": "O microfone foi desconectado"
+      },
+      "deviceLost": "O microfone foi desconectado. A gravação foi interrompida."
     }
   },
   "chatList": {

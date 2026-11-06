@@ -52,8 +52,10 @@
         "unsupported": "Este navegador no puede grabar sonido",
         "insecure": "Grabar requiere una conexión segura (HTTPS)",
         "failed": "No se pudo grabar el sonido",
-        "too_short": "La grabación es demasiado corta"
-      }
+        "too_short": "La grabación es demasiado corta",
+        "device_lost": "Se desconectó el micrófono"
+      },
+      "deviceLost": "Se desconectó el micrófono. La grabación se detuvo."
     }
   },
   "chatList": {

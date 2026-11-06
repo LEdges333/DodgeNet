@@ -52,8 +52,10 @@
         "unsupported": "このブラウザでは録音できません",
         "insecure": "録音には安全な接続（HTTPS）が必要です",
         "failed": "録音できませんでした",
-        "too_short": "録音が短すぎます"
-      }
+        "too_short": "録音が短すぎます",
+        "device_lost": "マイクが切断されました"
+      },
+      "deviceLost": "マイクが切断されました。録音を停止しました。"
     }
   },
   "chatList": {

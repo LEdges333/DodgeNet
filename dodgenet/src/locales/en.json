@@ -52,8 +52,10 @@
         "unsupported": "This browser cannot record sound",
         "insecure": "Recording needs a secure connection (HTTPS)",
         "failed": "Could not record sound",
-        "too_short": "The recording is too short"
-      }
+        "too_short": "The recording is too short",
+        "device_lost": "The microphone was disconnected"
+      },
+      "deviceLost": "The microphone was disconnected. The recording was stopped."
     }
   },
   "chatList": {

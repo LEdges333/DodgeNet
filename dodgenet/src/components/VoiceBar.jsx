@@ -76,7 +76,8 @@ function VoiceBar({ voice, onSend }) {
         </button>
         <div className="voice-review-player">
           <AudioPlayer voice label={t('chat.voice.message')} duration={review.duration} mime={review.mime} getUrl={async () => review.url} />
-          {voice.limitReached && <p className="attachment-note">{t('chat.voice.maxReached')}</p>}
+          {voice.note === 'limit' && <p className="attachment-note">{t('chat.voice.maxReached')}</p>}
+          {voice.note === 'device' && <p className="attachment-note">{t('chat.voice.deviceLost')}</p>}
         </div>
         <button type="button" className="send-button" onClick={send} aria-label={t('chat.voice.send')} title={t('chat.voice.send')}>
           <Send />

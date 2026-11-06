@@ -52,8 +52,10 @@
         "unsupported": "Dieser Browser kann keinen Ton aufnehmen",
         "insecure": "Für die Aufnahme ist eine sichere Verbindung (HTTPS) nötig",
         "failed": "Der Ton konnte nicht aufgenommen werden",
-        "too_short": "Die Aufnahme ist zu kurz"
-      }
+        "too_short": "Die Aufnahme ist zu kurz",
+        "device_lost": "Das Mikrofon wurde getrennt"
+      },
+      "deviceLost": "Das Mikrofon wurde getrennt. Die Aufnahme wurde beendet."
     }
   },
   "chatList": {

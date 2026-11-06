@@ -52,8 +52,10 @@
         "unsupported": "Ce navigateur ne peut pas enregistrer le son",
         "insecure": "L’enregistrement nécessite une connexion sécurisée (HTTPS)",
         "failed": "Impossible d’enregistrer le son",
-        "too_short": "L’enregistrement est trop court"
-      }
+        "too_short": "L’enregistrement est trop court",
+        "device_lost": "Le microphone a été déconnecté"
+      },
+      "deviceLost": "Le microphone a été déconnecté. L’enregistrement a été arrêté."
     }
   },
   "chatList": {

@@ -52,8 +52,10 @@
         "unsupported": "此浏览器无法录音",
         "insecure": "录音需要安全连接（HTTPS）",
         "failed": "无法录音",
-        "too_short": "录音太短"
-      }
+        "too_short": "录音太短",
+        "device_lost": "麦克风已断开"
+      },
+      "deviceLost": "麦克风已断开。录音已停止。"
     }
   },
   "chatList": {
